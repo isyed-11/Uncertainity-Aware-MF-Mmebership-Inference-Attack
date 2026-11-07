@@ -1,0 +1,26 @@
+[
+  {
+    "url": "https://archive.ics.uci.edu/ml/machine-learning-databases/adult/adult.data",
+    "path": "data\\raw\\uci_adult\\adult.data",
+    "bytes": 3974305,
+    "sha256": "5b00264637dbfec36bdeaab5676b0b309ff9eb788d63554ca0a249491c86603d"
+  },
+  {
+    "url": "https://archive.ics.uci.edu/ml/machine-learning-databases/adult/adult.test",
+    "path": "data\\raw\\uci_adult\\adult.test",
+    "bytes": 2003153,
+    "sha256": "a2a9044bc167a35b2361efbabec64e89d69ce82d9790d2980119aac5fd7e9c05"
+  },
+  {
+    "url": "https://archive.ics.uci.edu/ml/machine-learning-databases/adult/adult.names",
+    "path": "data\\raw\\uci_adult\\adult.names",
+    "bytes": 5229,
+    "sha256": "c248284c0b5de30c9e1958d6cdd168a34a654758b620e68f46aefa83fc0a576a"
+  },
+  {
+    "url": "https://www2.census.gov/programs-surveys/acs/data/pums/2018/1-Year/csv_pca.zip",
+    "path": "data\\raw\\folktables\\2018\\1-Year\\csv_pca.zip",
+    "bytes": 67233615,
+    "sha256": "6194ade52892ddb0e41903f7d3b49399842f08eeebd42e6b19ee8e417affbf79"
+  }
+]
