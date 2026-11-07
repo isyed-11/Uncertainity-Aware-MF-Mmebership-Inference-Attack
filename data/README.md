@@ -29,8 +29,11 @@ or experimental train/test/MIA splitting has been performed.
 Adult's original partitions are both auxiliary data, not target test data.
 ACS and Adult feature codes differ and require explicit harmonization before
 shadow models can share the target model's input schema.
-The 2017 and 2018 occupation codes also need harmonization before cross-year
-evaluation. No occupation crosswalk or inflation adjustment has been applied;
+Stored CSVs retain their original occupation codes. The notebook's 2017 test
+section now maps a copy of 2017 OCCP to 2018 codes using Census TP78 E1/F1
+references in `data/reference/`. Ambiguous splits use the highest conversion
+rate and are reported in an audit; they are approximations. The 2018 data,
+preprocessor, and model are unchanged. No inflation adjustment is applied;
 the income label follows Folktables' nominal $50,000 threshold in each year.
 Use the held-out 2018 partition for the main MIA non-member evaluation;
 2017 is a separate generalization evaluation set.
@@ -54,3 +57,4 @@ python scripts/download_data.py --state CA --year 2017
 - UCI Adult: https://archive.ics.uci.edu/dataset/2/adult
 
 Raw and processed datasets are excluded from Git; metadata and scripts are retained.
+

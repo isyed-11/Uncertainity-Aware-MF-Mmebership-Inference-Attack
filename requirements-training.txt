@@ -1,0 +1,6 @@
+-r requirements-data.txt
+scikit-learn==1.9.1
+torch>=2.2,<3
+joblib>=1.4,<2
+ipykernel>=6,<8
+xgboost>=2,<4
