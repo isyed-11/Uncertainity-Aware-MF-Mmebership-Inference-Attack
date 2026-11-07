@@ -1,0 +1,19 @@
+{
+  "year": 2017,
+  "state": "CA",
+  "acs_raw_rows": 377575,
+  "acs_income_rows": 192929,
+  "acs_features": [
+    "AGEP",
+    "COW",
+    "SCHL",
+    "MAR",
+    "OCCP",
+    "POBP",
+    "RELP",
+    "WKHP",
+    "SEX",
+    "RAC1P"
+  ],
+  "positive_labels": 76470
+}

@@ -22,5 +22,11 @@
     "path": "data\\raw\\folktables\\2018\\1-Year\\csv_pca.zip",
     "bytes": 67233615,
     "sha256": "6194ade52892ddb0e41903f7d3b49399842f08eeebd42e6b19ee8e417affbf79"
+  },
+  {
+    "url": "https://www2.census.gov/programs-surveys/acs/data/pums/2017/1-Year/csv_pca.zip",
+    "path": "data\\raw\\folktables\\2017\\1-Year\\csv_pca.zip",
+    "bytes": 74948023,
+    "sha256": "d28c43dabd5fdc0abcba3d0941101bf6eceda4a84c1bdd269982adb8b89d6617"
   }
 ]
