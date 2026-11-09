@@ -126,7 +126,7 @@ def membership_features(probabilities, income_labels):
     })
 
 
-def train_shadow_model(adult, algorithm, *, seed=42, parameters=None):
+def train_shadow_model(adult, algorithm, *, seed=42, parameters=None, schema='adult'):
     """Fit one shadow; return model, preprocessor, IDs, metrics, and attack rows.
 
     Trees and logistic regression use fixed settings; MLP selects its epoch using
@@ -134,11 +134,23 @@ def train_shadow_model(adult, algorithm, *, seed=42, parameters=None):
     """
     if algorithm not in ALGORITHMS:
         raise ValueError(f'Choose an algorithm from {ALGORITHMS}')
+    if schema == 'adult':
+        feature_columns = FEATURES
+        preprocessor = build_adult_preprocessor()
+    elif schema == 'expanded_acs':
+        from .expanded_data import EXPANDED_FEATURES, build_expanded_preprocessor
+        feature_columns = EXPANDED_FEATURES
+        preprocessor = build_expanded_preprocessor()
+    elif schema == 'acs':
+        from .data import FEATURES as acs_features, build_preprocessor
+        feature_columns = acs_features
+        preprocessor = build_preprocessor()
+    else:
+        raise ValueError('schema must be adult or acs.')
     partitions = split_shadow_data(adult, seed=seed)
-    preprocessor = build_adult_preprocessor()
-    preprocessor.fit(partitions['train'][FEATURES])
+    preprocessor.fit(partitions['train'][feature_columns])
     arrays = {name: {
-        'X': np.asarray(preprocessor.transform(frame[FEATURES]), dtype=np.float32),
+        'X': preprocessor.transform(frame[feature_columns]).astype(np.float32),
         'y': frame[LABEL].to_numpy(dtype=np.int64, copy=True),
     } for name, frame in partitions.items()}
     history, metadata = [], {}
@@ -174,7 +186,7 @@ def train_shadow_model(adult, algorithm, *, seed=42, parameters=None):
             rows['membership'] = int(name == 'train')
             rows['shadow_model'] = algorithm
             attack_rows.append(rows)
-    return {'algorithm': algorithm, 'seed': seed, 'model': model,
+    return {'algorithm': algorithm, 'seed': seed, 'schema': schema, 'model': model,
             'preprocessor': preprocessor, 'metrics': metrics,
             'partition_ids': {name: frame.index.to_numpy(copy=True)
                               for name, frame in partitions.items()},
@@ -182,15 +194,25 @@ def train_shadow_model(adult, algorithm, *, seed=42, parameters=None):
             'history': history, 'metadata': metadata}
 
 
-def train_shadow_models(adult, *, seed=42, model_parameters=None):
-    """Train the five algorithms sequentially with different deterministic splits."""
+def train_shadow_models(adult, *, seed=42, model_parameters=None, schema='adult', n_models=5):
+    """Cycle diverse algorithms with unique seeded splits; train sequentially.
+
+    The default retains the original five-model behavior and result keys.
+    Larger pools use unique keys so repeated algorithms cannot overwrite models.
+    """
+    if not isinstance(n_models, int) or isinstance(n_models, bool) or n_models < 1:
+        raise ValueError('n_models must be a positive integer.')
     results = {}
     model_parameters = model_parameters or {}
-    for index, algorithm in enumerate(ALGORITHMS):
-        print(f'Training shadow {index + 1}/{len(ALGORITHMS)}: {algorithm}', flush=True)
-        results[algorithm] = train_shadow_model(
+    for index in range(n_models):
+        algorithm = ALGORITHMS[index % len(ALGORITHMS)]
+        name = algorithm if n_models <= len(ALGORITHMS) else f'{algorithm}_{index + 1:02d}'
+        print(f'Training shadow {index + 1}/{n_models}: {algorithm}', flush=True)
+        result = train_shadow_model(
             adult, algorithm, seed=seed + 10 * index,
-            parameters=model_parameters.get(algorithm))
+            parameters=model_parameters.get(algorithm), schema=schema)
+        result['attack_data']['shadow_model'] = name
+        results[name] = result
     return results
 
 

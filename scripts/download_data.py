@@ -24,7 +24,7 @@ def fetch(url, path):
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('--state', help='ACS state abbreviation, e.g. CA')
-    parser.add_argument('--year', type=int, default=2018, choices=[2017, 2018])
+    parser.add_argument('--year', type=int, default=2018, choices=[2014, 2017, 2018, 2023, 2024])
     args = parser.parse_args()
     records = []
     adult_dir = ROOT / 'data/raw/uci_adult'

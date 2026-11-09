@@ -50,6 +50,24 @@ def threshold_for_fpr(labels, scores, *, max_fpr=0.01):
     return float(thresholds[best])
 
 
+def threshold_from_nonmembers(scores, *, max_fpr=0.05):
+    """Smallest representable cutoff above the excluded validation score tail.
+
+    Select using auxiliary validation NONMEMBERS only. With prediction score >=
+    cutoff meaning member, allow at most floor(max_fpr * N) false positives.
+    Ties are excluded conservatively. This controls empirical validation FPR,
+    not population FPR or target FPR under distribution shift.
+    """
+    scores = np.asarray(scores, dtype=float)
+    if scores.ndim != 1 or not len(scores) or not np.isfinite(scores).all():
+        raise ValueError('Expected a nonempty vector of finite nonmember scores.')
+    if not 0 < max_fpr < 1:
+        raise ValueError('max_fpr must be between zero and one.')
+    allowed = int(np.floor(max_fpr * len(scores)))
+    excluded_score = np.sort(scores)[::-1][allowed]
+    return float(np.nextafter(excluded_score, np.inf))
+
+
 def evaluate_attack(classifier, frame, *, threshold=0.5, low_fpr_threshold=None):
     """Membership metrics, including ROC-derived and fixed-threshold low-FPR TPR.
 
@@ -89,9 +107,10 @@ def train_membership_classifier(shadow_attack_data, *, seed=42,
     record-group split instead of making an internal row-wise validation split.
     """
     feature_sets = {'all': ATTACK_FEATURES, 'probability_only': PROBABILITY_FEATURES,
-                    'paper': PAPER_FEATURES}
+                    'paper': PAPER_FEATURES,
+                    'paper_no_walk': [feature for feature in PAPER_FEATURES if feature != 'blind_walk']}
     if feature_set not in feature_sets:
-        raise ValueError('feature_set must be all, probability_only, or paper.')
+        raise ValueError(f'feature_set must be one of {list(feature_sets)}.')
     features = feature_sets[feature_set]
     if split_record_ids is None:
         splits = split_attack_data(shadow_attack_data, seed=seed, features=features)

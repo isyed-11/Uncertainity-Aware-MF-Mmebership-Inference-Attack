@@ -6,6 +6,7 @@ from the paper. No experiments run on import. Only probability queries are used.
 import numpy as np
 import pandas as pd
 from sklearn.model_selection import train_test_split
+from scipy import sparse
 
 from .data import FEATURES as ACS_FEATURES
 from .shadow_models import FEATURES as ADULT_FEATURES, membership_features
@@ -31,10 +32,15 @@ def make_probability_oracle(model, preprocessor, *, schema):
     """
     if schema not in ('adult', 'acs'):
         raise ValueError('schema must be adult or acs.')
-    columns = ADULT_FEATURES if schema == 'adult' else ACS_FEATURES
+    columns = (ADULT_FEATURES if schema == 'adult'
+               else list(preprocessor.feature_names_in_))
 
     def query(frame):
-        X = np.asarray(preprocessor.transform(frame[columns]), dtype=np.float32)
+        transformed = preprocessor.transform(frame[columns])
+        # Preserve the fitted representation: XGBoost treats absent sparse
+        # entries as missing, whereas dense zeros are observed values.
+        X = (transformed.astype(np.float32) if sparse.issparse(transformed)
+             else np.asarray(transformed, dtype=np.float32))
         if hasattr(model, 'predict_proba'):
             order = [list(model.classes_).index(label) for label in [0, 1]]
             return model.predict_proba(X)[:, order]
@@ -42,7 +48,8 @@ def make_probability_oracle(model, preprocessor, *, schema):
     return query
 
 
-def extract_paper_features(query, frame, income_labels, *, config=None):
+def extract_paper_features(query, frame, income_labels, *, config=None, include_blind_walk=True,
+                           numeric_protocol=None):
     """Return four attack features and query/censoring diagnostics.
 
     Blind walk measures first change from ORIGINAL PREDICTION, not true label.
@@ -64,7 +71,8 @@ def extract_paper_features(query, frame, income_labels, *, config=None):
     if len(frame) != len(labels) or frame.empty:
         raise ValueError('Expected nonempty, row-aligned inputs and income labels.')
     rng = np.random.default_rng(settings['seed'])
-    numeric = [column for column in frame if column in NUMERIC_PROTOCOL]
+    numeric_protocol = NUMERIC_PROTOCOL | (numeric_protocol or {})
+    numeric = [column for column in frame if column in numeric_protocol]
     categorical = [column for column in frame if column not in numeric]
     domains = {column: frame[column].dropna().unique() for column in categorical}
     features, censored_values, query_count = [], [], 0
@@ -79,8 +87,8 @@ def extract_paper_features(query, frame, income_labels, *, config=None):
         logits = np.log(np.clip(true_p, 1e-12, 1)) - np.log(np.clip(other_p, 1e-12, 1))
         query_count += len(base)
         times = np.full((repeats, len(base)), steps + 1, dtype=float)
-        for repeat in range(repeats):
-            directions = {column: rng.normal(0, NUMERIC_PROTOCOL[column][0], len(base))
+        for repeat in range(repeats if include_blind_walk else 0):
+            directions = {column: rng.normal(0, numeric_protocol[column][0], len(base))
                           for column in numeric}
             destinations = {column: rng.choice(domain, len(base)) for column, domain in domains.items()
                             if len(domain)}
@@ -92,7 +100,7 @@ def extract_paper_features(query, frame, income_labels, *, config=None):
                     break
                 candidate = base.iloc[active].copy()
                 for column in numeric:
-                    _, lower, upper = NUMERIC_PROTOCOL[column]
+                    _, lower, upper = numeric_protocol[column]
                     values = np.rint(base[column].to_numpy(dtype=float)[active]
                                      + directions[column][active] * step)
                     candidate[column] = np.clip(values, lower, np.inf if upper is None else upper)
@@ -103,22 +111,29 @@ def extract_paper_features(query, frame, income_labels, *, config=None):
                 query_count += len(active)
                 times[repeat, active[changed]] = step
                 active = active[~changed]
-        features.append(pd.DataFrame({
+        batch_features = pd.DataFrame({
             'class_scaled_logit': logits, 'blind_walk': times.mean(axis=0),
             'entropy': basic['entropy'].to_numpy(), 'cross_entropy': basic['loss'].to_numpy(),
-        }))
-        censored_values.extend((times > steps).mean(axis=0).tolist())
+        })
+        if not include_blind_walk:
+            batch_features = batch_features.drop(columns='blind_walk')
+        features.append(batch_features)
+        if include_blind_walk:
+            censored_values.extend((times > steps).mean(axis=0).tolist())
         print(f'Attack feature extraction: {min(start + batch_size, len(frame)):,}/{len(frame):,}', flush=True)
     diagnostics = {'record_queries': query_count,
-                   'max_record_queries': len(frame) * (1 + repeats * steps),
-                   'walk_censored_fraction': float(np.mean(censored_values)), 'config': settings}
+                   'max_record_queries': len(frame) * (1 + repeats * steps if include_blind_walk else 1),
+                   'walk_censored_fraction': float(np.mean(censored_values)) if include_blind_walk else None,
+                   'blind_walk_enabled': include_blind_walk, 'config': settings}
     return pd.concat(features, ignore_index=True), diagnostics
 
 
-def collect_shadow_paper_features(results, adult, *, per_class=2000, config=None, seed=42):
+def collect_shadow_paper_features(results, adult, *, per_class=2000, config=None, seed=42,
+                                  include_blind_walk=True, numeric_protocol=None):
     """Query existing shadows; sample balanced known members/nonmembers per model.
 
-    Adult row IDs come from load_adult_data. No shadows are retrained here.
+    Input row IDs must match the shadow partition IDs. Schema is read from each
+    result (legacy results default to Adult). No shadows are retrained here.
     per_class=None uses all available rows and can be expensive.
     """
     frames, diagnostics = [], {}
@@ -136,9 +151,12 @@ def collect_shadow_paper_features(results, adult, *, per_class=2000, config=None
             part['membership'] = membership
             selected.append(part)
         candidates = pd.concat(selected).sample(frac=1, random_state=seed)
-        query = make_probability_oracle(result['model'], result['preprocessor'], schema='adult')
-        features, audit = extract_paper_features(query, candidates[ADULT_FEATURES],
-            candidates['income_gt_50k'].to_numpy(), config=config)
+        schema = result.get('schema', 'adult')
+        columns = list(result['preprocessor'].feature_names_in_)
+        query = make_probability_oracle(result['model'], result['preprocessor'], schema='acs' if schema == 'expanded_acs' else schema)
+        features, audit = extract_paper_features(query, candidates[columns],
+            candidates['income_gt_50k'].to_numpy(), config=config, include_blind_walk=include_blind_walk,
+            numeric_protocol=numeric_protocol)
         features['record_id'] = candidates.index.to_numpy()
         features['membership'] = candidates['membership'].to_numpy()
         features['shadow_model'] = name
@@ -147,7 +165,8 @@ def collect_shadow_paper_features(results, adult, *, per_class=2000, config=None
     return pd.concat(frames, ignore_index=True), diagnostics
 
 
-def collect_target_paper_features(model, preprocessor, partitions, *, config=None, seed=42):
+def collect_target_paper_features(model, preprocessor, partitions, *, config=None, seed=42,
+                                  include_blind_walk=True, numeric_protocol=None):
     """Query the actual target MIA partitions, retaining all candidate records."""
     if set(partitions['mia_members'].index) & set(partitions['mia_nonmembers'].index):
         raise ValueError('Target members and nonmembers overlap.')
@@ -156,8 +175,10 @@ def collect_target_paper_features(model, preprocessor, partitions, *, config=Non
         partitions['mia_nonmembers'].assign(membership=0),
     ]).sample(frac=1, random_state=seed)
     query = make_probability_oracle(model, preprocessor, schema='acs')
-    features, audit = extract_paper_features(query, candidates[ACS_FEATURES],
-        candidates['income_gt_50k'].to_numpy(), config=config)
+    columns = list(preprocessor.feature_names_in_)
+    features, audit = extract_paper_features(query, candidates[columns],
+        candidates['income_gt_50k'].to_numpy(), config=config, include_blind_walk=include_blind_walk,
+        numeric_protocol=numeric_protocol)
     features['record_id'] = candidates.index.to_numpy()
     features['membership'] = candidates['membership'].to_numpy()
     return features, audit
