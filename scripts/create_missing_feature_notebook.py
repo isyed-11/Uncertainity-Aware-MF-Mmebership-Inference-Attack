@@ -147,6 +147,8 @@ summary = dict(execution_status='all_cells_completed',target_year=2023,auxiliary
 (RUN_DIR/'summary.json').write_text(json.dumps(summary,indent=2),encoding='utf-8')
 print('Completed experiment saved to',RUN_DIR)
 ''')
+from adult_missing_feature_cells import append_adult_cells
+append_adult_cells(cells)
 notebook=dict(cells=cells,metadata=dict(kernelspec=dict(display_name='Python 3 (ipykernel)',
     language='python',name='python3'),language_info=dict(name='python',version='3.12')),
     nbformat=4,nbformat_minor=5)
