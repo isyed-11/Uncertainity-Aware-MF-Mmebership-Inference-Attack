@@ -31,7 +31,7 @@ EXPANDED_FEATURES = [c for c in BASE_FEATURES + [c for group in ADDITIONAL_GROUP
                      if c not in {'RELP', 'WKW', 'JWTR'}]
 NUMERIC = ['AGEP', 'WKHP', 'JWMNP', 'JWRIP']
 CATEGORICAL = [c for c in EXPANDED_FEATURES if c not in NUMERIC]
-EXCLUDED = ['PINCP', 'PERNP', 'WAGP', 'SEMP', 'INTP', 'OIP', 'PAP', 'RETP',
+EXCLUDED = ['ADJINC', 'PINCP', 'PERNP', 'WAGP', 'SEMP', 'INTP', 'OIP', 'PAP', 'RETP',
             'SSIP', 'SSP', 'POVPIP', 'SERIALNO', 'SPORDER', 'PUMA', 'PWGTP']
 
 
@@ -136,23 +136,35 @@ def build_expanded_preprocessor():
     ], remainder='drop', verbose_feature_names_out=True, sparse_threshold=1.0)
 
 
-def load_expanded_year(year):
+def load_expanded_year(year, *, income_base_year=None):
     """Load native-year expanded ACS; IDs are namespaced by survey year.
 
     Each year retains its own categorical code system. Separate preprocessors
     avoid assuming occupation/industry codes mean the same thing across years.
-    Income threshold is nominal $50,000 in each year (no inflation adjustment).
+    By default the income threshold is nominal $50,000. income_base_year=2023
+    applies ADJINC and CPI-U before labeling; neither adjustment is a predictor.
     """
     filename = 'ss14pca.csv' if year == 2014 else 'psam_p06.csv'
     path = Path(f'data/raw/folktables/{year}/1-Year') / filename
-    raw = pd.read_csv(path, usecols=EXPANDED_FEATURES + ['PINCP', 'PWGTP'],
+    label_columns = ['ADJINC'] if income_base_year is not None else []
+    raw = pd.read_csv(path, usecols=EXPANDED_FEATURES + ['PINCP', 'PWGTP'] + label_columns,
                       low_memory=False, skipinitialspace=True)
     # Older PUMS files use whitespace-only cells for structural N/A.
     for column in raw:
         raw[column] = pd.to_numeric(raw[column], errors='raise')
     keep = (raw.AGEP > 16) & (raw.PINCP > 100) & (raw.WKHP > 0) & (raw.PWGTP >= 1)
     frame = raw.loc[keep, EXPANDED_FEATURES].astype('float32').copy()
-    frame[TARGET] = (raw.loc[keep, 'PINCP'] > 50_000).astype('int64')
+    label_income = raw.loc[keep, 'PINCP'].to_numpy(dtype=np.float64)
+    nominal_labels = label_income > 50_000
+    if income_base_year is not None:
+        from .income_adjustment import income_in_base_year, CPI_U_ANNUAL, CPI_SOURCE, ACS_SOURCE
+        label_income = income_in_base_year(label_income, raw.loc[keep, 'ADJINC'], year, income_base_year)
+        frame.attrs['income_adjustment'] = dict(base_year=income_base_year, survey_year=year,
+            label_threshold=50_000, adjinc_divisor=1_000_000, cpi_series='CPI-U US city average all items, annual NSA',
+            cpi_values=CPI_U_ANNUAL, cpi_ratio=CPI_U_ANNUAL[income_base_year]/CPI_U_ANNUAL[year],
+            cpi_source=CPI_SOURCE, acs_source=ACS_SOURCE, eligibility='Original nominal ACSIncome eligibility retained',
+            labels_changed_from_nominal=int(np.count_nonzero((label_income > 50_000) != nominal_labels)))
+    frame[TARGET] = (label_income > 50_000).astype('int64')
     frame.index = pd.Index([f'acs_{year}_{i}' for i in frame.index], name='record_id')
     if frame.empty or frame[TARGET].nunique() != 2:
         raise ValueError('Expected nonempty ACS data with both income classes.')

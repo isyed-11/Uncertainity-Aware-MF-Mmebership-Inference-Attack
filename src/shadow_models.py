@@ -4,7 +4,7 @@ from pathlib import Path
 import numpy as np
 import pandas as pd
 from sklearn.compose import ColumnTransformer
-from sklearn.ensemble import RandomForestClassifier
+from sklearn.ensemble import GradientBoostingClassifier, RandomForestClassifier
 from sklearn.impute import SimpleImputer
 from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import accuracy_score, log_loss, roc_auc_score
@@ -23,6 +23,7 @@ CATEGORICAL = ['workclass', 'marital_status', 'occupation', 'relationship',
                'race', 'sex', 'native_country']
 FEATURES = NUMERIC + CATEGORICAL
 ALGORITHMS = ('xgboost', 'random_forest', 'mlp', 'decision_tree', 'logistic_regression')
+PAPER_SHADOW_ALGORITHMS = ('random_forest', 'gradient_boosting', 'xgboost')
 
 
 def load_adult_data(directory='data/processed'):
@@ -85,6 +86,11 @@ def build_shadow_estimator(algorithm, *, seed=42, parameters=None):
                         objective='binary:logistic', eval_metric='logloss',
                         random_state=seed, n_jobs=2)
         cls = XGBClassifier
+    elif algorithm == 'gradient_boosting':
+        # Explicit project settings: the paper does not report its exact grid.
+        defaults = dict(n_estimators=300, learning_rate=0.05, max_depth=3,
+                        random_state=seed)
+        cls = GradientBoostingClassifier
     elif algorithm == 'random_forest':
         defaults = dict(n_estimators=200, min_samples_leaf=2, random_state=seed, n_jobs=2)
         cls = RandomForestClassifier
@@ -132,8 +138,8 @@ def train_shadow_model(adult, algorithm, *, seed=42, parameters=None, schema='ad
     Trees and logistic regression use fixed settings; MLP selects its epoch using
     validation loss. Non-members never participate in fitting or model selection.
     """
-    if algorithm not in ALGORITHMS:
-        raise ValueError(f'Choose an algorithm from {ALGORITHMS}')
+    if algorithm not in set(ALGORITHMS) | set(PAPER_SHADOW_ALGORITHMS):
+        raise ValueError(f'Unsupported shadow algorithm: {algorithm}')
     if schema == 'adult':
         feature_columns = FEATURES
         preprocessor = build_adult_preprocessor()

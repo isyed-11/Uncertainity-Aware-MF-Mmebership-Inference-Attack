@@ -1,5 +1,6 @@
 """Execute Experiment 3 only; running this script requires explicit authorization."""
 import os
+import argparse
 from pathlib import Path
 import time
 
@@ -7,7 +8,10 @@ import nbformat
 from nbclient import NotebookClient
 
 ROOT = Path(__file__).resolve().parents[1]
-PATH = ROOT / 'exp_3_expanded dataset.ipynb'
+parser = argparse.ArgumentParser()
+parser.add_argument('--notebook', default='exp_3_expanded dataset.ipynb')
+args = parser.parse_args()
+PATH = ROOT / args.notebook
 os.chdir(ROOT)
 notebook = nbformat.read(PATH, as_version=4)
 started = time.monotonic()
