@@ -9,10 +9,11 @@ from scipy import sparse
 from sklearn.compose import ColumnTransformer
 from sklearn.ensemble import RandomForestClassifier, RandomForestRegressor
 from sklearn.impute import SimpleImputer
+from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import accuracy_score, balanced_accuracy_score, confusion_matrix, roc_auc_score, roc_curve
 from sklearn.model_selection import train_test_split
 from sklearn.pipeline import Pipeline
-from sklearn.preprocessing import OneHotEncoder
+from sklearn.preprocessing import OneHotEncoder, StandardScaler
 
 from .expanded_data import EXPANDED_FEATURES, NUMERIC
 from .paper_attack_features import extract_paper_features
@@ -63,25 +64,52 @@ class ConditionalDonorChain:
             model.fit(x, train[field].to_numpy())
             print(f'  {field}: trees fitted; collecting leaf donors', flush=True)
             leaves = model.apply(x)
-            values = train[field].to_numpy()
+            # Losslessly encode values once per stage. The supported fields
+            # have few distinct values, so leaf pools normally need one byte
+            # per donor rather than the four bytes of ACS float32 values.
+            # Every donor occurrence stays in the same leaf and row order;
+            # repeated values retain exactly their empirical sampling weights.
+            values, codes = np.unique(train[field].to_numpy(), return_inverse=True)
+            codes = codes.astype(np.min_scalar_type(len(values) - 1), copy=False)
             donors = []
             for tree in range(leaves.shape[1]):
                 order = np.argsort(leaves[:, tree], kind='stable')
                 ids, starts = np.unique(leaves[order, tree], return_index=True)
                 groups = np.split(order, starts[1:])
-                donors.append({int(leaf): values[group] for leaf, group in zip(ids, groups)})
-            self.stages.append((field, columns, transform, model, donors))
+                donors.append({int(leaf): codes[group] for leaf, group in zip(ids, groups)})
+            self.stages.append((field, columns, transform, model, donors, values))
             print(f'  {field}: reconstruction fitted in {time.monotonic() - started:.1f}s', flush=True)
         return self
 
     def sample(self, frame, *, seed):
+        return self._sample(frame, seed=seed)
+
+    def iter_samples(self, frame, *, seeds):
+        """Reuse the first stage's unchanged transform across independent draws.
+
+        Later stages are transformed afresh because preceding sampled fields
+        change. Random-number calls and row ordering match sample() exactly.
+        """
+        if not getattr(self, 'stages', None):
+            raise ValueError('Fit reconstruction on auxiliary data first.')
+        _, columns, transform, _, _ = self.stages[0][:5]
+        first_x = sparse.csr_matrix(transform.transform(frame[columns]), dtype=np.float32)
+        for seed in seeds:
+            yield self._sample(frame, seed=seed, first_x=first_x)
+
+    def _sample(self, frame, *, seed, first_x=None):
         if not hasattr(self, 'stages'):
             raise ValueError('Fit reconstruction on auxiliary data first.')
         # Drop all hidden values before any stage; never condition on true labels.
         completed = frame[EXPANDED_FEATURES].drop(columns=self.hidden).copy()
         rng = np.random.default_rng(seed)
-        for field, columns, transform, model, donors in self.stages:
-            x = sparse.csr_matrix(transform.transform(completed[columns]), dtype=np.float32)
+        for stage_index, stage in enumerate(self.stages):
+            field, columns, transform, model, donors = stage[:5]
+            # Five-element stages from older saved chains contain values
+            # directly. New stages contain compact codes into a value codebook.
+            donor_values = stage[5] if len(stage) > 5 else None
+            x = (first_x if stage_index == 0 and first_x is not None else
+                 sparse.csr_matrix(transform.transform(completed[columns]), dtype=np.float32))
             tree_choices = rng.integers(len(model.estimators_), size=len(completed))
             values = np.empty(len(completed), dtype=float)
             for tree in np.unique(tree_choices):
@@ -89,7 +117,8 @@ class ConditionalDonorChain:
                 leaf_ids = model.estimators_[tree].apply(x[rows])
                 for leaf in np.unique(leaf_ids):
                     selected = rows[leaf_ids == leaf]
-                    values[selected] = rng.choice(donors[tree][int(leaf)], size=len(selected))
+                    sampled = rng.choice(donors[tree][int(leaf)], size=len(selected))
+                    values[selected] = sampled if donor_values is None else donor_values[sampled]
             completed[field] = values
         return completed[EXPANDED_FEATURES]
 
@@ -121,21 +150,58 @@ def auxiliary_roles(auxiliary, attack_result, *, seed=42):
 
 
 def completion_scores(query, candidates, reconstructor, base_classifier, *, k,
-                      seed, walk_config, numeric_protocol=None):
-    """Return K scores per candidate; use common blind-walk randomness.
+                      seed, walk_config, numeric_protocol=None, include_blind_walk=True,
+                      checkpoint_dir=None, context_signature=None):
+    """Return K scores per candidate; optionally use common blind-walk randomness.
 
     Candidate ordering must be deterministic. Membership labels are never passed
-    here. Each completed record goes through the original four attack features.
+    here. Each completed record uses the same selected attack features as the
+    fitted base classifier (three probability features, optionally blind walk).
     """
     if k < 2:
         raise ValueError('At least two completions are needed for variability.')
+    from pathlib import Path
+    import inspect
+    import joblib
+    from .uncertainty_checkpoints import atomic_save, frame_signature, load_verified
+
+    cached = [None] * k
+    paths, signatures = [], []
+    if checkpoint_dir is not None:
+        if context_signature is None or not hasattr(reconstructor, 'checkpoint_signature_'):
+            raise ValueError('Resumable scoring requires fitted-oracle and reconstruction signatures.')
+        visible = candidates[EXPANDED_FEATURES + ['income_gt_50k']].drop(columns=reconstructor.hidden)
+        source_dir = Path(__file__).parent
+        feature_code = [(source_dir / name).read_bytes()
+                        for name in ['paper_attack_features.py', 'shadow_models.py']]
+        settings = dict(context=context_signature, base_attack=joblib.hash(base_classifier),
+            reconstruction=reconstructor.checkpoint_signature_, candidates=frame_signature(visible),
+            walk_config=walk_config, numeric_protocol=numeric_protocol,
+            include_blind_walk=include_blind_walk,
+            feature_code=feature_code, completion_code=inspect.getsource(completion_scores))
+        signatures = [joblib.hash(dict(settings, seed=seed + draw)) for draw in range(k)]
+        paths = [Path(checkpoint_dir) / f'score_draw_{draw + 1:03d}.joblib' for draw in range(k)]
+        cached = [load_verified(path, signature) for path, signature in zip(paths, signatures)]
+    missing = [draw for draw, value in enumerate(cached) if value is None]
+    generated = reconstructor.iter_samples(candidates[EXPANDED_FEATURES],
+        seeds=[seed + draw for draw in missing])
     scores, audits = [], []
     for draw in range(k):
-        completion = reconstructor.sample(candidates[EXPANDED_FEATURES], seed=seed + draw)
+        if cached[draw] is not None:
+            print(f'  Completion {draw + 1}/{k}: loaded saved attack scores', flush=True)
+            values, audit = cached[draw]
+            scores.append(values)
+            audits.append(audit)
+            continue
+        print(f'  Completion {draw + 1}/{k}: sampling and extracting attack features', flush=True)
+        completion = next(generated)
         features, audit = extract_paper_features(query, completion,
             candidates['income_gt_50k'].to_numpy(), config=walk_config,
-            numeric_protocol=numeric_protocol)
-        scores.append(base_classifier.predict_proba(features[list(base_classifier.feature_names_in_)])[:, 1])
+            numeric_protocol=numeric_protocol, include_blind_walk=include_blind_walk)
+        values = base_classifier.predict_proba(features[list(base_classifier.feature_names_in_)])[:, 1]
+        if checkpoint_dir is not None:
+            atomic_save(paths[draw], signatures[draw], (values, audit))
+        scores.append(values)
         audits.append(audit)
     return np.column_stack(scores), audits
 
@@ -148,8 +214,12 @@ def summarize_scores(scores):
                              std=scores.std(axis=1, ddof=0)))
 
 
-def fit_aggregation(meta, calibration, *, seed=42):
-    """Fit matched mean-only and mean+std RFs; calibrate every method equally."""
+def fit_aggregation(meta, calibration, *, seed=42, include_logistic=False):
+    """Fit matched RFs and optional L2 logistic controls; calibrate separately.
+
+    Logistic models use the same draws/roles as RF, fixed C=1, and a scaler fit
+    only on meta-training records. Calibration labels select thresholds only.
+    """
     for frame in [meta, calibration]:
         if set(frame['membership'].unique()) != {0, 1}:
             raise ValueError('Meta fit and calibration each require both classes.')
@@ -159,6 +229,16 @@ def fit_aggregation(meta, calibration, *, seed=42):
             min_samples_leaf=20, max_features=1.0, random_state=seed, n_jobs=2)
         model.fit(meta[columns], meta['membership'])
         learned[name] = model
+    if include_logistic:
+        for name, columns in [('logistic_mean', ['mean']),
+                              ('logistic_uncertainty', ['mean', 'std'])]:
+            model = Pipeline([
+                ('scale', StandardScaler()),
+                ('classifier', LogisticRegression(C=1.0, solver='lbfgs',
+                    max_iter=1000, random_state=seed)),
+            ])
+            model.fit(meta[columns], meta['membership'])
+            learned[name] = model
     scores = aggregation_predictions(calibration, learned)
     thresholds = {}
     for name, values in scores.items():

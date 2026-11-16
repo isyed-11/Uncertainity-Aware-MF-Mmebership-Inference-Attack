@@ -1,6 +1,10 @@
--r requirements-data.txt
+folktables==0.0.12
+numpy==2.5.4
+pandas==3.1.1
 scikit-learn==1.9.1
 torch>=2.2,<3
 joblib>=1.4,<2
 ipykernel>=6,<8
 xgboost>=2,<4
+opacus==1.6.0
+matplotlib>=3.8,<4

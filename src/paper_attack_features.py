@@ -48,6 +48,21 @@ def make_probability_oracle(model, preprocessor, *, schema):
     return query
 
 
+def probability_attack_features(probabilities, income_labels):
+    """Compute the three output features without perturbation queries."""
+    probabilities = np.asarray(probabilities, dtype=float)
+    labels = np.asarray(income_labels, dtype=int)
+    basic = membership_features(probabilities, labels)
+    true_p = probabilities[np.arange(len(labels)), labels]
+    other_p = probabilities[np.arange(len(labels)), 1 - labels]
+    return pd.DataFrame({
+        'class_scaled_logit': (np.log(np.clip(true_p, 1e-12, 1))
+                               - np.log(np.clip(other_p, 1e-12, 1))),
+        'entropy': basic['entropy'].to_numpy(),
+        'cross_entropy': basic['loss'].to_numpy(),
+    })
+
+
 def extract_paper_features(query, frame, income_labels, *, config=None, include_blind_walk=True,
                            numeric_protocol=None):
     """Return four attack features and query/censoring diagnostics.
@@ -70,6 +85,16 @@ def extract_paper_features(query, frame, income_labels, *, config=None, include_
     labels = np.asarray(income_labels)
     if len(frame) != len(labels) or frame.empty:
         raise ValueError('Expected nonempty, row-aligned inputs and income labels.')
+    if not include_blind_walk:
+        # No walks depend on candidate batches in this mode. Transform/query
+        # each completed table once; the MLP oracle handles its own batching.
+        features = probability_attack_features(query(frame), labels)
+        print(f'Attack feature extraction: {len(frame):,}/{len(frame):,}', flush=True)
+        return features, {
+            'record_queries': len(frame), 'max_record_queries': len(frame),
+            'walk_censored_fraction': None, 'blind_walk_enabled': False,
+            'config': settings,
+        }
     rng = np.random.default_rng(settings['seed'])
     numeric_protocol = NUMERIC_PROTOCOL | (numeric_protocol or {})
     numeric = [column for column in frame if column in numeric_protocol]

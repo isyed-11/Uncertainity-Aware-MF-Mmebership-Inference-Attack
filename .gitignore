@@ -4,3 +4,4 @@ data/raw/
 data/processed/
 artifacts/
 .ipynb_checkpoints/
+.codex_tmp_pdf

@@ -1,298 +1,334 @@
-"""Create the expanded experiment notebook; does not execute it."""
+# Generate the four-year, complete-feature Exp 3 baseline without running cells.
+import ast
 import json
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-cells = []
+DESTINATION = ROOT / 'exp_3_expanded dataset.ipynb'
+metadata = json.loads(DESTINATION.read_text(encoding='utf-8')).get('metadata', {})
+metadata.pop('widgets', None)
+notebook = dict(nbformat=4, nbformat_minor=5, metadata=metadata, cells=[])
 
 
-def markdown(text):
-    cells.append({'cell_type': 'markdown', 'metadata': {}, 'id': f'exp3-{len(cells)}',
-                  'source': text.splitlines(keepends=True)})
+def add(kind, source):
+    cell = dict(cell_type=kind, metadata={}, id=f'multiyear-baseline-{len(notebook["cells"])}',
+        source=source.splitlines(keepends=True))
+    if kind == 'code':
+        ast.parse(source)
+        cell.update(execution_count=None, outputs=[])
+    notebook['cells'].append(cell)
 
 
-def code(text):
-    cells.append({'cell_type': 'code', 'metadata': {}, 'id': f'exp3-{len(cells)}',
-                  'execution_count': None, 'outputs': [], 'source': text.splitlines(keepends=True)})
+add('markdown', '''# Exp 3 baseline: two targets and two auxiliary years
+Train separate ACS 2023 and ACS 2024 income MLPs. Train a separate membership
+attack from each auxiliary year, ACS 2014 and ACS 2018, using 16 shadows per year
+(6 random forests, 5 gradient boosting, 5 XGBoost). Report all four combinations:
+2023/2014, 2023/2018, 2024/2014 and 2024/2018 (target/auxiliary).
 
+Use the explicitly approved common 47-feature schema: VPS is absent from the
+2024 file and is excluded from all four years. Other feature definitions,
+nominal income >$50,000 labels, eligibility, training settings and split sizes
+follow Exp 3. The historical 48-input metrics are a separate configuration.
+Every target and shadow fits its own preprocessor on training records only.
 
-markdown("""# Experiment 3: ACS 2023 target and ACS 2014 auxiliary shadows
-Train the target on 100,000 California 2023 records with expanded predictors.
-Compare 16 California 2014 shadows with 16 UCI Adult shadows in separate cells.
-Both pools cycle random forest (6), gradient boosting (5), and XGBoost (5).
-Each model fits its own preprocessing on its training partition only.
-The label is nominal personal income (PINCP) >$50,000 in both years, without
-ADJINC or CPI inflation adjustment. Original eligibility filters are retained. Occupation and other category
-codes remain native to each year; no cross-year code equivalence is assumed.
-Income-derived predictors, identifiers, survey weights and allocation flags are
-excluded. MIA uses logit, blind walk, entropy and cross-entropy.
-Perturbation calls retain the original protocol: categorical commuting changes
-for shadows and numeric commuting changes for the target. No protocol correction
-was applied in the 100,000-record run.
-Prepared for review; execution requires user approval.
-""")
-code('''from pathlib import Path
+Blind walks are enabled, with the same numeric protocol for shadows and targets.
+All 16 shadows for one auxiliary year share that year's grouped attack split;
+auxiliary validation alone selects thresholds. Target membership labels only
+score the frozen attacks. Native category codes are retained within each year.
+
+Extract target attack features once per target and reuse them for both auxiliary
+attacks. Train and query one shadow at a time to keep memory use bounded. No
+model checkpoints or log files are loaded or saved. Compact progress, metrics,
+row assignments and the study protocol are exported. The known sklearn/joblib
+warning is suppressed; other warnings and exceptions remain visible.
+
+This notebook stops after complete-feature baseline MIA. PFV, missing-feature
+reconstruction and uncertainty-aware methods are not run here. Notebook creation
+and validation execute no experiments; ask before running the cells.
+''')
+add('code', '''from pathlib import Path
+import csv
+import gc
+import importlib
 import json
 import time
 import numpy as np
 import pandas as pd
 import torch
 from IPython.display import display
-from src.data import load_acs_income, split_acs_data, subset_target_training
-from src.expanded_data import (
-    load_expanded_acs, preprocess_expanded_partitions, expanded_feature_inventory,
-    reference_split_config, EXPANDED_FEATURES, EXCLUDED, load_expanded_year,
+from src.data import split_acs_data, subset_target_training
+from src.expanded_data import reference_split_config
+from src.multiyear_baseline import (
+    BASELINE_FEATURES, baseline_raw_path, load_baseline_year,
+    preprocess_baseline_partitions, baseline_feature_inventory, train_baseline_shadow,
 )
 from src.training import train_target_model, evaluate_model
-from src.exp3_checkpoints import cached_target_train, cached_expanded_shadows
-from src.shadow_models import (load_adult_data, train_shadow_models,
-                               summarize_shadow_models, PAPER_SHADOW_ALGORITHMS)
+from src.shadow_models import PAPER_SHADOW_ALGORITHMS, summarize_shadow_models
 from src.membership_attack import train_membership_classifier, evaluate_attack
-from src.paper_attack_features import (collect_shadow_paper_features, collect_target_paper_features,
-                                       make_probability_oracle)
+from src.paper_attack_features import (
+    collect_shadow_paper_features, collect_target_paper_features, make_probability_oracle,
+)
+import src.notebook_output as notebook_output_module
+importlib.reload(notebook_output_module)
+notebook_output_module.suppress_sklearn_parallel_warning()
+from src.notebook_output import CellProgress, quiet_output
 
 torch.set_num_threads(4)
 SEED = 42
+TARGET_YEARS = (2023, 2024)
+AUXILIARY_YEARS = (2014, 2018)
 TRAIN_SIZE = 100_000
-INCOME_BASE_YEAR = None
-NOMINAL_INCOME_METADATA = dict(enabled=False, label='PINCP > 50000', adjustment='None')
-RUN_DIR = Path('artifacts/exp_3_2023_2014_100000_nominal_paper_algorithms')
-ADULT_RUN_DIR = RUN_DIR / 'adult_auxiliary'
-RUN_DIR.mkdir(parents=True, exist_ok=True)
+N_SHADOW_MODELS = 16
+SHADOW_RECORDS_PER_CLASS = 2000
+SHADOW_ALGORITHMS = PAPER_SHADOW_ALGORITHMS
+FEATURE_COLUMNS = list(BASELINE_FEATURES)
+assert len(FEATURE_COLUMNS) == 47 and 'VPS' not in FEATURE_COLUMNS
+DATA_ROOT = Path('data/raw/folktables')
 SPLIT_CONFIG = reference_split_config()
-assert SPLIT_CONFIG['seed'] == SEED, 'Use the reference seed consistently.'
+assert SPLIT_CONFIG['seed'] == SEED
 TRAIN_CONFIG = dict(hidden_dims=(512, 256, 128), dropout=0.0, epochs=100,
     batch_size=256, learning_rate=1e-3, weight_decay=0.0, seed=SEED,
     device='cpu', early_stopping=False, restore_best=False, monitor_train=True)
 WALK_CONFIG = dict(max_steps=20, repeats=2, categorical_change_probability=0.05,
-                   batch_size=512, seed=SEED)
-SHADOW_RECORDS_PER_CLASS = 2000
-N_SHADOW_MODELS = 16
-SHADOW_ALGORITHMS = PAPER_SHADOW_ALGORITHMS
-# Native commuting units; all other added codes are categorical in the walk.
+    batch_size=512, seed=SEED)
 EXPANDED_NUMERIC_WALK = {'JWMNP': (2.0, 0, 200), 'JWRIP': (1.0, 1, 10)}
-print('Training size:', TRAIN_SIZE, '| Input fields:', len(EXPANDED_FEATURES))
-print('Reference split configuration:', SPLIT_CONFIG)
+INCLUDE_BLIND_WALK = True
+ATTACK_FEATURE_SET = 'paper' if INCLUDE_BLIND_WALK else 'paper_no_walk'
+ATTACK_FEATURES = (['class_scaled_logit', 'blind_walk', 'entropy', 'cross_entropy']
+    if INCLUDE_BLIND_WALK else ['class_scaled_logit', 'entropy', 'cross_entropy'])
+ATTACK_MODE = 'with_walk_consistent_v1' if INCLUDE_BLIND_WALK else 'probability_only_v1'
+RUN_DIR = Path('artifacts/exp_3_targets2023_2024_aux2014_2018_s16_common47') / ATTACK_MODE
+RUN_DIR.mkdir(parents=True, exist_ok=True)
+print('Targets:', TARGET_YEARS, '| Auxiliary pools:', AUXILIARY_YEARS)
+print('Inputs:', len(FEATURE_COLUMNS), '| Shadows per auxiliary year:', N_SHADOW_MODELS)
+print('Attack features:', ATTACK_FEATURES)
+print('Results:', RUN_DIR)
 ''')
-markdown('''## Load 2023 target records and make stratified partitions
-Split sizes and seed follow Experiment 2, applied to the new 2023 records.
+add('markdown', '''## Check all source files before training
+Check headers for all four years first. Income and survey weights are used only
+for eligibility/labels. They are excluded from the 47 predictors. Missing source
+columns cause an early error rather than silent imputation of unavailable inputs.
 ''')
-code('''expanded_source = load_expanded_year(2023, income_base_year=INCOME_BASE_YEAR)
-reference_partitions = split_acs_data(expanded_source, **SPLIT_CONFIG)
-expanded_base_partitions = reference_partitions
-expanded_partitions = subset_target_training(
-    expanded_base_partitions, train_size=TRAIN_SIZE, seed=SEED)
-for name in ['validation', 'test', 'mia_members', 'mia_nonmembers']:
-    np.testing.assert_array_equal(expanded_partitions[name].index, reference_partitions[name].index)
-assert set(expanded_partitions['mia_members'].index).issubset(expanded_partitions['train'].index)
-for name in ['validation', 'test', 'mia_nonmembers']:
-    assert set(expanded_partitions[name].index).isdisjoint(expanded_partitions['train'].index)
-print('Target income adjustment:', expanded_source.attrs.get('income_adjustment', NOMINAL_INCOME_METADATA))
-print('Eligible records:', len(expanded_source))
-print('Unused records:', len(expanded_source) - TRAIN_SIZE
-      - sum(len(expanded_partitions[name]) for name in ['validation', 'test', 'mia_nonmembers']))
-display(pd.DataFrame({name: {'records': len(part), 'positive_rate': part['income_gt_50k'].mean()}
-    for name, part in expanded_partitions.items()}).T)
-feature_inventory = expanded_feature_inventory(expanded_partitions['train'])
-display(feature_inventory)
+add('code', '''source_checks = []
+for year in TARGET_YEARS + AUXILIARY_YEARS:
+    path = baseline_raw_path(year, DATA_ROOT)
+    if not path.is_file():
+        raise FileNotFoundError(f'ACS {year} source CSV is required: {path}')
+    with path.open(encoding='utf-8-sig', newline='') as handle:
+        columns = set(next(csv.reader(handle, skipinitialspace=True)))
+    missing = set(FEATURE_COLUMNS + ['PINCP', 'PWGTP']) - columns
+    if missing:
+        raise ValueError(f'ACS {year} missing required columns: {sorted(missing)}')
+    source_checks.append(dict(year=year, role='target' if year in TARGET_YEARS else 'auxiliary',
+        file=str(path), predictors=len(FEATURE_COLUMNS)))
+display(pd.DataFrame(source_checks))
 ''')
-markdown('''## Preprocess using training records only
-The output is sparse; the MLP densifies only the current batch. Cardinality
-counts above refer to the original fields, not one-hot dimensions.
+add('markdown', '''## Train and evaluate two independent target MLPs
+Each target uses 100,000 training records and its own stratified validation,
+income-test and MIA partitions. MIA members belong to training; MIA nonmembers
+are held out. Each year has 10,000 MIA members and 10,000 MIA nonmembers.
+Targets train for 100 epochs with final weights retained. The same fixed split
+configuration is applied independently within each year.
 ''')
-code('''expanded_preprocessor, expanded_arrays = preprocess_expanded_partitions(expanded_partitions)
-print('Encoded input dimensions:', expanded_arrays['train']['X'].shape[1])
-print('Training CSR storage (MiB):', round(sum(
-    value.nbytes for value in [expanded_arrays['train']['X'].data,
-    expanded_arrays['train']['X'].indices, expanded_arrays['train']['X'].indptr]) / 2**20, 2))
-pd.DataFrame({name: {'rows': values['X'].shape[0], 'encoded_features': values['X'].shape[1]}
-    for name, values in expanded_arrays.items()}).T
+add('code', '''def prepare_target(target_year, progress):
+    started = time.monotonic()
+    progress.update(f'Target {target_year}: loading and splitting')
+    source = load_baseline_year(target_year, data_root=DATA_ROOT)
+    reference = split_acs_data(source, **SPLIT_CONFIG)
+    partitions = subset_target_training(reference, train_size=TRAIN_SIZE, seed=SEED)
+    for name in ['validation', 'test', 'mia_members', 'mia_nonmembers']:
+        np.testing.assert_array_equal(partitions[name].index, reference[name].index)
+    train_ids = set(partitions['train'].index)
+    assert set(partitions['mia_members'].index).issubset(train_ids)
+    for name in ['validation', 'test', 'mia_nonmembers']:
+        assert train_ids.isdisjoint(partitions[name].index)
+    progress.update(f'Target {target_year}: preprocessing and training {TRAIN_CONFIG["epochs"]} epochs')
+    with quiet_output():
+        preprocessor, arrays = preprocess_baseline_partitions(partitions)
+        model, history, training = train_target_model(
+            arrays['train']['X'], arrays['train']['y'],
+            arrays['validation']['X'], arrays['validation']['y'], **TRAIN_CONFIG)
+        income_metrics = {name: evaluate_model(model, arrays[name]['X'], arrays[name]['y'])
+            for name in ['train', 'validation', 'test']}
+    assert list(preprocessor.feature_names_in_) == FEATURE_COLUMNS
+    progress.update(f'Target {target_year}: extracting baseline attack features once')
+    with quiet_output():
+        attack_features, query_audit = collect_target_paper_features(
+            model, preprocessor, partitions, config=WALK_CONFIG, seed=SEED,
+            numeric_protocol=EXPANDED_NUMERIC_WALK, include_blind_walk=INCLUDE_BLIND_WALK)
+    assert list(attack_features[ATTACK_FEATURES].columns) == ATTACK_FEATURES
+    directory = RUN_DIR / f'target_{target_year}'
+    directory.mkdir(parents=True, exist_ok=True)
+    for name, frame in partitions.items():
+        pd.Series(frame.index, name='record_id').to_csv(directory / f'{name}_ids.csv', index=False)
+    baseline_feature_inventory(partitions['train']).to_csv(directory / 'feature_inventory.csv')
+    pd.DataFrame(income_metrics).T.to_csv(directory / 'income_metrics.csv')
+    progress.update(f'Target {target_year}: complete ({time.monotonic() - started:.1f}s)')
+    return dict(model=model, preprocessor=preprocessor, partitions=partitions,
+        attack_features=attack_features, income_metrics=income_metrics, history=history,
+        training=training, query_audit=query_audit, eligible_records=len(source),
+        income_adjustment=source.attrs['income_adjustment'])
 ''')
-markdown('''## Train the target
-Fixed 100 epochs, final weights retained. Validation is monitored but does not
-select an epoch in this deliberately overfit experimental condition.
+add('code', '''target_results = {}
+target_progress = CellProgress()
+for target_year in TARGET_YEARS:
+    target_results[target_year] = prepare_target(target_year, target_progress)
+    gc.collect()
+target_income_rows = [dict(target_year=year, partition=name, **metrics)
+    for year, result in target_results.items()
+    for name, metrics in result['income_metrics'].items()]
+target_income_metrics = pd.DataFrame(target_income_rows)
+display(target_income_metrics.set_index(['target_year', 'partition']).round(4))
+print('Two target models are available in target_results[2023] and target_results[2024].')
 ''')
-code('''target_started = time.monotonic()
-expanded_model, expanded_history, expanded_metadata = cached_target_train(
-    expanded_arrays, TRAIN_CONFIG, RUN_DIR)
-target_training_seconds = time.monotonic() - target_started
-print('Target training seconds:', round(target_training_seconds, 1))
-display(pd.DataFrame(expanded_history).iloc[::10])
+add('markdown', '''## Fit separate baseline attacks from ACS 2014 and ACS 2018
+For each auxiliary year, train 16 shadows independently: cycle RF, gradient
+boosting and XGBoost with seeds 42, 52, ..., 192. Preserve the original 40/20/40
+shadow train/validation/nonmember splits and estimator settings. Each shadow
+contributes 2,000 sampled members and 2,000 sampled nonmembers to the attack.
+
+Query one shadow at a time and discard its fitted model after feature extraction.
+The resulting features match collecting the same ordered models as one pool.
+Record-ID-grouped 60/20/20 attack splits keep repeated records in one role. Fit
+one RF attack per auxiliary year and select its thresholds on that year's
+validation records. The two auxiliary pools are not combined or selected using
+target scores. Both targets use each auxiliary attack's frozen thresholds.
 ''')
-markdown('''## Income-prediction evaluation
-These are target income metrics, not membership metrics. The test set was not
-used for model selection. Do not choose target settings using these results.
+add('code', '''def fit_query_one_shadow(auxiliary, name, algorithm, seed):
+    with quiet_output():
+        shadow = train_baseline_shadow(auxiliary, algorithm, seed=seed)
+        shadow['attack_data']['shadow_model'] = name
+        audit_rows = shadow['attack_data'].iloc[:32]
+        oracle = make_probability_oracle(shadow['model'], shadow['preprocessor'], schema='acs')
+        native = auxiliary.loc[audit_rows['record_id'], FEATURE_COLUMNS]
+        np.testing.assert_allclose(oracle(native),
+            audit_rows[['p_income_le_50k', 'p_income_gt_50k']].to_numpy(),
+            rtol=1e-5, atol=1e-6, err_msg=f'Query mismatch: {name}')
+        features, audits = collect_shadow_paper_features({name: shadow}, auxiliary,
+            per_class=SHADOW_RECORDS_PER_CLASS, config=WALK_CONFIG, seed=SEED,
+            numeric_protocol=EXPANDED_NUMERIC_WALK, include_blind_walk=INCLUDE_BLIND_WALK)
+        metrics = summarize_shadow_models({name: shadow})
+    return features, audits[name], metrics
+
+
+def prepare_auxiliary_attack(auxiliary_year, progress):
+    started = time.monotonic()
+    auxiliary = load_baseline_year(auxiliary_year, data_root=DATA_ROOT)
+    for target_year, target in target_results.items():
+        for frame in target['partitions'].values():
+            assert set(auxiliary.index).isdisjoint(frame.index)
+    feature_tables, shadow_metric_tables, query_audits, shadow_seeds = [], [], {}, {}
+    for index in range(N_SHADOW_MODELS):
+        algorithm = SHADOW_ALGORITHMS[index % len(SHADOW_ALGORITHMS)]
+        name = f'{algorithm}_{index + 1:02d}'
+        seed = SEED + 10 * index
+        progress.update(f'Auxiliary {auxiliary_year}: shadow [{index + 1}/{N_SHADOW_MODELS}] {name}')
+        features, audit, metrics = fit_query_one_shadow(auxiliary, name, algorithm, seed)
+        feature_tables.append(features)
+        shadow_metric_tables.append(metrics)
+        query_audits[name] = audit
+        shadow_seeds[name] = seed
+        gc.collect()
+    attack_data = pd.concat(feature_tables, ignore_index=True)
+    assert len(attack_data) == N_SHADOW_MODELS * 2 * SHADOW_RECORDS_PER_CLASS
+    progress.update(f'Auxiliary {auxiliary_year}: fitting attack and calibrating thresholds')
+    with quiet_output():
+        attack = train_membership_classifier(attack_data, seed=SEED,
+            algorithm='random_forest', feature_set=ATTACK_FEATURE_SET)
+    assert list(attack['classifier'].feature_names_in_) == ATTACK_FEATURES
+    role_ids = {name: set(frame['record_id']) for name, frame in attack['splits'].items()}
+    assert role_ids['train'].isdisjoint(role_ids['validation'])
+    assert role_ids['train'].isdisjoint(role_ids['test'])
+    assert role_ids['validation'].isdisjoint(role_ids['test'])
+    directory = RUN_DIR / f'auxiliary_{auxiliary_year}'
+    directory.mkdir(parents=True, exist_ok=True)
+    pd.concat(shadow_metric_tables).to_csv(directory / 'shadow_income_metrics.csv')
+    pd.DataFrame(attack['metrics']).T.to_csv(directory / 'attack_metrics.csv')
+    for name, frame in attack['splits'].items():
+        frame[['record_id', 'shadow_model', 'membership']].to_csv(
+            directory / f'attack_{name}_rows.csv', index=False)
+    progress.update(f'Auxiliary {auxiliary_year}: complete ({time.monotonic() - started:.1f}s)')
+    return dict(attack_result=attack, query_audits=query_audits, shadow_seeds=shadow_seeds,
+        eligible_records=len(auxiliary), income_adjustment=auxiliary.attrs['income_adjustment'])
 ''')
-code('''expanded_metrics = {name: evaluate_model(expanded_model, expanded_arrays[name]['X'],
-    expanded_arrays[name]['y']) for name in ['train', 'validation', 'test']}
-display(pd.DataFrame(expanded_metrics).T)
-print('Train-test accuracy gap (percentage points):',
-      100 * (expanded_metrics['train']['accuracy'] - expanded_metrics['test']['accuracy']))
+add('code', '''auxiliary_results = {}
+auxiliary_progress = CellProgress()
+for auxiliary_year in AUXILIARY_YEARS:
+    auxiliary_results[auxiliary_year] = prepare_auxiliary_attack(auxiliary_year, auxiliary_progress)
+    gc.collect()
+auxiliary_attack_rows = [dict(auxiliary_year=year, partition=name, **metrics)
+    for year, result in auxiliary_results.items()
+    for name, metrics in result['attack_result']['metrics'].items()]
+auxiliary_attack_metrics = pd.DataFrame(auxiliary_attack_rows)
+display(auxiliary_attack_metrics.set_index(['auxiliary_year', 'partition'])[
+    ['accuracy', 'balanced_accuracy', 'roc_auc', 'tpr_at_1pct_fpr_roc']].round(4))
 ''')
-markdown('''## 16 expanded ACS 2014 shadows using the paper's three named algorithms
-Keep existing RF/XGBoost settings and 40/20/40 splits.
-Gradient boosting uses 300 trees, learning rate 0.05, maximum depth 3, seed per shadow.
-These are project settings; the paper does not provide its exact configurations.
-Each preprocessor fits its own training records.
-These shadows do not assume knowledge of the target architecture.
-Cycle the three algorithms using unique seeds and splits. Models may reuse auxiliary
-records across shadows; grouped attack splits keep repeated records together.
+add('markdown', '''## Baseline MIA: evaluate all four target/auxiliary pairs
+Target features were extracted once per target, independently of auxiliary
+membership labels. Reuse them here; changing auxiliary year adds no target-oracle
+queries. Every target uses identical MIA records for its two auxiliary comparisons.
+
+Accuracy and balanced accuracy use the auxiliary-validation-selected cutoff.
+ROC-derived TPR@1% FPR is an evaluation summary. Separate TPR/FPR columns report
+the actual operating point of the frozen auxiliary low-FPR cutoff; its target FPR
+need not equal 1%. No target labels choose cutoffs or the auxiliary year.
 ''')
-code('''acs_auxiliary = load_expanded_year(2014, income_base_year=INCOME_BASE_YEAR)
-print('Auxiliary income adjustment:', acs_auxiliary.attrs.get('income_adjustment', NOMINAL_INCOME_METADATA))
-assert set(acs_auxiliary.index).isdisjoint(expanded_source.index)
-shadow_results = cached_expanded_shadows(acs_auxiliary, seed=SEED, n_models=N_SHADOW_MODELS,
-    run_dir=RUN_DIR, algorithms=SHADOW_ALGORITHMS)
-# Verify native-input queries reproduce probabilities computed during training.
-for name, result in shadow_results.items():
-    audit_rows = result['attack_data'].iloc[:32]
-    native = acs_auxiliary.loc[audit_rows['record_id'], EXPANDED_FEATURES]
-    query = make_probability_oracle(result['model'], result['preprocessor'], schema='acs')
-    np.testing.assert_allclose(query(native),
-        audit_rows[['p_income_le_50k', 'p_income_gt_50k']].to_numpy(),
-        rtol=1e-5, atol=1e-6, err_msg=f'Query mismatch for {name}')
-print('Probability oracle consistency verified for all 16 shadows.')
-display(summarize_shadow_models(shadow_results))
+add('code', '''baseline_rows = []
+for target_year in TARGET_YEARS:
+    features = target_results[target_year]['attack_features']
+    for auxiliary_year in AUXILIARY_YEARS:
+        attack = auxiliary_results[auxiliary_year]['attack_result']
+        with quiet_output():
+            metrics, scores = evaluate_attack(attack['classifier'], features,
+                threshold=attack['accuracy_threshold'], low_fpr_threshold=attack['low_fpr_threshold'])
+        metrics['tpr_at_accuracy_threshold'] = metrics['tp'] / metrics['members']
+        metrics['fpr_at_accuracy_threshold'] = metrics['fp'] / (metrics['records'] - metrics['members'])
+        baseline_rows.append(dict(target_year=target_year, auxiliary_year=auxiliary_year,
+            n_shadow_models=N_SHADOW_MODELS, **metrics))
+        features.assign(membership_score=scores).to_csv(
+            RUN_DIR / f'target_{target_year}_auxiliary_{auxiliary_year}_scores.csv', index=False)
+baseline_mia_metrics = pd.DataFrame(baseline_rows).set_index(['target_year', 'auxiliary_year'])
+assert len(baseline_mia_metrics) == len(TARGET_YEARS) * len(AUXILIARY_YEARS)
+display(baseline_mia_metrics[['accuracy', 'balanced_accuracy', 'roc_auc',
+    'tpr_at_1pct_fpr_roc', 'tpr_at_shadow_threshold', 'fpr_at_shadow_threshold']].round(4))
 ''')
-markdown('''## Extract shadow features and fit the random forest attack
-Features: class-scaled logit, blind walk, entropy and cross-entropy. Use 2,000
-members and 2,000 non-members per shadow. Attack record-ID grouping prevents
-repeated 2014 records from crossing attack partitions. Select both thresholds
-on auxiliary validation only; no target membership labels train this classifier.
+add('markdown', '''## Save final metrics and protocol
+CSV/JSON outputs contain metrics, predictions and row assignments, not fitted
+models or resumable checkpoints. Each year's attack result remains in memory for
+later inspection; there is no missing-feature or uncertainty computation here.
 ''')
-code('''shadow_attack_data, shadow_query_diagnostics = collect_shadow_paper_features(
-    shadow_results, acs_auxiliary, per_class=SHADOW_RECORDS_PER_CLASS,
-    config=WALK_CONFIG, seed=SEED)
-display(pd.DataFrame(shadow_query_diagnostics).T)
-attack_result = train_membership_classifier(
-    shadow_attack_data, seed=SEED, algorithm='random_forest', feature_set='paper')
-display(pd.DataFrame(attack_result['metrics']).T)
+add('code', '''baseline_mia_metrics.to_csv(RUN_DIR / 'baseline_mia_metrics.csv')
+target_income_metrics.to_csv(RUN_DIR / 'target_income_metrics.csv', index=False)
+auxiliary_attack_metrics.to_csv(RUN_DIR / 'auxiliary_attack_metrics.csv', index=False)
+protocol = dict(execution_status='baseline_mia_completed',
+    target_years=TARGET_YEARS, auxiliary_years=AUXILIARY_YEARS,
+    pairs=[dict(target_year=t, auxiliary_year=a) for t in TARGET_YEARS for a in AUXILIARY_YEARS],
+    feature_count=len(FEATURE_COLUMNS), features=FEATURE_COLUMNS,
+    schema_change='VPS excluded from every year with user approval; absent from 2024 file',
+    label='nominal PINCP > 50000', eligibility='AGEP > 16; PINCP > 100; WKHP > 0; PWGTP >= 1',
+    train_size=TRAIN_SIZE, split_config=SPLIT_CONFIG, target_training_config=TRAIN_CONFIG,
+    shadow_models_per_auxiliary=N_SHADOW_MODELS, total_shadow_models=N_SHADOW_MODELS * len(AUXILIARY_YEARS),
+    shadow_algorithms=list(SHADOW_ALGORITHMS), records_per_class_per_shadow=SHADOW_RECORDS_PER_CLASS,
+    attack_feature_set=ATTACK_FEATURE_SET, attack_features=ATTACK_FEATURES,
+    include_blind_walk=INCLUDE_BLIND_WALK, walk_config=WALK_CONFIG,
+    extra_numeric_protocol=EXPANDED_NUMERIC_WALK,
+    walk_protocol_scope='Same numeric fields and perturbation settings for all target and shadow years',
+    threshold_selection='Each auxiliary validation only; frozen for both targets',
+    target_features='Queried once per target and reused for both auxiliary attacks',
+    checkpoints_enabled=False, logging_enabled=False,
+    targets={str(year): dict(training=result['training'], eligible_records=result['eligible_records'],
+        income_metrics=result['income_metrics'], query_audit=result['query_audit'])
+        for year, result in target_results.items()},
+    auxiliary={str(year): dict(eligible_records=result['eligible_records'],
+        shadow_seeds=result['shadow_seeds'], attack_metrics=result['attack_result']['metrics'],
+        query_audits=result['query_audits']) for year, result in auxiliary_results.items()},
+    limitations=['native category codes differ across years', 'one training/attack seed configuration',
+        '47-feature schema differs from historical 48-feature baseline'])
+_ = (RUN_DIR / 'protocol.json').write_text(json.dumps(protocol, indent=2), encoding='utf-8')
+print('Complete-feature baseline MIA finished. Results:', RUN_DIR / 'baseline_mia_metrics.csv')
 ''')
-markdown('''## Final MIA evaluation on the expanded target
-Query the expanded native input schema, preserving categorical codes and
-handling numeric commute fields in native units. The walk still generates
-field-valid but potentially implausible combinations, and its dimensionality
-matches the expanded auxiliary schema. Thresholds are frozen from auxiliary validation.
-''')
-code('''target_attack_data, target_query_diagnostics = collect_target_paper_features(
-    expanded_model, expanded_preprocessor, expanded_partitions,
-    config=WALK_CONFIG, seed=SEED, numeric_protocol=EXPANDED_NUMERIC_WALK)
-display(pd.Series(target_query_diagnostics, name='expanded target query diagnostics'))
-target_mia_metrics, target_membership_scores = evaluate_attack(
-    attack_result['classifier'], target_attack_data,
-    threshold=attack_result['accuracy_threshold'],
-    low_fpr_threshold=attack_result['low_fpr_threshold'])
-target_mia_metrics['tpr_at_accuracy_threshold'] = target_mia_metrics['tp'] / target_mia_metrics['members']
-target_mia_metrics['fpr_at_accuracy_threshold'] = target_mia_metrics['fp'] / (
-    target_mia_metrics['records'] - target_mia_metrics['members'])
-display(pd.DataFrame({'2014 auxiliary attack test': attack_result['metrics']['test'],
-                      'Expanded ACS target MIA': target_mia_metrics}).T)
-''')
-markdown('''## Small reproducibility artifacts
-Save summaries, feature inventory and row assignments. Completed target and
-shadow checkpoints are saved during training to support recovery after interruption.
-Source CSVs and the other experiment notebooks remain unchanged.
-''')
-code('''result_dir = RUN_DIR
-result_dir.mkdir(parents=True, exist_ok=True)
-feature_inventory.to_csv(result_dir / 'feature_inventory.csv')
-for name, part in expanded_partitions.items():
-    pd.Series(part.index, name='record_id').to_csv(result_dir / f'{name}_ids.csv', index=False)
-summarize_shadow_models(shadow_results).to_csv(result_dir / 'shadow_metrics.csv')
-summary = dict(income_base_year=INCOME_BASE_YEAR,
-    target_income_adjustment=expanded_source.attrs.get('income_adjustment', NOMINAL_INCOME_METADATA),
-    auxiliary_income_adjustment=acs_auxiliary.attrs.get('income_adjustment', NOMINAL_INCOME_METADATA),
-    perturbation_protocol_audit={'shadow_numeric_fields': {'AGEP': [1.0, 17, 99], 'WKHP': [2.0, 1, 99]}, 'target_extra_numeric_fields': {'JWMNP': [2.0, 0, 200], 'JWRIP': [1.0, 1, 10]}, 'shadow_commuting_fields': 'Categorical replacements, unchanged from original run', 'target_commuting_fields': 'Numeric perturbations, unchanged from original run', 'correction': 'Prior assistant statements that the shadow commuting perturbation protocol changed were incorrect. Original and current perturbation call sources are identical.'},
-    walk_numeric_protocol_scope='Extra target numeric fields only',
-    walk_numeric_protocol=EXPANDED_NUMERIC_WALK, execution_status='all_cells_completed',
-    attack_metrics_status='oracle_consistency_verified', target_year=2023, auxiliary_year=2014, n_shadow_models=N_SHADOW_MODELS,
-    shadow_algorithms=list(SHADOW_ALGORITHMS),
-    shadow_seeds={name: result['seed'] for name, result in shadow_results.items()},
-    original_feature_count=len(EXPANDED_FEATURES),
-    encoded_feature_count=expanded_arrays['train']['X'].shape[1],
-    train_size=TRAIN_SIZE, split_config=SPLIT_CONFIG, training=expanded_metadata,
-    target_training_seconds=target_training_seconds, target_metrics=expanded_metrics,
-    shadow_attack_metrics=attack_result['metrics'], target_mia_metrics=target_mia_metrics,
-    target_query_diagnostics=target_query_diagnostics)
-(result_dir / 'summary.json').write_text(json.dumps(summary, indent=2), encoding='utf-8')
-print('Summary and exact row IDs written to', result_dir)
+add('markdown', '''The notebook ends at baseline MIA. No PFV or uncertainty section is appended.
 ''')
 
-markdown('''## UCI Adult auxiliary comparison: load every record and train 16 shadows
-Pool the original Adult training and test files as auxiliary information only.
-Use all 48,842 rows: per shadow, 40% training members, 20% validation and 40%
-held-out non-members. Partitions are disjoint within each shadow. Across shadows,
-records can be reused; grouped attack splits prevent record leakage.
-Adult uses its native 12 predictors and nominal income label, not a fabricated
-mapping to the 48 ACS predictors. The same four output/query features transfer
-to the same ACS target. Differences in input geometry and population limit comparison.
-No Adult feature-extraction subsampling is used. This increases query cost.
-''')
-code('''adult_auxiliary = load_adult_data()
-assert len(adult_auxiliary) == 48_842, 'Expected complete UCI Adult dataset.'
-assert adult_auxiliary.index.is_unique
-assert set(adult_auxiliary.index).isdisjoint(expanded_source.index)
-print('Adult auxiliary records:', len(adult_auxiliary))
-adult_shadow_results = cached_expanded_shadows(
-    adult_auxiliary, seed=SEED, n_models=N_SHADOW_MODELS,
-    run_dir=ADULT_RUN_DIR, algorithms=SHADOW_ALGORITHMS, schema='adult')
-for name, result in adult_shadow_results.items():
-    assigned = [set(ids) for ids in result['partition_ids'].values()]
-    assert sum(map(len, assigned)) == len(adult_auxiliary)
-    assert set.union(*assigned) == set(adult_auxiliary.index)
-    assert all(a.isdisjoint(b) for i, a in enumerate(assigned) for b in assigned[i+1:])
-    audit_rows = result['attack_data'].iloc[:32]
-    query = make_probability_oracle(result['model'], result['preprocessor'], schema='adult')
-    np.testing.assert_allclose(query(adult_auxiliary.loc[audit_rows['record_id']]),
-        audit_rows[['p_income_le_50k', 'p_income_gt_50k']].to_numpy(), rtol=1e-5, atol=1e-6)
-display(summarize_shadow_models(adult_shadow_results))
-''')
-markdown('''## Adult attack features: all available members and non-members
-Validation rows retain their existing model-validation role. Every training member
-and held-out non-member contributes attack features (per_class=None).
-Use the existing native Adult perturbation protocol and unchanged RF attack.
-Thresholds are selected on auxiliary attack validation only.
-''')
-code('''adult_attack_data, adult_query_diagnostics = collect_shadow_paper_features(
-    adult_shadow_results, adult_auxiliary, per_class=None, config=WALK_CONFIG, seed=SEED)
-assert len(adult_attack_data) == sum(
-    len(result['attack_data']) for result in adult_shadow_results.values())
-display(adult_attack_data.groupby(['shadow_model', 'membership']).size().unstack())
-adult_attack_result = train_membership_classifier(
-    adult_attack_data, seed=SEED, algorithm='random_forest', feature_set='paper')
-display(pd.DataFrame(adult_attack_result['metrics']).T)
-''')
-markdown('''## Compare both auxiliary sources against the same saved target queries
-Reuse target_attack_data from above: no retraining or additional target queries.
-Both attacks use thresholds frozen on their own auxiliary validation data.
-''')
-code('''adult_target_mia_metrics, adult_target_scores = evaluate_attack(
-    adult_attack_result['classifier'], target_attack_data,
-    threshold=adult_attack_result['accuracy_threshold'],
-    low_fpr_threshold=adult_attack_result['low_fpr_threshold'])
-comparison = pd.DataFrame({
-    'ACS 2014 auxiliary': target_mia_metrics,
-    'UCI Adult auxiliary (all records)': adult_target_mia_metrics}).T
-display(comparison)
-ADULT_RUN_DIR.mkdir(parents=True, exist_ok=True)
-comparison.to_csv(RUN_DIR / 'auxiliary_comparison.csv')
-summarize_shadow_models(adult_shadow_results).to_csv(ADULT_RUN_DIR / 'shadow_metrics.csv')
-adult_summary = dict(execution_status='all_adult_cells_completed', auxiliary='UCI Adult',
-    auxiliary_records=len(adult_auxiliary), shadow_schema='adult',
-    n_shadow_models=N_SHADOW_MODELS, algorithms=list(SHADOW_ALGORITHMS),
-    split_fractions=dict(train=0.4, validation=0.2, nonmembers=0.4),
-    feature_sampling_per_membership_class=None,
-    shadow_seeds={name: result['seed'] for name, result in adult_shadow_results.items()},
-    shadow_attack_metrics=adult_attack_result['metrics'],
-    target_mia_metrics=adult_target_mia_metrics, query_diagnostics=adult_query_diagnostics,
-    target_summary='../summary.json', target_queries_reused=True)
-(ADULT_RUN_DIR / 'summary.json').write_text(json.dumps(adult_summary, indent=2), encoding='utf-8')
-print('Adult comparison saved to', ADULT_RUN_DIR)
-''')
-
-notebook = {'cells': cells, 'metadata': {
-    'kernelspec': {'display_name': 'Python 3 (ipykernel)', 'language': 'python', 'name': 'python3'},
-    'language_info': {'name': 'python', 'version': '3.12'}}, 'nbformat': 4, 'nbformat_minor': 5}
-path = ROOT / 'exp_3_expanded dataset.ipynb'
-path.write_text(json.dumps(notebook, indent=1) + '\n', encoding='utf-8')
-print(path)
+DESTINATION.write_text(json.dumps(notebook, indent=1, ensure_ascii=False) + '\n', encoding='utf-8')
+print(f'Prepared {DESTINATION.name}: {len(notebook["cells"])} cells; none executed.')
