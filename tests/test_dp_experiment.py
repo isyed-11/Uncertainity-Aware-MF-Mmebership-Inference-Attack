@@ -12,7 +12,7 @@ import torch
 from scipy import sparse
 
 from src.dp_experiment import (
-    _dense_batch, _training_loss, categorical_budget_rows, check_partition_ids,
+    _calibrate_fixed_schedule, _dense_batch, _training_loss, categorical_budget_rows, check_partition_ids,
     prepare_public_preprocessing, train_dp_study_target, plot_budget_accuracy,
 )
 from src.expanded_data import EXPANDED_FEATURES
@@ -91,6 +91,7 @@ class FakeLoader:
 
 class FakeOptimizer:
     noise_multiplier = 1.0
+    sample_rate = 0.5
 
     def __init__(self):
         self.accountant = None
@@ -102,7 +103,7 @@ class FakeOptimizer:
     def step(self):
         self.steps += 1
         if self.accountant:
-            self.accountant.step(noise_multiplier=self.noise_multiplier, sample_rate=0.5)
+            self.accountant.step(noise_multiplier=self.noise_multiplier, sample_rate=self.sample_rate)
 
 
 class FakeEngine:
@@ -215,11 +216,87 @@ class DPExperimentTests(unittest.TestCase):
 
     def test_invalid_privacy_parameters_fail_before_model_creation(self):
         values, labels = np.ones((4, 2)), np.array([0, 1, 0, 1])
-        for settings in [dict(epsilon=0), dict(epsilon=float('inf')), dict(delta=.25)]:
+        for settings in [dict(epsilon=0), dict(epsilon=float('inf')), dict(delta=.25),
+                         dict(selection_metric='test_accuracy'), dict(strict_accounting='yes'),
+                         dict(early_stopping='no'), dict(restore_best=0)]:
             with self.subTest(settings=settings), patch('src.dp_experiment.build_mlp') as build:
                 with self.assertRaises(ValueError):
                     train_dp_study_target(values, labels, values, labels, **settings)
                 build.assert_not_called()
+
+    def test_accuracy_selection_ties_and_strict_accounting_use_conservative_rate(self):
+        """Stub updates only: verify selection and accountant contracts together."""
+        model, optimizer = FakeModel(), FakeOptimizer()
+        optimizer.sample_rate = 1 / 3
+        values = sparse.csr_matrix(np.ones((4, 2), dtype=np.float32))
+        labels = np.array([0, 1, 0, 1])
+        validations = [dict(accuracy=accuracy, roc_auc=.9, log_loss=loss)
+            for accuracy, loss in [(.8, .3), (.85, .5), (.85, .4), (.84, .2), (.83, .1)]]
+        planned_accountants = []
+
+        def create_accountant(**kwargs):
+            result = FakeAccountant()
+            planned_accountants.append(result)
+            return result
+
+        with ExitStack() as stack:
+            stack.enter_context(patch('src.dp_experiment._load_opacus', return_value=(
+                FakeEngine, create_accountant, FakeMemoryManager, MagicMock())))
+            stack.enter_context(patch('src.dp_experiment.build_mlp', return_value=model))
+            stack.enter_context(patch('src.dp_experiment.torch.optim.Adam', return_value=optimizer))
+            stack.enter_context(patch('src.dp_experiment.DataLoader', return_value=FakeLoader()))
+            stack.enter_context(patch.object(FakeLoader, 'sample_rate', .25))
+            stack.enter_context(patch('src.dp_experiment._training_loss', return_value=MagicMock()))
+            stack.enter_context(patch('src.dp_experiment.evaluate_model', side_effect=validations))
+            calibration = stack.enter_context(patch('src.dp_experiment._calibrate_fixed_schedule', return_value=2.))
+            _, history, metadata = train_dp_study_target(values, labels, values, labels,
+                epsilon=5, max_epochs=6, patience=2, selection_metric='accuracy', strict_accounting=True)
+        calibration.assert_called_once_with(5, 1e-6, 1 / 3, 18)
+        self.assertEqual(metadata['best_epoch'], 3)
+        self.assertEqual(metadata['epochs_run'], 5)
+        self.assertEqual(model.restored, 9)
+        self.assertEqual(metadata['sampler_sample_rate'], .25)
+        self.assertEqual(metadata['accountant_sample_rate'], 1 / 3)
+        self.assertEqual(metadata['bound_sample_rate'], 1 / 3)
+        self.assertEqual(metadata['noise_multiplier'], 2.)
+        self.assertEqual(len(history), 5)
+        self.assertTrue(all(item[:2] == (2., 1 / 3) for item in planned_accountants[0].history))
+        self.assertTrue(all(item[:2] == (2., 1 / 3) for item in FakeEngine.last.accountant.history))
+
+    def test_fixed_100_epoch_schedule_returns_final_weights_despite_worsening_validation(self):
+        """Stub-only control/DP runs: no real optimizer updates or experiment."""
+        values = sparse.csr_matrix(np.ones((4, 2), dtype=np.float32))
+        labels = np.array([0, 1, 0, 1])
+        for epsilon in (None, 50):
+            with self.subTest(epsilon=epsilon), ExitStack() as stack:
+                model, optimizer = FakeModel(), FakeOptimizer()
+                optimizer.sample_rate = 1 / 3
+                stack.enter_context(patch('src.dp_experiment._load_opacus', return_value=(
+                    FakeEngine, lambda **kwargs: FakeAccountant(), FakeMemoryManager, MagicMock())))
+                stack.enter_context(patch('src.dp_experiment.build_mlp', return_value=model))
+                stack.enter_context(patch('src.dp_experiment.torch.optim.Adam', return_value=optimizer))
+                stack.enter_context(patch('src.dp_experiment.DataLoader', return_value=FakeLoader()))
+                stack.enter_context(patch.object(FakeLoader, 'sample_rate', .25))
+                stack.enter_context(patch('src.dp_experiment._training_loss', return_value=MagicMock()))
+                stack.enter_context(patch('src.dp_experiment._calibrate_fixed_schedule', return_value=2.))
+                stack.enter_context(patch('src.dp_experiment.evaluate_model', side_effect=[
+                    dict(accuracy=.8, roc_auc=.9, log_loss=.1 + epoch / 100)
+                    for epoch in range(100)]))
+                result, history, metadata = train_dp_study_target(values, labels, values, labels,
+                    epsilon=epsilon, max_epochs=100, patience=1, dropout=0., weight_decay=0.,
+                    learning_rate=.001, early_stopping=False, restore_best=False, strict_accounting=True)
+            self.assertIs(result, model)
+            self.assertEqual(metadata['best_epoch'], 1)  # Diagnostic only.
+            self.assertEqual(metadata['returned_epoch'], 100)
+            self.assertEqual(metadata['epochs_run'], 100)
+            self.assertEqual(len(history), 100)
+            self.assertIsNone(model.restored)
+            self.assertEqual(model.calls, 300)
+            self.assertEqual(metadata['planned_optimizer_steps'], metadata['actual_optimizer_steps'])
+            self.assertFalse(metadata['early_stopping'])
+            self.assertFalse(metadata['restore_best'])
+            if epsilon is not None:
+                self.assertEqual(metadata['epsilon_fixed_schedule_bound'], metadata['epsilon_at_stop_diagnostic'])
 
     def test_budget_categories_preserve_declared_order_and_reject_incomplete_runs(self):
         results = pd.DataFrame(dict(private=[True, False, True, True, True, True],
@@ -290,6 +367,24 @@ class DPExperimentTests(unittest.TestCase):
                 self.assertGreater(sigma, 0)
                 sigmas.append(sigma)
         self.assertTrue(all(a > b for a, b in zip(sigmas, sigmas[1:])))
+
+    @unittest.skipUnless(find_spec('opacus'), 'Optional DP dependency not installed')
+    def test_strict_calibration_covers_exact_private_loader_schedule_at_all_budgets(self):
+        """Accountant arithmetic only, covering the 391-to-390 rounding case."""
+        from opacus.accountants import create_accountant
+
+        steps, accountant_rate, sampler_rate, delta = 390 * 30, 1 / 390, 1 / 391, 1e-6
+        for epsilon in (1, 5, 10, 25, 50):
+            with self.subTest(epsilon=epsilon):
+                sigma = _calibrate_fixed_schedule(epsilon, delta, accountant_rate, steps)
+                bounds = []
+                for rate in (sampler_rate, accountant_rate):
+                    accountant = create_accountant(mechanism='rdp')
+                    for _ in range(steps):
+                        accountant.step(noise_multiplier=sigma, sample_rate=rate)
+                    bounds.append(accountant.get_epsilon(delta=delta))
+                self.assertLessEqual(bounds[0], bounds[1])
+                self.assertLessEqual(bounds[1], epsilon + 1e-6)
 
     @unittest.skipUnless(find_spec('matplotlib'), 'Optional plotting dependency not installed')
     def test_real_graph_exports_have_categorical_ticks_and_both_reference_lines(self):

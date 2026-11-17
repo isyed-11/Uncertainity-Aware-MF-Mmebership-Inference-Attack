@@ -88,12 +88,22 @@ def _training_loss(logits, labels):
     return nn.functional.cross_entropy(logits, labels) if len(labels) else logits.sum()
 
 
+def _calibrate_fixed_schedule(epsilon, delta, sample_rate, steps):
+    """Calibrate against an explicit logical-step count, without training."""
+    from opacus.accountants.utils import get_noise_multiplier
+
+    return float(get_noise_multiplier(target_epsilon=float(epsilon), target_delta=delta,
+        sample_rate=sample_rate, steps=steps, accountant='rdp'))
+
+
 def train_dp_study_target(X_train, y_train, X_public_validation, y_public_validation, *,
                           epsilon=None, delta=1e-6, hidden_dims=(512, 256, 128),
                           dropout=0.1, max_epochs=30, patience=5, min_delta=0.0,
                           batch_size=256, max_physical_batch_size=32,
                           learning_rate=1e-3, weight_decay=1e-4,
-                          max_grad_norm=1.0, seed=42, device='cpu', progress=None):
+                          max_grad_norm=1.0, seed=42, device='cpu', progress=None,
+                          selection_metric='log_loss', strict_accounting=False,
+                          early_stopping=True, restore_best=True):
     """Matched Adam/DP-Adam targets with public-validation early stopping.
 
     epsilon=None is the fresh non-private control. Private targets use Poisson
@@ -106,9 +116,21 @@ def train_dp_study_target(X_train, y_train, X_public_validation, y_public_valida
     use separate nondeterministically seeded generators whose seeds are not
     exported. secure_mode=False is a research setting, not hardened deployment.
     No train losses, private metrics, test records or MIA inputs select an epoch.
+    selection_metric='accuracy' maximizes public accuracy, breaking ties by loss.
+    strict_accounting=True aligns calibration and reporting with the conservative
+    Opacus 1.6 accountant rate, 1 / len(private_loader), before the first update.
+    Legacy defaults preserve the original notebook's configuration.
+    early_stopping=False, restore_best=False runs the fixed full schedule and
+    returns the final epoch; validation is then monitoring only.
     """
     if epsilon is not None and (not math.isfinite(epsilon) or epsilon <= 0):
         raise ValueError('epsilon must be a finite positive number or None.')
+    if selection_metric not in {'log_loss', 'accuracy'}:
+        raise ValueError('selection_metric must be log_loss or accuracy.')
+    if not isinstance(strict_accounting, bool):
+        raise ValueError('strict_accounting must be a boolean.')
+    if not isinstance(early_stopping, bool) or not isinstance(restore_best, bool):
+        raise ValueError('early_stopping and restore_best must be booleans.')
     for name, value in [('max_epochs', max_epochs), ('patience', patience),
                         ('batch_size', batch_size), ('max_physical_batch_size', max_physical_batch_size)]:
         if not isinstance(value, int) or value < 1:
@@ -145,6 +167,7 @@ def train_dp_study_target(X_train, y_train, X_public_validation, y_public_valida
     loader = DataLoader(dataset, batch_size=batch_size, shuffle=True,
         generator=sampling_generator, num_workers=0)
     engine, planned_epsilon, noise_multiplier, sample_rate = None, None, None, None
+    accountant_sample_rate, bound_sample_rate = None, None
     planned_steps = len(loader) * max_epochs
     if private:
         PrivacyEngine, create_accountant, BatchMemoryManager, ModuleValidator = opacus_parts
@@ -157,20 +180,30 @@ def train_dp_study_target(X_train, y_train, X_public_validation, y_public_valida
             target_epsilon=float(epsilon), target_delta=delta, epochs=max_epochs,
             max_grad_norm=max_grad_norm, poisson_sampling=True, clipping='flat',
             grad_sample_mode='hooks', noise_generator=noise_generator)
-        noise_multiplier = float(optimizer.noise_multiplier)
         sample_rate = float(loader.sample_rate)
+        accountant_sample_rate = 1 / len(loader)
         planned_steps = len(loader) * max_epochs
+        bound_sample_rate = accountant_sample_rate if strict_accounting else sample_rate
+        if strict_accounting:
+            if sample_rate > accountant_sample_rate + 1e-12:
+                raise RuntimeError('Sampler rate exceeds the conservative Opacus accountant rate.')
+            # Opacus's hook reads optimizer.noise_multiplier on each step.
+            # Change it BEFORE any update; calibrate to the exact same hook rate.
+            optimizer.noise_multiplier = _calibrate_fixed_schedule(
+                epsilon, delta, accountant_sample_rate, planned_steps)
+        noise_multiplier = float(optimizer.noise_multiplier)
         # A fixed-schedule upper bound remains valid for selecting/stopping from
         # the DP trajectory on independent public validation data.
         planned_accountant = create_accountant(mechanism='rdp')
         for _ in range(planned_steps):
-            planned_accountant.step(noise_multiplier=noise_multiplier, sample_rate=sample_rate)
+            planned_accountant.step(noise_multiplier=noise_multiplier, sample_rate=bound_sample_rate)
         planned_epsilon = float(planned_accountant.get_epsilon(delta=delta))
         if planned_epsilon > epsilon + 1e-6:
             raise RuntimeError(f'Calibrated privacy bound {planned_epsilon} exceeds requested {epsilon}.')
 
     history, best_state = [], None
     best_loss, best_epoch, stale = float('inf'), None, 0
+    best_accuracy = -float('inf')
     started = time.monotonic()
     try:
         for epoch in range(1, max_epochs + 1):
@@ -197,16 +230,22 @@ def train_dp_study_target(X_train, y_train, X_public_validation, y_public_valida
                 raise RuntimeError('Non-finite public-validation metrics; model selection aborted.')
             history.append(dict(epoch=epoch,
                 **{f'validation_{key}': value for key, value in validation.items()}))
-            if validation['log_loss'] < best_loss - min_delta:
+            improved = validation['log_loss'] < best_loss - min_delta
+            if selection_metric == 'accuracy':
+                improved = (validation['accuracy'] > best_accuracy + min_delta or
+                    (validation['accuracy'] == best_accuracy and validation['log_loss'] < best_loss))
+            if improved:
+                best_accuracy = validation['accuracy']
                 best_loss, best_epoch, stale = validation['log_loss'], epoch, 0
-                best_state = copy.deepcopy(base_model.state_dict())
+                if restore_best:
+                    best_state = copy.deepcopy(base_model.state_dict())
             else:
                 stale += 1
             if progress:
                 name = 'Non-private' if not private else f'epsilon={epsilon:g}'
                 progress(f'{name}: epoch {epoch}/{max_epochs}; public validation '
                     f'accuracy={validation["accuracy"]:.3%}, loss={validation["log_loss"]:.4f}; best epoch={best_epoch}')
-            if stale >= patience:
+            if early_stopping and stale >= patience:
                 break
         spent_epsilon = float(engine.get_epsilon(delta=delta)) if private else None
         logical_steps = (sum(item[2] for item in engine.accountant.history) if private
@@ -214,9 +253,10 @@ def train_dp_study_target(X_train, y_train, X_public_validation, y_public_valida
     finally:
         if private:
             model = model.to_standard_module()
-    if best_state is None:
-        raise RuntimeError('No finite validation-selected weights were produced.')
-    model.load_state_dict(best_state)
+    if restore_best:
+        if best_state is None:
+            raise RuntimeError('No finite validation-selected weights were produced.')
+        model.load_state_dict(best_state)
     model.eval()
     metadata = dict(private=private, epsilon_requested=epsilon,
         epsilon_fixed_schedule_bound=planned_epsilon,
@@ -224,17 +264,23 @@ def train_dp_study_target(X_train, y_train, X_public_validation, y_public_valida
         accountant='rdp' if private else None,
         epsilon_reporting='Fixed maximum-schedule bound; stopped-time epsilon is diagnostic only',
         noise_multiplier=noise_multiplier, sample_rate=sample_rate,
+        sampler_sample_rate=sample_rate, accountant_sample_rate=accountant_sample_rate,
+        bound_sample_rate=bound_sample_rate, strict_accounting=strict_accounting,
         max_grad_norm=max_grad_norm if private else None,
         planned_optimizer_steps=planned_steps, actual_optimizer_steps=logical_steps,
         max_epochs=max_epochs, epochs_run=len(history), best_epoch=best_epoch,
-        returned_epoch=best_epoch, patience=patience, min_delta=min_delta,
+        returned_epoch=best_epoch if restore_best else len(history), patience=patience, min_delta=min_delta,
+        selection_metric=selection_metric,
+        selection_rule=('Final epoch; validation does not select weights' if not restore_best else
+            ('Highest public-validation accuracy; lower log loss breaks exact ties'
+             if selection_metric == 'accuracy' else 'Lowest public-validation log loss')),
         input_dim=X_train.shape[1], hidden_dims=list(hidden_dims), dropout=dropout,
         batch_size=batch_size, max_physical_batch_size=max_physical_batch_size,
         learning_rate=learning_rate, weight_decay=weight_decay, optimizer='Adam',
         seed=seed, device=str(device), training_seconds=time.monotonic() - started,
         secure_mode=False if private else None,
         private_rng='Independent nondeterministic sampling/noise generators; seeds not saved' if private else None,
-        early_stopping=True, restore_best=True,
+        early_stopping=early_stopping, restore_best=restore_best,
         validation_scope='Fixed public held-out records outside protected training set')
     return model, history, metadata
 
