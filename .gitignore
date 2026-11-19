@@ -5,3 +5,6 @@ data/processed/
 artifacts/
 .ipynb_checkpoints/
 .codex_tmp_pdf
+scripts/__pycache__/
+scripts
+.codex_tmp_pdf
