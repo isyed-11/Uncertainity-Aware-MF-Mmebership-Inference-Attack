@@ -24,6 +24,11 @@ CATEGORICAL = ['workclass', 'marital_status', 'occupation', 'relationship',
 FEATURES = NUMERIC + CATEGORICAL
 ALGORITHMS = ('xgboost', 'random_forest', 'mlp', 'decision_tree', 'logistic_regression')
 PAPER_SHADOW_ALGORITHMS = ('random_forest', 'gradient_boosting', 'xgboost')
+# Generic auxiliary MLP recipe, independent of the target architecture/settings.
+# These are the existing MLP branch defaults, now explicit for study protocols.
+MLP_SHADOW_CONFIG = dict(hidden_dims=(128, 64), dropout=0.0, epochs=50,
+    batch_size=256, learning_rate=1e-3, weight_decay=1e-4, patience=5,
+    early_stopping=True, restore_best=True, monitor_train=False, device='cpu')
 
 
 def load_adult_data(directory='data/processed'):
@@ -132,11 +137,14 @@ def membership_features(probabilities, income_labels):
     })
 
 
-def train_shadow_model(adult, algorithm, *, seed=42, parameters=None, schema='adult'):
+def train_shadow_model(adult, algorithm, *, seed=42, parameters=None, schema='adult',
+                       partitions=None):
     """Fit one shadow; return model, preprocessor, IDs, metrics, and attack rows.
 
     Trees and logistic regression use fixed settings; MLP selects its epoch using
-    validation loss. Non-members never participate in fitting or model selection.
+    validation loss by default. Explicit train/nonmembers splits support fixed
+    schedules without validation (MLP early_stopping/restore_best must be False).
+    Non-members never participate in fitting or model selection.
     """
     if algorithm not in set(ALGORITHMS) | set(PAPER_SHADOW_ALGORITHMS):
         raise ValueError(f'Unsupported shadow algorithm: {algorithm}')
@@ -153,7 +161,27 @@ def train_shadow_model(adult, algorithm, *, seed=42, parameters=None, schema='ad
         preprocessor = build_preprocessor()
     else:
         raise ValueError('schema must be adult or acs.')
-    partitions = split_shadow_data(adult, seed=seed)
+    if partitions is None:
+        partitions = split_shadow_data(adult, seed=seed)
+    else:
+        if not adult.index.is_unique:
+            raise ValueError('Auxiliary record IDs must be unique.')
+        if set(partitions) not in ({'train', 'validation', 'nonmembers'}, {'train', 'nonmembers'}):
+            raise ValueError('Expected train/nonmembers and an optional validation partition.')
+        pool_ids, seen = set(adult.index), set()
+        for name, part in partitions.items():
+            ids = set(part.index)
+            if (part.empty or not part.index.is_unique or seen & ids
+                    or not ids <= pool_ids or set(part[LABEL].unique()) != {0, 1}):
+                raise ValueError(f'Invalid or overlapping explicit shadow {name} records.')
+            pd.testing.assert_frame_equal(part, adult.loc[part.index])
+            seen.update(ids)
+        if seen != pool_ids:
+            raise ValueError('Explicit shadow partitions must cover the entire auxiliary pool.')
+    if algorithm == 'mlp' and 'validation' not in partitions:
+        config = dict(MLP_SHADOW_CONFIG, **(parameters or {}))
+        if config['early_stopping'] or config['restore_best']:
+            raise ValueError('Without shadow validation, disable early_stopping and restore_best.')
     preprocessor.fit(partitions['train'][feature_columns])
     arrays = {name: {
         'X': preprocessor.transform(frame[feature_columns]).astype(np.float32),
@@ -161,12 +189,12 @@ def train_shadow_model(adult, algorithm, *, seed=42, parameters=None, schema='ad
     } for name, frame in partitions.items()}
     history, metadata = [], {}
     if algorithm == 'mlp':
-        config = dict(hidden_dims=(128, 64), dropout=0.0, epochs=50,
-                      batch_size=256, patience=5, seed=seed, device='cpu')
+        config = dict(MLP_SHADOW_CONFIG, seed=seed)
         config.update(parameters or {})
         model, history, metadata = train_target_model(
             arrays['train']['X'], arrays['train']['y'],
-            arrays['validation']['X'], arrays['validation']['y'], **config)
+            arrays['validation']['X'] if 'validation' in arrays else None,
+            arrays['validation']['y'] if 'validation' in arrays else None, **config)
     else:
         model = build_shadow_estimator(algorithm, seed=seed, parameters=parameters)
         model.fit(arrays['train']['X'], arrays['train']['y'])

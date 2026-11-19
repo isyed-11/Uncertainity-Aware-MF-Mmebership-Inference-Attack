@@ -42,6 +42,12 @@ the minimum-loss epoch. A lower learning rate and accuracy-based selection may
 improve utility; improvement and a small generalization gap are not guaranteed.
 The test set and target MIA results never select epochs or settings in this run.
 The original notebook and its saved results remain available for comparison.
+This version uses 16 mixed shadows: four RF, four gradient boosting, four
+XGBoost and four generic MLPs. MLP shadows have hidden layers 128/64, no dropout,
+Adam learning rate 0.001 and weight decay 0.0001, with validation-loss early
+stopping (patience five, maximum 50 epochs, best weights restored). Their
+architecture is predeclared independently of the target. All shadows are
+non-private; this remains a frozen transfer attack across DP budgets.
 
 Noise calibration, the full-schedule bound and the realised-stop diagnostic all
 use the conservative Opacus accountant rate, **1 / len(private_loader)**. The
@@ -50,14 +56,41 @@ discrepancy between those two rates in Opacus 1.6. The full 30-epoch bound must
 remain within each requested epsilon before training can start.
 '''
         elif index == 2:
+            source = replace_once(source,
+                'from src.expanded_data import EXPANDED_FEATURES, load_expanded_year, reference_split_config',
+                'import src.expanded_data as expanded_data_module\n'
+                'importlib.reload(expanded_data_module)\n'
+                'from src.expanded_data import EXPANDED_FEATURES, load_expanded_year, reference_split_config')
+            source = replace_once(source,
+                'from src.shadow_models import train_shadow_model, summarize_shadow_models, PAPER_SHADOW_ALGORITHMS',
+                'import src.shadow_models as shadow_models_module\n'
+                'importlib.reload(shadow_models_module)\n'
+                'from src.shadow_models import (train_shadow_model, summarize_shadow_models,\n'
+                '    PAPER_SHADOW_ALGORITHMS, MLP_SHADOW_CONFIG)')
+            source = replace_once(source, 'SHADOW_ALGORITHMS = PAPER_SHADOW_ALGORITHMS',
+                "SHADOW_ALGORITHMS = PAPER_SHADOW_ALGORITHMS + ('mlp',)\n"
+                'SHADOW_MLP_CONFIG = dict(MLP_SHADOW_CONFIG)\n'
+                'assert N_SHADOW_MODELS == 4 * len(SHADOW_ALGORITHMS)')
             source = replace_once(source, 'learning_rate=1e-3', 'learning_rate=3e-4')
             source = replace_once(source, "max_grad_norm=1.0, seed=SEED, device='cpu')",
                 "max_grad_norm=1.0, seed=SEED, device='cpu',\n"
                 "    selection_metric='accuracy', strict_accounting=True)")
             source = replace_once(source, 'exp_4_2023_2014_dp_e1_5_10_25_50_d1e6',
-                'exp_4_2023_2014_dp_accuracy_e0p5_1_2_5_10_25_50_d1e6')
+                'exp_4_2023_2014_dp_accuracy_e0p5_1_2_5_10_25_50_d1e6_mixed_mlp')
             source = replace_once(source, 'EPSILON_BUDGETS = (1, 5, 10, 25, 50)',
                 'EPSILON_BUDGETS = (0.5, 1, 2, 5, 10, 25, 50)')
+        elif index == 5:
+            source = replace_once(source,
+                'Train 16 public 2014 shadows (6 RF, 5 gradient boosting, 5 XGBoost), keeping their\nexisting estimator settings and 40/20/40 splits.',
+                'Train 16 public 2014 shadows: four each of RF, gradient boosting, XGBoost\n'
+                'and generic MLP. Existing tree settings and 40/20/40 splits are retained.\n'
+                'MLP configuration is recorded in SHADOW_MLP_CONFIG; only its shadow\n'
+                'validation partition selects epochs, never nonmembers or target records.')
+        elif index == 6:
+            source = replace_once(source,
+                "result = train_shadow_model(auxiliary, algorithm, seed=seed, schema='expanded_acs')",
+                "result = train_shadow_model(auxiliary, algorithm, seed=seed, schema='expanded_acs',\n"
+                "            parameters=SHADOW_MLP_CONFIG if algorithm == 'mlp' else None)")
         elif index == 7:
             source = replace_once(source,
                 'and noise generators; their seeds are not saved. Public-validation loss alone\nselects the returned epoch.',
@@ -69,7 +102,8 @@ logical step count and the same conservative rate used by the Opacus accountant.
 Record both the actual sampler rate and the accountant/bound rate. Public
 preprocessing, splits, architecture, regularization, auxiliary attack and blind
 walks follow the original DP experiment. Learning rate, epoch selection,
-accounting calibration and the expanded budget grid differ in this follow-up.
+accounting calibration, expanded budget grid and mixed shadow composition differ
+in this follow-up. Target training settings are unaffected by adding MLP shadows.
 '''
         elif index == 8:
             source = replace_once(source,
@@ -86,11 +120,30 @@ display(study_results.loc[study_results['private'], [
     'noise_multiplier', 'epsilon_fixed_schedule_bound'
 ]].set_index('condition'))
 '''
+        elif index == 14:
+            source = replace_once(source, 'display(figure)',
+                'axes.set_ylim(0.70, 0.90)\n'
+                "for suffix in ('png', 'svg'):\n"
+                "    figure.savefig(RUN_DIR / f'target_accuracy_vs_epsilon.{suffix}', dpi=200)\n"
+                'display(figure)')
+        elif index == 16:
+            source = replace_once(source, 'display(figure)',
+                'axes.set_ylim(0.40, 0.60)\n'
+                "for suffix in ('png', 'svg'):\n"
+                "    figure.savefig(RUN_DIR / f'mia_accuracy_vs_epsilon.{suffix}', dpi=200)\n"
+                'display(figure)')
         elif index == 18:
             source = replace_once(source, "protocol = dict(execution_status='complete',",
                 "protocol = dict(study_variant='accuracy-focused exploratory follow-up',\n"
                 "    accounting_calibration='Exact private-loader steps; conservative Opacus accountant rate',\n"
                 "    execution_status='complete',")
+            source = replace_once(source,
+                'n_shadow_models=N_SHADOW_MODELS, shadow_algorithms=SHADOW_ALGORITHMS, shadow_seeds=shadow_seeds,',
+                'n_shadow_models=N_SHADOW_MODELS, shadow_algorithms=SHADOW_ALGORITHMS, shadow_seeds=shadow_seeds,\n'
+                '    shadow_models_per_algorithm=4, shadow_mlp_config=SHADOW_MLP_CONFIG,')
+            source = replace_once(source,
+                'Frozen complete-feature RF transfer attack; non-DP tree shadows',
+                'Frozen complete-feature RF transfer attack; non-DP tree and generic MLP shadows')
         # Keep narrative counts and run-status messages aligned with seven DP
         # budgets plus the single non-private control.
         for old, new in [
@@ -100,6 +153,7 @@ display(study_results.loc[study_results['private'], [
             ('All five', 'All seven'), ('all five', 'all seven'),
             ('All six', 'All eight'), ('all six', 'all eight'),
             ('the six\nconditions', 'the eight\nconditions'),
+            ('transferred tree-shadow attacks', 'transferred mixed tree/MLP-shadow attacks'),
         ]:
             source = source.replace(old, new)
         if kind == 'code':

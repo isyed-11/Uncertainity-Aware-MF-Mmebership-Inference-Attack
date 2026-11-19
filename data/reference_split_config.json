@@ -1,0 +1,7 @@
+{
+  "validation_size": 10000,
+  "test_size": 10000,
+  "mia_nonmember_size": 10000,
+  "mia_member_size": 10000,
+  "seed": 42
+}

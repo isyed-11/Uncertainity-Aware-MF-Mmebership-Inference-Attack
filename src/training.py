@@ -63,12 +63,20 @@ def train_target_model(X_train, y_train, X_validation, y_validation, *,
     CPU is the reproducible default; GPU reproducibility can vary by platform.
     For a fixed-budget overfitting experiment use early_stopping=False and
     restore_best=False. monitor_train adds end-of-epoch training metrics.
+    Both validation arguments may be None only in that fixed-budget mode;
+    no held-out test data is then passed to training or monitored by this helper.
     """
     if epochs < 1 or batch_size < 1 or patience < 1:
         raise ValueError('epochs, batch_size, and patience must be positive.')
-    if X_train.ndim != 2 or X_validation.ndim != 2 or X_train.shape[1] != X_validation.shape[1]:
+    if (X_validation is None) != (y_validation is None):
+        raise ValueError('Provide both validation inputs/labels, or neither.')
+    has_validation = X_validation is not None
+    if not has_validation and (early_stopping or restore_best):
+        raise ValueError('Without validation, early_stopping and restore_best must both be False.')
+    if X_train.ndim != 2 or (has_validation and
+            (X_validation.ndim != 2 or X_train.shape[1] != X_validation.shape[1])):
         raise ValueError('Training and validation feature dimensions must agree.')
-    if X_train.shape[0] != len(y_train) or X_validation.shape[0] != len(y_validation):
+    if X_train.shape[0] != len(y_train) or (has_validation and X_validation.shape[0] != len(y_validation)):
         raise ValueError('Feature and label row counts must agree.')
     random.seed(seed)
     np.random.seed(seed)
@@ -102,21 +110,24 @@ def train_target_model(X_train, y_train, X_validation, y_validation, *,
             loss.backward()
             optimizer.step()
             total_loss += loss.item() * len(y_batch)
-        validation = evaluate_model(model, X_validation, y_validation, device=device)
+        validation = evaluate_model(model, X_validation, y_validation, device=device) if has_validation else {}
         history.append({'epoch': epoch, 'train_loss': total_loss / len(dataset),
                         **{f'validation_{key}': value for key, value in validation.items()}})
         if monitor_train:
             training = evaluate_model(model, X_train, y_train, device=device)
             history[-1].update({f'train_eval_{key}': value for key, value in training.items()})
-        print(f"Epoch {epoch:03d}: train loss={history[-1]['train_loss']:.4f}, "
-              f"validation loss={validation['log_loss']:.4f}, "
-              f"validation accuracy={validation['accuracy']:.4f}")
-        if validation['log_loss'] < best_loss:
+        if has_validation:
+            print(f"Epoch {epoch:03d}: train loss={history[-1]['train_loss']:.4f}, "
+                  f"validation loss={validation['log_loss']:.4f}, "
+                  f"validation accuracy={validation['accuracy']:.4f}")
+        else:
+            print(f"Epoch {epoch:03d}: train loss={history[-1]['train_loss']:.4f}; fixed schedule, no validation")
+        if has_validation and validation['log_loss'] < best_loss:
             best_loss, stale_epochs = validation['log_loss'], 0
             best_epoch = epoch
             if restore_best:
                 best_state = copy.deepcopy(model.state_dict())
-        else:
+        elif has_validation:
             stale_epochs += 1
             if early_stopping and stale_epochs >= patience:
                 break

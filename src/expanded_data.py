@@ -90,9 +90,25 @@ def preprocess_expanded_partitions(partitions):
     return preprocessor, arrays
 
 
-def reference_split_config(path='experiments_2_overfit.ipynb'):
-    """Read the reference seed/sizes without executing any notebook code."""
-    notebook = json.loads(Path(path).read_text(encoding='utf-8'))
+def reference_split_config(path=None):
+    """Read fixed reference seed/sizes, independently of notebook filenames.
+
+    The shared JSON preserves the historical splits. An explicit notebook path
+    remains supported for callers comparing another reference configuration;
+    its code is parsed as literals and is never executed.
+    """
+    reference = (Path(__file__).resolve().parents[1] / 'data/reference_split_config.json'
+                 if path is None else Path(path))
+    saved = json.loads(reference.read_text(encoding='utf-8'))
+    if reference.suffix.lower() == '.json':
+        required = {'validation_size', 'test_size', 'mia_nonmember_size', 'mia_member_size', 'seed'}
+        if not isinstance(saved, dict) or set(saved) != required:
+            raise ValueError(f'Expected the five reference split settings in {reference}.')
+        if any(type(value) is not int or value < (0 if key == 'seed' else 1)
+               for key, value in saved.items()):
+            raise ValueError('Split sizes must be positive integers; seed must be a nonnegative integer.')
+        return saved
+    notebook = saved
     known = {}
     for cell in notebook['cells']:
         if cell.get('id') != 'overfit-imports':
@@ -106,10 +122,10 @@ def reference_split_config(path='experiments_2_overfit.ipynb'):
             if name == 'SPLIT_CONFIG':
                 value = node.value
                 if not isinstance(value, ast.Call) or getattr(value.func, 'id', None) != 'dict':
-                    raise ValueError('Expected literal dict(...) split configuration in Experiment 2.')
+                    raise ValueError('Expected literal dict(...) split configuration in reference notebook.')
                 return {item.arg: known[item.value.id] if isinstance(item.value, ast.Name)
                         else ast.literal_eval(item.value) for item in value.keywords}
-    raise ValueError('Could not read Experiment 2 split configuration.')
+    raise ValueError(f'Could not read reference split configuration from {reference}.')
 
 
 def expanded_feature_inventory(training):

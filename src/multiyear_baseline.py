@@ -14,9 +14,10 @@ from .expanded_data import (
     ADDITIONAL_GROUPS, EXPANDED_FEATURES, NUMERIC, build_expanded_preprocessor,
 )
 from .shadow_models import (
-    LABEL, PAPER_SHADOW_ALGORITHMS, build_shadow_estimator, membership_features,
+    LABEL, PAPER_SHADOW_ALGORITHMS, MLP_SHADOW_CONFIG, build_shadow_estimator, membership_features,
     split_shadow_data,
 )
+from .training import train_target_model, predict_probabilities
 
 
 # Explicitly approved common schema: VPS is absent from the 2024 source file.
@@ -83,23 +84,56 @@ def baseline_feature_inventory(training):
     ) for column in BASELINE_FEATURES]).set_index('feature')
 
 
-def train_baseline_shadow(auxiliary, algorithm, *, seed=42):
-    """Same tree estimators and 40/20/40 splits, on the common 47 inputs."""
-    if algorithm not in PAPER_SHADOW_ALGORITHMS:
+def train_baseline_shadow(auxiliary, algorithm, *, seed=42, parameters=None, partitions=None):
+    """Tree or generic MLP shadows with 40/20/40 splits and 47 common inputs.
+
+    MLP epochs are selected using shadow validation loss only. Nonmember rows
+    never participate in fitting or model selection. Existing trees are unchanged.
+    """
+    if algorithm not in (*PAPER_SHADOW_ALGORITHMS, 'mlp'):
         raise ValueError(f'Unsupported baseline shadow algorithm: {algorithm}')
-    partitions = split_shadow_data(auxiliary, seed=seed)
+    if parameters is not None and algorithm != 'mlp':
+        raise ValueError('Custom parameters are supported only for the added MLP shadows.')
+    if partitions is None:
+        partitions = split_shadow_data(auxiliary, seed=seed)
+    else:
+        if algorithm != 'mlp':
+            raise ValueError('Explicit splits are supported only for the same-year MLP study.')
+        if set(partitions) not in ({'train', 'validation', 'nonmembers'}, {'train', 'nonmembers'}):
+            raise ValueError('Expected train/nonmembers and an optional validation partition.')
+        seen = set()
+        for name, part in partitions.items():
+            ids = set(part.index)
+            if (part.empty or not part.index.is_unique or seen & ids
+                    or not ids <= set(auxiliary.index) or set(part[LABEL].unique()) != {0, 1}):
+                raise ValueError(f'Invalid or overlapping same-year {name} records.')
+            pd.testing.assert_frame_equal(part, auxiliary.loc[part.index])
+            seen.update(ids)
+        if seen != set(auxiliary.index):
+            raise ValueError('Same-year shadow partitions must cover the entire pool.')
     preprocessor = build_baseline_preprocessor()
     preprocessor.fit(partitions['train'][BASELINE_FEATURES])
     arrays = {name: dict(
         X=preprocessor.transform(frame[BASELINE_FEATURES]).astype(np.float32),
         y=frame[LABEL].to_numpy(dtype=np.int64, copy=True),
     ) for name, frame in partitions.items()}
-    model = build_shadow_estimator(algorithm, seed=seed)
-    model.fit(arrays['train']['X'], arrays['train']['y'])
+    history = []
+    if algorithm == 'mlp':
+        config = dict(MLP_SHADOW_CONFIG, seed=seed)
+        config.update(parameters or {})
+        model, history, metadata = train_target_model(
+            arrays['train']['X'], arrays['train']['y'],
+            arrays['validation']['X'] if 'validation' in arrays else None,
+            arrays['validation']['y'] if 'validation' in arrays else None, **config)
+    else:
+        model = build_shadow_estimator(algorithm, seed=seed)
+        model.fit(arrays['train']['X'], arrays['train']['y'])
+        metadata = model.get_params()
     metrics, attack_rows = {}, []
-    order = [list(model.classes_).index(label) for label in [0, 1]]
+    order = [list(model.classes_).index(label) for label in [0, 1]] if algorithm != 'mlp' else None
     for name, values in arrays.items():
-        probabilities = model.predict_proba(values['X'])[:, order]
+        probabilities = (predict_probabilities(model, values['X']) if algorithm == 'mlp'
+                         else model.predict_proba(values['X'])[:, order])
         metrics[name] = dict(records=len(values['y']),
             accuracy=float(accuracy_score(values['y'], probabilities.argmax(axis=1))),
             roc_auc=float(roc_auc_score(values['y'], probabilities[:, 1])),
@@ -115,4 +149,4 @@ def train_baseline_shadow(auxiliary, algorithm, *, seed=42):
         model=model, preprocessor=preprocessor, metrics=metrics,
         partition_ids={name: frame.index.to_numpy(copy=True) for name, frame in partitions.items()},
         attack_data=pd.concat(attack_rows, ignore_index=True),
-        history=[], metadata=model.get_params())
+        history=history, metadata=metadata)
