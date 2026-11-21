@@ -56,7 +56,8 @@ def train_target_model(X_train, y_train, X_validation, y_validation, *,
                        hidden_dims=(128, 64), dropout=0.0, epochs=50,
                        batch_size=256, learning_rate=1e-3, weight_decay=1e-4,
                        patience=5, seed=42, device='cpu', early_stopping=True,
-                       restore_best=True, monitor_train=False, num_classes=2):
+                       restore_best=True, monitor_train=False, num_classes=2,
+                       target_gap_pp=None):
     """Fit an MLP; by default select and restore the best validation epoch.
 
     No test or MIA data is accepted. Returns (model, history, metadata).
@@ -65,12 +66,23 @@ def train_target_model(X_train, y_train, X_validation, y_validation, *,
     restore_best=False. monitor_train adds end-of-epoch training metrics.
     Both validation arguments may be None only in that fixed-budget mode;
     no held-out test data is then passed to training or monitored by this helper.
+    Optional target_gap_pp selects an intermediate model using the end-of-epoch
+    train-minus-validation accuracy gap, in percentage points. Stop at the first
+    crossing of that gap or the epoch limit and return the closest visited epoch
+    (earlier epoch wins ties). Weights stay in memory. This mode requires
+    validation, monitor_train=True and both loss-based selection flags off.
     """
     if epochs < 1 or batch_size < 1 or patience < 1:
         raise ValueError('epochs, batch_size, and patience must be positive.')
     if (X_validation is None) != (y_validation is None):
         raise ValueError('Provide both validation inputs/labels, or neither.')
     has_validation = X_validation is not None
+    if target_gap_pp is not None:
+        if not np.isfinite(target_gap_pp) or not 0 < target_gap_pp <= 100:
+            raise ValueError('target_gap_pp must be finite and in (0, 100].')
+        if not has_validation or not monitor_train or early_stopping or restore_best:
+            raise ValueError('Gap selection requires validation, monitor_train=True, '
+                             'early_stopping=False and restore_best=False.')
     if not has_validation and (early_stopping or restore_best):
         raise ValueError('Without validation, early_stopping and restore_best must both be False.')
     if X_train.ndim != 2 or (has_validation and
@@ -97,6 +109,9 @@ def train_target_model(X_train, y_train, X_validation, y_validation, *,
     criterion = nn.CrossEntropyLoss()
     best_loss, stale_epochs = float('inf'), 0
     best_state, best_epoch = None, None
+    closest_gap_state, closest_gap_epoch = None, None
+    closest_gap_error, selected_gap_pp = float('inf'), None
+    gap_target_crossed = False
     history = []
     for epoch in range(1, epochs + 1):
         model.train()
@@ -131,7 +146,21 @@ def train_target_model(X_train, y_train, X_validation, y_validation, *,
             stale_epochs += 1
             if early_stopping and stale_epochs >= patience:
                 break
-    if restore_best:
+        if target_gap_pp is not None:
+            gap_pp = 100 * (training['accuracy'] - validation['accuracy'])
+            history[-1]['train_validation_accuracy_gap_pp'] = gap_pp
+            gap_error = abs(gap_pp - target_gap_pp)
+            # Small numerical ties retain the earlier epoch.
+            if gap_error < closest_gap_error - 1e-10:
+                closest_gap_error, selected_gap_pp = gap_error, gap_pp
+                closest_gap_epoch = epoch
+                closest_gap_state = copy.deepcopy(model.state_dict())
+            if gap_pp >= target_gap_pp - 1e-10:
+                gap_target_crossed = True
+                break
+    if target_gap_pp is not None:
+        model.load_state_dict(closest_gap_state)
+    elif restore_best:
         model.load_state_dict(best_state)
     model.eval()
     metadata = {'input_dim': X_train.shape[1], 'num_classes': num_classes, 'hidden_dims': list(hidden_dims),
@@ -141,7 +170,15 @@ def train_target_model(X_train, y_train, X_validation, y_validation, *,
                 'weight_decay': weight_decay, 'patience': patience, 'device': str(device),
                 'early_stopping': early_stopping, 'restore_best': restore_best,
                 'monitor_train': monitor_train,
-                'returned_epoch': best_epoch if restore_best else len(history)}
+                'returned_epoch': (closest_gap_epoch if target_gap_pp is not None
+                                   else best_epoch if restore_best else len(history))}
+    if target_gap_pp is not None:
+        metadata.update(target_gap_pp=float(target_gap_pp),
+                        selected_train_validation_gap_pp=float(selected_gap_pp),
+                        gap_distance_pp=float(closest_gap_error),
+                        gap_target_crossed=gap_target_crossed,
+                        stopping_reason='gap_target_crossed' if gap_target_crossed else 'epoch_limit',
+                        weight_selection='closest gap among epochs visited through first crossing or epoch limit')
     return model, history, metadata
 
 

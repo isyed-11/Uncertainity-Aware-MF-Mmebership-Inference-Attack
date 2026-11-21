@@ -5,6 +5,8 @@ data/processed/
 artifacts/
 .ipynb_checkpoints/
 .codex_tmp_pdf
+tests
 scripts/__pycache__/
 scripts
-.codex_tmp_pdf
+.codex_tmp_pdf/pypdf
+.codex_tmp_pdf/pypdf-7.1.0.dist-info
