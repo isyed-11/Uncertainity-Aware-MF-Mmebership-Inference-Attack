@@ -103,7 +103,8 @@ def train_dp_study_target(X_train, y_train, X_public_validation, y_public_valida
                           learning_rate=1e-3, weight_decay=1e-4,
                           max_grad_norm=1.0, seed=42, device='cpu', progress=None,
                           selection_metric='log_loss', strict_accounting=False,
-                          early_stopping=True, restore_best=True):
+                          early_stopping=True, restore_best=True,
+                          checkpoint_path=None, checkpoint_signature=None):
     """Matched Adam/DP-Adam targets with public-validation early stopping.
 
     epsilon=None is the fresh non-private control. Private targets use Poisson
@@ -122,6 +123,8 @@ def train_dp_study_target(X_train, y_train, X_public_validation, y_public_valida
     Legacy defaults preserve the original notebook's configuration.
     early_stopping=False, restore_best=False runs the fixed full schedule and
     returns the final epoch; validation is then monitoring only.
+    Optional internal epoch checkpoints preserve optimizer, accountant and RNG
+    states. They are not DP releases. No checkpoint I/O occurs by default.
     """
     if epsilon is not None and (not math.isfinite(epsilon) or epsilon <= 0):
         raise ValueError('epsilon must be a finite positive number or None.')
@@ -150,6 +153,21 @@ def train_dp_study_target(X_train, y_train, X_public_validation, y_public_valida
         if not np.isfinite(finite).all():
             raise ValueError('Inputs must be finite.')
 
+    saved = None
+    if checkpoint_path is not None:
+        if not checkpoint_signature:
+            raise ValueError('Training checkpoints require a data/settings signature.')
+        from .dp_mf_checkpoints import capture_rng, restore_rng
+        from .uncertainty_checkpoints import atomic_save, load_verified
+        import joblib
+        # Bind the caller's run signature to this condition and its actual data.
+        checkpoint_signature = joblib.hash((checkpoint_signature, epsilon, delta,
+            hidden_dims, dropout, max_epochs, patience, min_delta, batch_size,
+            max_physical_batch_size, learning_rate, weight_decay, max_grad_norm,
+            seed, device, selection_metric, strict_accounting, early_stopping,
+            restore_best, X_train, y_train, X_public_validation, y_public_validation))
+        saved = load_verified(checkpoint_path, checkpoint_signature)
+
     private = epsilon is not None
     opacus_parts = _load_opacus() if private else None
     random.seed(seed)
@@ -167,6 +185,7 @@ def train_dp_study_target(X_train, y_train, X_public_validation, y_public_valida
     loader = DataLoader(dataset, batch_size=batch_size, shuffle=True,
         generator=sampling_generator, num_workers=0)
     engine, planned_epsilon, noise_multiplier, sample_rate = None, None, None, None
+    noise_generator = None
     accountant_sample_rate, bound_sample_rate = None, None
     planned_steps = len(loader) * max_epochs
     if private:
@@ -204,9 +223,29 @@ def train_dp_study_target(X_train, y_train, X_public_validation, y_public_valida
     history, best_state = [], None
     best_loss, best_epoch, stale = float('inf'), None, 0
     best_accuracy = -float('inf')
+    elapsed_before, start_epoch = 0.0, 1
+    if saved is not None:
+        base_model.load_state_dict(saved['model'])
+        optimizer.load_state_dict(saved['optimizer'])
+        if private:
+            engine.accountant.load_state_dict(saved['accountant'])
+            if saved['noise_multiplier'] != noise_multiplier:
+                raise ValueError('Checkpoint noise calibration does not match this run.')
+            if sum(item[2] for item in engine.accountant.history) != len(loader) * saved['epoch']:
+                raise ValueError('Checkpoint accountant does not cover all completed epochs.')
+        history, best_state = saved['history'], saved['best_state']
+        best_loss, best_epoch = saved['best_loss'], saved['best_epoch']
+        best_accuracy, stale = saved['best_accuracy'], saved['stale']
+        elapsed_before, start_epoch = saved['training_seconds'], saved['epoch'] + 1
+        restore_rng(saved['rng'], sampling_generator, noise_generator)
+        if progress:
+            progress(f'Resumed training after epoch {start_epoch - 1}; privacy accountant restored')
     started = time.monotonic()
     try:
-        for epoch in range(1, max_epochs + 1):
+        epoch_range = range(start_epoch, max_epochs + 1)
+        if early_stopping and stale >= patience:
+            epoch_range = ()
+        for epoch in epoch_range:
             model.train()
             if private:
                 with BatchMemoryManager(data_loader=loader,
@@ -245,6 +284,17 @@ def train_dp_study_target(X_train, y_train, X_public_validation, y_public_valida
                 name = 'Non-private' if not private else f'epsilon={epsilon:g}'
                 progress(f'{name}: epoch {epoch}/{max_epochs}; public validation '
                     f'accuracy={validation["accuracy"]:.3%}, loss={validation["log_loss"]:.4f}; best epoch={best_epoch}')
+            if checkpoint_path is not None:
+                if private and (getattr(optimizer, '_is_last_step_skipped', False)
+                                or getattr(optimizer, '_step_skip_queue', [])):
+                    raise RuntimeError('Refusing to checkpoint inside an unfinished logical DP batch.')
+                atomic_save(checkpoint_path, checkpoint_signature, dict(
+                    epoch=epoch, model=base_model.state_dict(), optimizer=optimizer.state_dict(),
+                    accountant=engine.accountant.state_dict() if private else None,
+                    noise_multiplier=noise_multiplier, history=history, best_state=best_state,
+                    best_loss=best_loss, best_epoch=best_epoch, best_accuracy=best_accuracy, stale=stale,
+                    rng=capture_rng(sampling_generator, noise_generator),
+                    training_seconds=elapsed_before + time.monotonic() - started))
             if early_stopping and stale >= patience:
                 break
         spent_epsilon = float(engine.get_epsilon(delta=delta)) if private else None
@@ -277,11 +327,15 @@ def train_dp_study_target(X_train, y_train, X_public_validation, y_public_valida
         input_dim=X_train.shape[1], hidden_dims=list(hidden_dims), dropout=dropout,
         batch_size=batch_size, max_physical_batch_size=max_physical_batch_size,
         learning_rate=learning_rate, weight_decay=weight_decay, optimizer='Adam',
-        seed=seed, device=str(device), training_seconds=time.monotonic() - started,
+        seed=seed, device=str(device), training_seconds=elapsed_before + time.monotonic() - started,
         secure_mode=False if private else None,
         private_rng='Independent nondeterministic sampling/noise generators; seeds not saved' if private else None,
         early_stopping=early_stopping, restore_best=restore_best,
         validation_scope='Fixed public held-out records outside protected training set')
+    if checkpoint_path is not None:
+        metadata.update(training_checkpoint_enabled=True, resumed_after_epoch=start_epoch - 1)
+        if private:
+            metadata['private_rng'] = 'Independent nondeterministic generators; state saved in internal research checkpoint only'
     return model, history, metadata
 
 
