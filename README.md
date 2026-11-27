@@ -4,14 +4,79 @@ This project studies whether missing input features protect a person's training 
 
 The experiments use California ACS data to predict whether personal income exceeds **$50,000**. They adapt my proposal to a 48-feature tabular setting. The explanations below follow the project methodology report, with results checked against the saved experiment files.
 
+## Start here: run the main Experiment 3
+
+The main experiment is [`exp_3_expanded_missing_feature_baseline_mlp.ipynb`](exp_3_expanded_missing_feature_baseline_mlp.ipynb). It trains the 2023 income target, trains **20 auxiliary shadows on 2014 data**, and evaluates complete-feature MIA, missing-feature PFV and uncertainty-aware MF-MIA. The missing-feature study uses **seven masks and K = 6 completions**.
+
+### Clone without the artifacts folder
+
+Saved results are optional for rerunning the experiment. To clone the code without checking out `artifacts/`, use the following commands in PowerShell or Bash. Run them from the parent folder where you want the new `MF-MIA` directory:
+
+```text
+git -c core.longpaths=true clone --filter=blob:none --sparse https://github.com/isyed-11/Uncertainity-Aware-MF-Mmebership-Inference-Attack.git MF-MIA
+cd MF-MIA
+git config --local core.longpaths true
+git sparse-checkout set --no-cone "/*" "!/artifacts/"
+```
+
+The partial clone defers file-content downloads, and sparse checkout omits `artifacts/` from the working tree. Adding a tracked folder to `.gitignore` does not exclude it when cloning. See the [Git clone documentation](https://git-scm.com/docs/git-clone) and [sparse-checkout documentation](https://git-scm.com/docs/git-sparse-checkout). Notebooks create their result directories during execution; existing artifacts are not needed as inputs.
+
+### Set up Python and data
+
+Use **Python 3.12**. From the project root, run these commands in Windows PowerShell:
+
+```powershell
+py -3.12 -m venv .venv
+.\.venv\Scripts\python.exe -m pip install -r requirements.txt
+.\.venv\Scripts\python.exe -m ipykernel install --user --name mf-mia --display-name "Python (MF-MIA)"
+```
+
+The experiment needs these raw California ACS files:
+
+```text
+data/raw/folktables/2014/1-Year/ss14pca.csv
+data/raw/folktables/2023/1-Year/psam_p06.csv
+```
+
+If they are absent, download them through the installed `folktables` package. This also works in a fresh clone without the local `scripts/` folder:
+
+```powershell
+.\.venv\Scripts\python.exe -c "from folktables import ACSDataSource; [ACSDataSource(survey_year=str(year), horizon='1-Year', survey='person', root_dir='data/raw/folktables').get_data(states=['CA'], download=True) for year in (2014, 2023)]"
+```
+
+### Execute the notebook
+
+1. Open `exp_3_expanded_missing_feature_baseline_mlp.ipynb` in VS Code with the Python and Jupyter extensions installed.
+2. Select the **Python (MF-MIA)** kernel. Keep the kernel's working directory at the project root so `src/` and `data/` resolve correctly.
+3. Choose **Run All**, or run the cells in order. Later attack and reconstruction cells depend on the models and variables created earlier.
+4. Save the notebook after execution to retain its output cells. Metric tables are also written under `artifacts/exp_3_2023_2014_100000_nominal_tree16_mlp4_target_recipe/reduced_k6_s20_m7/`.
+
+The main Exp 3 notebook keeps fitted models and completion scores in memory. Restarting its kernel requires recomputation. Its saved target-training time is **1,655.875 seconds, or 27 minutes 36 seconds**. The full notebook runtime was not recorded. Completion scoring was previously observed to take **around 3–4 hours**, but that observation is not a measured total for the current 20-shadow run.
+
+### Recorded runtimes and Nebula runs
+
+The long DP studies were run on the **University of Waterloo ECE Nebula server**, using CPU PyTorch. These are elapsed times from the saved executed notebooks, not estimates for another machine.
+
+| Experiment | Where it ran | Recorded time | What the time covers |
+| --- | --- | ---: | --- |
+| Main Exp 3 baseline MLP | Local laptop | **27 min 36 sec** | Target training only; full notebook elapsed time unavailable |
+| Exp 4 DP accuracy notebook | Local laptop | **About 16–18 hours** | User-observed runtime; no exact execution timestamps |
+| Exp 4 DP overfitting study | Nebula CPU | **29 hr 38 min 8 sec** | Full run: 100-epoch targets, complete-feature MIA, non-private control and seven DP budgets |
+| Exp 4 DP + uncertainty-aware MF-MIA | Nebula CPU (`ece-nebula20`) | **34 hr 49 min 14 sec** | Full run: 100-epoch targets, 20 shadows, seven masks, K = 6, non-private control and seven DP budgets |
+
+The DP overfitting run lasted from **20 November 2026, 20:21:21 UTC** to **22 November 2026, 01:59:29 UTC**. The combined DP/MF-MIA run lasted from **23 November 2026, 02:57:01 UTC** to **24 November 2026, 13:46:15 UTC**. The two runs have different shadow configurations, so their runtime difference is not a controlled measurement of reconstruction overhead. Server load and hardware also affect runtime.
+
+The downloaded notebook [`dp-uncertainty-result-from-nebula.ipynb`](dp-uncertainty-result-from-nebula.ipynb) contains the combined run's saved cell outputs. The combined notebook supports checkpoints during execution; checkpoints and saved states from this completed local result copy were removed after preserving the result tables and protocol.
+
 ## Main notebooks
 
 | Notebook | Study |
 | --- | --- |
 | [Experiment 3: missing-feature MIA](exp_3_expanded_missing_feature_baseline_mlp.ipynb) | Complete-feature MIA, PFV reconstruction and uncertainty-aware MF-MIA; 20 shadows |
 | [Experiment 4: differential privacy](exp_4_differential_privacy_accuracy.ipynb) | Income-model utility and complete-feature MIA across privacy budgets; 16 shadows |
+| [Experiment 4: DP with uncertainty-aware MF-MIA](exp_4_differential_privacy_uncertainty_mf_mia.ipynb) | 100-epoch DP and non-private targets; 20 shadows, seven masks and K = 6; run on Nebula |
 
-Earlier variants are in [`other experiments/`](other%20experiments/). The two notebooks above are the current entry points. Archived notebooks also assume that their kernel's working directory is the project root.
+Earlier variants are in [`other experiments/`](other%20experiments/). Archived notebooks also assume that their kernel's working directory is the project root. The Experiment 4 methodology and accuracy table below describe the accuracy notebook; the combined Nebula study uses the separate 100-epoch configuration described above.
 
 ## Data and evaluation setting
 
@@ -198,29 +263,7 @@ The plots use equally spaced epsilon categories and a horizontal non-private ref
 
 ## Running the notebooks
 
-Use Python 3.12 and run commands from the project root. In Windows PowerShell:
-
-```powershell
-py -3.12 -m venv .venv
-.\.venv\Scripts\python.exe -m pip install -r requirements.txt
-.\.venv\Scripts\python.exe -m ipykernel install --user --name mf-mia --display-name "Python (MF-MIA)"
-```
-
-The main notebooks require these raw California ACS files:
-
-```text
-data/raw/folktables/2014/1-Year/ss14pca.csv
-data/raw/folktables/2023/1-Year/psam_p06.csv
-```
-
-If the datasets are absent, the project downloader can fetch them:
-
-```powershell
-.\.venv\Scripts\python.exe scripts/download_data.py --state CA --year 2014
-.\.venv\Scripts\python.exe scripts/download_data.py --state CA --year 2023
-```
-
-Open a main notebook in VS Code, select the `Python (MF-MIA)` kernel and run cells in order from the project root when ready to start the experiment. Training and completion queries can take hours on a laptop. Both notebooks keep models and completion draws in memory; they do not save model checkpoints or logs. Restarting the kernel requires recomputation.
+Follow the setup and execution steps at the start of this README. The same datasets and Python environment support the DP notebooks. The Exp 3 baseline and Exp 4 accuracy notebooks keep models in memory. The combined DP/MF-MIA notebook additionally saves progress logs, per-target result bundles and resumable checkpoints. To resume that notebook, reuse the same `MF_MIA_RUN_DIR` parent directory with unchanged code, data, settings and package versions; deleting its checkpoints requires recomputation.
 
 ## Files and saved results
 
@@ -228,6 +271,8 @@ Open a main notebook in VS Code, select the `Python (MF-MIA)` kernel and run cel
 MF-MIA/
 |-- exp_3_expanded_missing_feature_baseline_mlp.ipynb
 |-- exp_4_differential_privacy_accuracy.ipynb
+|-- exp_4_differential_privacy_uncertainty_mf_mia.ipynb
+|-- dp-uncertainty-result-from-nebula.ipynb   Executed Nebula notebook
 |-- other experiments/       Earlier notebook variants
 |-- src/                     Data, training, attack and DP helpers
 |-- scripts/                 Dataset and notebook utilities
@@ -238,12 +283,13 @@ MF-MIA/
 `-- AGENTS.md                Rules for agent-assisted experiment execution
 ```
 
-The metric tables above are a saved-results snapshot, checked on **19 November 2026**. Their local source folders are:
+The metric tables above retain the saved-results snapshot checked on **19 November 2026**. The execution instructions and Nebula runtime records were updated on **27 November 2026**. Local source folders are:
 
 - Experiment 3: `artifacts/exp_3_2023_2014_100000_nominal_tree16_mlp4_target_recipe/reduced_k6_s20_m7/`. Read `summary.json`, `missing_feature_pfv/comparison.csv` and `uncertainty_mf_mia/comparison.csv`.
 - Experiment 4: `artifacts/exp_4_2023_2014_dp_accuracy_e0p5_1_2_5_10_25_50_d1e6_mixed_mlp/`. Read `protocol.json`, `auxiliary_attack_metrics.csv` and `dp_target_and_mia_metrics.csv`.
+- Combined DP/MF-MIA on Nebula: `artifacts/dp-uncertainty/run-3734a3b6b6d89418/`. Read `dp_target_and_mia_metrics.csv`, `dp_missing_feature_metrics.csv`, `uncertainty_vs_mean_only.csv` and `protocol.json`.
 
-Raw/processed datasets, the virtual environment and artifacts are excluded from Git. Saved notebook outputs and these tables provide a readable snapshot; local result files support further analysis. Preserve those files before rerunning because the same output paths are reused. Earlier model checkpoints and completion caches were removed to reduce storage.
+Raw/processed datasets and the virtual environment are excluded from Git. `artifacts/` is not currently excluded by `.gitignore`; use the sparse-clone instructions above to omit it from a fresh checkout. Saved notebook outputs and these tables provide a readable snapshot; local result files support further analysis. Preserve those files before rerunning because the same output paths are reused. Earlier model checkpoints and completion caches were removed to reduce storage.
 
 ## Limitations
 
@@ -256,4 +302,4 @@ Raw/processed datasets, the virtual environment and artifacts are excluded from 
 
 ## Future work
 
-The combined **uncertainty-aware missing-feature attack against DP targets has not been evaluated**. The next study would apply the same masks and conditional controls to each private target and its non-private comparison. Further work includes repeated training runs, stronger attacks adapted to DP targets, and better calibration of low-FPR decisions under distribution shift.
+The combined **uncertainty-aware missing-feature attack against DP targets has now been evaluated on Nebula**. In that run, the non-private complete-feature MIA accuracy was 63.115%; the private targets' complete-feature and missing-feature attacks stayed near 50%. This is one run with a frozen auxiliary attack, not evidence that every attack would fail. Further work includes repeated training runs, stronger attacks adapted to DP targets, and better calibration of low-FPR decisions under distribution shift.
