@@ -1,0 +1,460 @@
+{
+  "methods": {
+    "offline_lira": {
+      "auxiliary": {
+        "train": {
+          "records": 198384,
+          "members": 99192,
+          "accuracy": 0.5524135010887975,
+          "balanced_accuracy": 0.5524135010887975,
+          "roc_auc": 0.5670125083799936,
+          "tpr_at_1pct_fpr_roc": 0.03641422695378659,
+          "threshold": "group-specific auxiliary validation cutoffs",
+          "low_fpr_threshold": "group-specific auxiliary validation cutoffs",
+          "tpr_at_accuracy_threshold": 0.3551193644648762,
+          "fpr_at_accuracy_threshold": 0.25029236228728124,
+          "tpr_at_shadow_threshold": 0.0349221711428341,
+          "fpr_at_shadow_threshold": 0.009486652149366885,
+          "tn": 74365,
+          "fp": 24827,
+          "fn": 63967,
+          "tp": 35225
+        },
+        "validation": {
+          "records": 66128,
+          "members": 33064,
+          "accuracy": 0.552912533268812,
+          "balanced_accuracy": 0.5529125332688121,
+          "roc_auc": 0.5652115283725748,
+          "tpr_at_1pct_fpr_roc": 0.03665618195015727,
+          "threshold": "group-specific auxiliary validation cutoffs",
+          "low_fpr_threshold": "group-specific auxiliary validation cutoffs",
+          "tpr_at_accuracy_threshold": 0.35664166465037506,
+          "fpr_at_accuracy_threshold": 0.25081659811275103,
+          "tpr_at_shadow_threshold": 0.03665618195015727,
+          "fpr_at_shadow_threshold": 0.009980643600290346,
+          "tn": 24771,
+          "fp": 8293,
+          "fn": 21272,
+          "tp": 11792
+        },
+        "test": {
+          "records": 66128,
+          "members": 33064,
+          "accuracy": 0.5542886523106703,
+          "balanced_accuracy": 0.5542886523106703,
+          "roc_auc": 0.5705260501281518,
+          "tpr_at_1pct_fpr_roc": 0.03925719816114203,
+          "threshold": "group-specific auxiliary validation cutoffs",
+          "low_fpr_threshold": "group-specific auxiliary validation cutoffs",
+          "tpr_at_accuracy_threshold": 0.35367771594483427,
+          "fpr_at_accuracy_threshold": 0.24510041132349383,
+          "tpr_at_shadow_threshold": 0.035658117590128234,
+          "fpr_at_shadow_threshold": 0.008740624243890636,
+          "tn": 24960,
+          "fp": 8104,
+          "fn": 21370,
+          "tp": 11694
+        }
+      },
+      "target": {
+        "records": 20000,
+        "members": 10000,
+        "accuracy": 0.52655,
+        "balanced_accuracy": 0.5265500000000001,
+        "roc_auc": 0.53558265,
+        "tpr_at_1pct_fpr_roc": 0.0122,
+        "threshold": "group-specific auxiliary validation cutoffs",
+        "low_fpr_threshold": "group-specific auxiliary validation cutoffs",
+        "tpr_at_accuracy_threshold": 0.5543,
+        "fpr_at_accuracy_threshold": 0.5012,
+        "tpr_at_shadow_threshold": 0.1716,
+        "fpr_at_shadow_threshold": 0.1392,
+        "tn": 4988,
+        "fp": 5012,
+        "fn": 4457,
+        "tp": 5543
+      }
+    },
+    "class_conditioned_lira": {
+      "auxiliary": {
+        "train": {
+          "records": 198384,
+          "members": 99192,
+          "accuracy": 0.5526252117106218,
+          "balanced_accuracy": 0.5526252117106218,
+          "roc_auc": 0.5670125083799936,
+          "tpr_at_1pct_fpr_roc": 0.03641422695378659,
+          "threshold": "group-specific auxiliary validation cutoffs",
+          "low_fpr_threshold": "group-specific auxiliary validation cutoffs",
+          "tpr_at_accuracy_threshold": 0.3285244777804662,
+          "fpr_at_accuracy_threshold": 0.2232740543592225,
+          "tpr_at_shadow_threshold": 0.0394084200338737,
+          "fpr_at_shadow_threshold": 0.009446326316638439,
+          "tn": 77045,
+          "fp": 22147,
+          "fn": 66605,
+          "tp": 32587
+        },
+        "validation": {
+          "records": 66128,
+          "members": 33064,
+          "accuracy": 0.553366198887007,
+          "balanced_accuracy": 0.553366198887007,
+          "roc_auc": 0.5652115283725748,
+          "tpr_at_1pct_fpr_roc": 0.03665618195015727,
+          "threshold": "group-specific auxiliary validation cutoffs",
+          "low_fpr_threshold": "group-specific auxiliary validation cutoffs",
+          "tpr_at_accuracy_threshold": 0.33169005564964915,
+          "fpr_at_accuracy_threshold": 0.22495765787563513,
+          "tpr_at_shadow_threshold": 0.04161625937575611,
+          "fpr_at_shadow_threshold": 0.009980643600290346,
+          "tn": 25626,
+          "fp": 7438,
+          "fn": 22097,
+          "tp": 10967
+        },
+        "test": {
+          "records": 66128,
+          "members": 33064,
+          "accuracy": 0.5549086619888701,
+          "balanced_accuracy": 0.5549086619888701,
+          "roc_auc": 0.5705260501281518,
+          "tpr_at_1pct_fpr_roc": 0.03925719816114203,
+          "threshold": "group-specific auxiliary validation cutoffs",
+          "low_fpr_threshold": "group-specific auxiliary validation cutoffs",
+          "tpr_at_accuracy_threshold": 0.32948221630776675,
+          "fpr_at_accuracy_threshold": 0.21966489233002662,
+          "tpr_at_shadow_threshold": 0.041888458746673116,
+          "fpr_at_shadow_threshold": 0.009194289862085652,
+          "tn": 25801,
+          "fp": 7263,
+          "fn": 22170,
+          "tp": 10894
+        }
+      },
+      "target": {
+        "records": 20000,
+        "members": 10000,
+        "accuracy": 0.5275,
+        "balanced_accuracy": 0.5275,
+        "roc_auc": 0.53558265,
+        "tpr_at_1pct_fpr_roc": 0.0122,
+        "threshold": "group-specific auxiliary validation cutoffs",
+        "low_fpr_threshold": "group-specific auxiliary validation cutoffs",
+        "tpr_at_accuracy_threshold": 0.5287,
+        "fpr_at_accuracy_threshold": 0.4737,
+        "tpr_at_shadow_threshold": 0.1813,
+        "fpr_at_shadow_threshold": 0.1435,
+        "tn": 5263,
+        "fp": 4737,
+        "fn": 4713,
+        "tp": 5287
+      }
+    },
+    "difficulty_conditioned_lira": {
+      "auxiliary": {
+        "train": {
+          "records": 198384,
+          "members": 99192,
+          "accuracy": 0.5691890475038309,
+          "balanced_accuracy": 0.5691890475038309,
+          "roc_auc": 0.5670125083799936,
+          "tpr_at_1pct_fpr_roc": 0.03641422695378659,
+          "threshold": "group-specific auxiliary validation cutoffs",
+          "low_fpr_threshold": "group-specific auxiliary validation cutoffs",
+          "tpr_at_accuracy_threshold": 0.8239979030566981,
+          "fpr_at_accuracy_threshold": 0.6856198080490362,
+          "tpr_at_shadow_threshold": 0.03725098798290185,
+          "fpr_at_shadow_threshold": 0.009496733607548996,
+          "tn": 31184,
+          "fp": 68008,
+          "fn": 17458,
+          "tp": 81734
+        },
+        "validation": {
+          "records": 66128,
+          "members": 33064,
+          "accuracy": 0.5717396564239051,
+          "balanced_accuracy": 0.5717396564239051,
+          "roc_auc": 0.5652115283725748,
+          "tpr_at_1pct_fpr_roc": 0.03665618195015727,
+          "threshold": "group-specific auxiliary validation cutoffs",
+          "low_fpr_threshold": "group-specific auxiliary validation cutoffs",
+          "tpr_at_accuracy_threshold": 0.8311154125332688,
+          "fpr_at_accuracy_threshold": 0.6876360996854585,
+          "tpr_at_shadow_threshold": 0.03995281877570772,
+          "fpr_at_shadow_threshold": 0.009829421727558674,
+          "tn": 10328,
+          "fp": 22736,
+          "fn": 5584,
+          "tp": 27480
+        },
+        "test": {
+          "records": 66128,
+          "members": 33064,
+          "accuracy": 0.570454270505686,
+          "balanced_accuracy": 0.5704542705056859,
+          "roc_auc": 0.5705260501281518,
+          "tpr_at_1pct_fpr_roc": 0.03925719816114203,
+          "threshold": "group-specific auxiliary validation cutoffs",
+          "low_fpr_threshold": "group-specific auxiliary validation cutoffs",
+          "tpr_at_accuracy_threshold": 0.8235543188966852,
+          "fpr_at_accuracy_threshold": 0.6826457778853133,
+          "tpr_at_shadow_threshold": 0.03874304379385434,
+          "fpr_at_shadow_threshold": 0.009375756109363658,
+          "tn": 10493,
+          "fp": 22571,
+          "fn": 5834,
+          "tp": 27230
+        }
+      },
+      "target": {
+        "records": 20000,
+        "members": 10000,
+        "accuracy": 0.53075,
+        "balanced_accuracy": 0.53075,
+        "roc_auc": 0.53558265,
+        "tpr_at_1pct_fpr_roc": 0.0122,
+        "threshold": "group-specific auxiliary validation cutoffs",
+        "low_fpr_threshold": "group-specific auxiliary validation cutoffs",
+        "tpr_at_accuracy_threshold": 0.8474,
+        "fpr_at_accuracy_threshold": 0.7859,
+        "tpr_at_shadow_threshold": 0.1776,
+        "fpr_at_shadow_threshold": 0.1386,
+        "tn": 2141,
+        "fp": 7859,
+        "fn": 1526,
+        "tp": 8474
+      }
+    },
+    "class_difficulty_conditioned_lira": {
+      "auxiliary": {
+        "train": {
+          "records": 198384,
+          "members": 99192,
+          "accuracy": 0.5696527945802081,
+          "balanced_accuracy": 0.5696527945802081,
+          "roc_auc": 0.5670125083799936,
+          "tpr_at_1pct_fpr_roc": 0.03641422695378659,
+          "threshold": "group-specific auxiliary validation cutoffs",
+          "low_fpr_threshold": "group-specific auxiliary validation cutoffs",
+          "tpr_at_accuracy_threshold": 0.6894709250746028,
+          "fpr_at_accuracy_threshold": 0.5501653359141866,
+          "tpr_at_shadow_threshold": 0.03680740382288894,
+          "fpr_at_shadow_threshold": 0.009002742156625535,
+          "tn": 44620,
+          "fp": 54572,
+          "fn": 30802,
+          "tp": 68390
+        },
+        "validation": {
+          "records": 66128,
+          "members": 33064,
+          "accuracy": 0.5716035567384466,
+          "balanced_accuracy": 0.5716035567384466,
+          "roc_auc": 0.5652115283725748,
+          "tpr_at_1pct_fpr_roc": 0.03665618195015727,
+          "threshold": "group-specific auxiliary validation cutoffs",
+          "low_fpr_threshold": "group-specific auxiliary validation cutoffs",
+          "tpr_at_accuracy_threshold": 0.6892088071618679,
+          "fpr_at_accuracy_threshold": 0.5460016936849746,
+          "tpr_at_shadow_threshold": 0.03968061940479071,
+          "fpr_at_shadow_threshold": 0.008952334865714976,
+          "tn": 15011,
+          "fp": 18053,
+          "fn": 10276,
+          "tp": 22788
+        },
+        "test": {
+          "records": 66128,
+          "members": 33064,
+          "accuracy": 0.5712557464311638,
+          "balanced_accuracy": 0.5712557464311638,
+          "roc_auc": 0.5705260501281518,
+          "tpr_at_1pct_fpr_roc": 0.03925719816114203,
+          "threshold": "group-specific auxiliary validation cutoffs",
+          "low_fpr_threshold": "group-specific auxiliary validation cutoffs",
+          "tpr_at_accuracy_threshold": 0.6863960803290587,
+          "fpr_at_accuracy_threshold": 0.5438845874667312,
+          "tpr_at_shadow_threshold": 0.038440600048391,
+          "fpr_at_shadow_threshold": 0.008680135494797967,
+          "tn": 15081,
+          "fp": 17983,
+          "fn": 10369,
+          "tp": 22695
+        }
+      },
+      "target": {
+        "records": 20000,
+        "members": 10000,
+        "accuracy": 0.53515,
+        "balanced_accuracy": 0.53515,
+        "roc_auc": 0.53558265,
+        "tpr_at_1pct_fpr_roc": 0.0122,
+        "threshold": "group-specific auxiliary validation cutoffs",
+        "low_fpr_threshold": "group-specific auxiliary validation cutoffs",
+        "tpr_at_accuracy_threshold": 0.7182,
+        "fpr_at_accuracy_threshold": 0.6479,
+        "tpr_at_shadow_threshold": 0.1747,
+        "fpr_at_shadow_threshold": 0.1366,
+        "tn": 3521,
+        "fp": 6479,
+        "fn": 2818,
+        "tp": 7182
+      }
+    }
+  },
+  "thresholds": {
+    "offline_lira": {
+      "accuracy": {
+        "all": 4.052622128928481
+      },
+      "low_fpr": {
+        "all": 5.090511157166087
+      },
+      "validation_counts": {
+        "all": {
+          "0": 33064,
+          "1": 33064
+        }
+      }
+    },
+    "class_conditioned_lira": {
+      "accuracy": {
+        "0": 4.05723976238796,
+        "1": 4.107820765204961
+      },
+      "low_fpr": {
+        "0": 5.230182444677565,
+        "1": 4.830987155574773
+      },
+      "validation_counts": {
+        "0": {
+          "0": 19432,
+          "1": 19432
+        },
+        "1": {
+          "0": 13632,
+          "1": 13632
+        }
+      }
+    },
+    "difficulty_conditioned_lira": {
+      "accuracy": {
+        "0": 4.058908660656779,
+        "1": 3.926254389329527,
+        "2": 3.903742079065234,
+        "3": 3.9051995744316312
+      },
+      "low_fpr": {
+        "0": 5.02344486224018,
+        "1": 4.798400236367333,
+        "2": 4.919107786040513,
+        "3": 5.493308673459208
+      },
+      "validation_counts": {
+        "0": {
+          "1": 7992,
+          "0": 7940
+        },
+        "1": {
+          "0": 8404,
+          "1": 8384
+        },
+        "2": {
+          "1": 8424,
+          "0": 8396
+        },
+        "3": {
+          "0": 8324,
+          "1": 8264
+        }
+      }
+    },
+    "class_difficulty_conditioned_lira": {
+      "accuracy": {
+        "0_0": 4.056963213930466,
+        "0_1": 3.9218492872678565,
+        "0_2": Infinity,
+        "0_3": 3.9051995744316312,
+        "1_0": 4.087986840867792,
+        "1_1": 3.9361202889616465,
+        "1_2": 3.9037306329246477,
+        "1_3": 3.904953256334337
+      },
+      "low_fpr": {
+        "0_0": 5.019467832028715,
+        "0_1": 4.882384964596897,
+        "0_2": 4.984646934654275,
+        "0_3": 5.5123917858020235,
+        "1_0": 5.0302509056888836,
+        "1_1": 4.744605978343615,
+        "1_2": 4.981795272301294,
+        "1_3": 5.482817657625801
+      },
+      "validation_counts": {
+        "0_0": {
+          "0": 3896,
+          "1": 3856
+        },
+        "0_1": {
+          "0": 3720,
+          "1": 3696
+        },
+        "0_2": {
+          "1": 4440,
+          "0": 4364
+        },
+        "0_3": {
+          "0": 7452,
+          "1": 7440
+        },
+        "1_0": {
+          "1": 4136,
+          "0": 4044
+        },
+        "1_1": {
+          "1": 4688,
+          "0": 4684
+        },
+        "1_2": {
+          "0": 4032,
+          "1": 3984
+        },
+        "1_3": {
+          "0": 872,
+          "1": 824
+        }
+      }
+    }
+  },
+  "pooled_out_std": 19.78229733535903,
+  "difficulty_cuts": [
+    2.9650276573374867,
+    11.941703796386719,
+    21.307177543640137
+  ],
+  "reference_count": 16,
+  "auxiliary_attack_rows": 330640,
+  "auxiliary_attack_unique_records": 20665,
+  "partition_balance": {
+    "train": {
+      "1": 99192,
+      "0": 99192
+    },
+    "validation": {
+      "0": 33064,
+      "1": 33064
+    },
+    "test": {
+      "0": 33064,
+      "1": 33064
+    }
+  },
+  "out_count_per_auxiliary_record": {
+    "8": 20665
+  },
+  "note": "Fixed-variance Gaussian OUT likelihood, median OUT locations, one query. Pseudo-target calibration excludes the query model and requires at least one other OUT model. Four-model calibration has limited per-record OUT support.",
+  "source": "https://github.com/tensorflow/privacy/blob/master/research/mi_lira_2021/plot.py"
+}

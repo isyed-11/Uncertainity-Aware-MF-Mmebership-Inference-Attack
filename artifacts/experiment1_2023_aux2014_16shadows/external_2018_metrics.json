@@ -1,0 +1,19 @@
+{
+  "target_year": 2023,
+  "evaluation_year": 2018,
+  "records": 25000,
+  "eligible_source_records": 195665,
+  "seed": 42,
+  "sampling": "stratified by income label, without replacement",
+  "positive_rate": 0.41056,
+  "accuracy": 0.81048,
+  "roc_auc": 0.9030665584645701,
+  "log_loss": 0.40881070494651794,
+  "relationship_mapping_audit": {
+    "direct_category_mapping": 143894,
+    "spouse_partner_inferred_from_reference_sex": 50131,
+    "roomer_boarder_merged_other_nonrelative": 1640
+  },
+  "relationship_audit_scope": "all eligible source records",
+  "notes": "Nominal >$50,000 income; no inflation adjustment. Native codes retained except audited 2018 relationship conversion. No full cross-year classification harmonization claimed."
+}

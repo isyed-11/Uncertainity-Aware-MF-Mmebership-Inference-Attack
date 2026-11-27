@@ -1,0 +1,36 @@
+{
+  "method": "calibrated_rf",
+  "role": "primary_reported_attack",
+  "target_year": 2018,
+  "reference_year": 2018,
+  "reference_count": 16,
+  "reference_pool": "20,665 unused ACS2018 records; approximately 10,300 training records per reference",
+  "access": "Stable pre-softmax logit margins and reference-calibrated features",
+  "metrics": {
+    "records": 20000,
+    "members": 10000,
+    "accuracy": 0.6205,
+    "balanced_accuracy": 0.6205,
+    "roc_auc": 0.6830339400000001,
+    "tpr_at_1pct_fpr_roc": 0.0601,
+    "threshold": 0.4806305646296278,
+    "low_fpr_threshold": 0.8241384264916044,
+    "tpr_at_accuracy_threshold": 0.8006,
+    "fpr_at_accuracy_threshold": 0.5596,
+    "tpr_at_shadow_threshold": 0.1102,
+    "fpr_at_shadow_threshold": 0.0271,
+    "tn": 4404,
+    "fp": 5596,
+    "fn": 1994,
+    "tp": 8006
+  },
+  "classifier_artifact": "references/attack_classifiers.joblib",
+  "classifier_key": "calibrated_rf",
+  "comparison_only": [
+    "original_probability_rf",
+    "stable_margin_rf",
+    "offline_reference_z",
+    "matched_2014_lira"
+  ],
+  "status": "Existing completed result retained; no retraining or new evaluation"
+}

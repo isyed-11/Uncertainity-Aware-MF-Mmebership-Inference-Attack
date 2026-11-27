@@ -1,0 +1,362 @@
+{
+  "target_year": 2023,
+  "auxiliary_source": "2014",
+  "n_shadow_models": 16,
+  "original_features": [
+    "AGEP",
+    "COW",
+    "SCHL",
+    "MAR",
+    "OCCP",
+    "POBP",
+    "RELSHIPP",
+    "WKHP",
+    "SEX",
+    "RAC1P"
+  ],
+  "encoded_features": 819,
+  "split_config": {
+    "validation_size": 10000,
+    "test_size": 10000,
+    "mia_nonmember_size": 10000,
+    "mia_member_size": 10000,
+    "seed": 42
+  },
+  "partition_counts": {
+    "validation": 10000,
+    "test": 10000,
+    "mia_nonmembers": 10000,
+    "train": 173278,
+    "mia_members": 10000
+  },
+  "training": {
+    "input_dim": 819,
+    "num_classes": 2,
+    "hidden_dims": [
+      128,
+      64
+    ],
+    "dropout": 0.0,
+    "best_epoch": 3,
+    "seed": 42,
+    "epochs_requested": 50,
+    "epochs_run": 8,
+    "batch_size": 256,
+    "learning_rate": 0.001,
+    "weight_decay": 0.0001,
+    "patience": 5,
+    "device": "cpu",
+    "early_stopping": true,
+    "restore_best": true,
+    "monitor_train": false,
+    "returned_epoch": 3
+  },
+  "target_metrics": {
+    "train": {
+      "accuracy": 0.8294301642447397,
+      "roc_auc": 0.911236979499931,
+      "log_loss": 0.3774574398994446
+    },
+    "validation": {
+      "accuracy": 0.822,
+      "roc_auc": 0.9022796193433023,
+      "log_loss": 0.39378926157951355
+    },
+    "test": {
+      "accuracy": 0.819,
+      "roc_auc": 0.9046730638521738,
+      "log_loss": 0.39032813906669617
+    }
+  },
+  "target_mia_metrics": {
+    "records": 20000,
+    "members": 10000,
+    "accuracy": 0.50175,
+    "balanced_accuracy": 0.50175,
+    "roc_auc": 0.50430626,
+    "tpr_at_1pct_fpr_roc": 0.0111,
+    "threshold": 0.5048694641927128,
+    "tn": 5088,
+    "fp": 4912,
+    "fn": 5053,
+    "tp": 4947,
+    "shadow_selected_threshold": 0.583234478496854,
+    "tpr_at_shadow_threshold": 0.0093,
+    "fpr_at_shadow_threshold": 0.009
+  },
+  "shadow_attack_metrics": {
+    "train": {
+      "records": 38419,
+      "members": 19317,
+      "accuracy": 0.5909315703167703,
+      "balanced_accuracy": 0.5909886789445362,
+      "roc_auc": 0.6286170131734683,
+      "tpr_at_1pct_fpr_roc": 0.02345084640472123,
+      "threshold": 0.5048694641927128,
+      "tn": 11484,
+      "fp": 7618,
+      "fn": 8098,
+      "tp": 11219,
+      "shadow_selected_threshold": 0.583234478496854,
+      "tpr_at_shadow_threshold": 0.015219754620282652,
+      "fpr_at_shadow_threshold": 0.005339754999476495
+    },
+    "validation": {
+      "records": 12849,
+      "members": 6376,
+      "accuracy": 0.5179391392326251,
+      "balanced_accuracy": 0.5178752354389364,
+      "roc_auc": 0.5200369268659839,
+      "tpr_at_1pct_fpr_roc": 0.010821831869510665,
+      "threshold": 0.5048694641927128,
+      "tn": 3407,
+      "fp": 3066,
+      "fn": 3128,
+      "tp": 3248,
+      "shadow_selected_threshold": 0.583234478496854,
+      "tpr_at_shadow_threshold": 0.010821831869510665,
+      "fpr_at_shadow_threshold": 0.007724393635099644
+    },
+    "test": {
+      "records": 12732,
+      "members": 6307,
+      "accuracy": 0.5023562676720076,
+      "balanced_accuracy": 0.5023237104841203,
+      "roc_auc": 0.5067914287071558,
+      "tpr_at_1pct_fpr_roc": 0.010464563183764071,
+      "threshold": 0.5048694641927128,
+      "tn": 3250,
+      "fp": 3175,
+      "fn": 3161,
+      "tp": 3146,
+      "shadow_selected_threshold": 0.583234478496854,
+      "tpr_at_shadow_threshold": 0.010464563183764071,
+      "fpr_at_shadow_threshold": 0.009027237354085603
+    }
+  },
+  "target_query_diagnostics": {
+    "record_queries": 593101,
+    "max_record_queries": 820000,
+    "walk_censored_fraction": 0.54155,
+    "blind_walk_enabled": true,
+    "config": {
+      "max_steps": 20,
+      "repeats": 2,
+      "categorical_change_probability": 0.05,
+      "batch_size": 512,
+      "seed": 42
+    }
+  },
+  "shadow_query_diagnostics": {
+    "xgboost_01": {
+      "record_queries": 124544,
+      "max_record_queries": 164000,
+      "walk_censored_fraction": 0.62775,
+      "blind_walk_enabled": true,
+      "config": {
+        "max_steps": 20,
+        "repeats": 2,
+        "categorical_change_probability": 0.05,
+        "batch_size": 512,
+        "seed": 42
+      }
+    },
+    "random_forest_02": {
+      "record_queries": 128613,
+      "max_record_queries": 164000,
+      "walk_censored_fraction": 0.661125,
+      "blind_walk_enabled": true,
+      "config": {
+        "max_steps": 20,
+        "repeats": 2,
+        "categorical_change_probability": 0.05,
+        "batch_size": 512,
+        "seed": 42
+      }
+    },
+    "mlp_03": {
+      "record_queries": 123561,
+      "max_record_queries": 164000,
+      "walk_censored_fraction": 0.61325,
+      "blind_walk_enabled": true,
+      "config": {
+        "max_steps": 20,
+        "repeats": 2,
+        "categorical_change_probability": 0.05,
+        "batch_size": 512,
+        "seed": 42
+      }
+    },
+    "decision_tree_04": {
+      "record_queries": 111253,
+      "max_record_queries": 164000,
+      "walk_censored_fraction": 0.50625,
+      "blind_walk_enabled": true,
+      "config": {
+        "max_steps": 20,
+        "repeats": 2,
+        "categorical_change_probability": 0.05,
+        "batch_size": 512,
+        "seed": 42
+      }
+    },
+    "logistic_regression_05": {
+      "record_queries": 125577,
+      "max_record_queries": 164000,
+      "walk_censored_fraction": 0.61425,
+      "blind_walk_enabled": true,
+      "config": {
+        "max_steps": 20,
+        "repeats": 2,
+        "categorical_change_probability": 0.05,
+        "batch_size": 512,
+        "seed": 42
+      }
+    },
+    "xgboost_06": {
+      "record_queries": 125713,
+      "max_record_queries": 164000,
+      "walk_censored_fraction": 0.6355,
+      "blind_walk_enabled": true,
+      "config": {
+        "max_steps": 20,
+        "repeats": 2,
+        "categorical_change_probability": 0.05,
+        "batch_size": 512,
+        "seed": 42
+      }
+    },
+    "random_forest_07": {
+      "record_queries": 128123,
+      "max_record_queries": 164000,
+      "walk_censored_fraction": 0.657375,
+      "blind_walk_enabled": true,
+      "config": {
+        "max_steps": 20,
+        "repeats": 2,
+        "categorical_change_probability": 0.05,
+        "batch_size": 512,
+        "seed": 42
+      }
+    },
+    "mlp_08": {
+      "record_queries": 124787,
+      "max_record_queries": 164000,
+      "walk_censored_fraction": 0.620875,
+      "blind_walk_enabled": true,
+      "config": {
+        "max_steps": 20,
+        "repeats": 2,
+        "categorical_change_probability": 0.05,
+        "batch_size": 512,
+        "seed": 42
+      }
+    },
+    "decision_tree_09": {
+      "record_queries": 113873,
+      "max_record_queries": 164000,
+      "walk_censored_fraction": 0.537875,
+      "blind_walk_enabled": true,
+      "config": {
+        "max_steps": 20,
+        "repeats": 2,
+        "categorical_change_probability": 0.05,
+        "batch_size": 512,
+        "seed": 42
+      }
+    },
+    "logistic_regression_10": {
+      "record_queries": 125051,
+      "max_record_queries": 164000,
+      "walk_censored_fraction": 0.610625,
+      "blind_walk_enabled": true,
+      "config": {
+        "max_steps": 20,
+        "repeats": 2,
+        "categorical_change_probability": 0.05,
+        "batch_size": 512,
+        "seed": 42
+      }
+    },
+    "xgboost_11": {
+      "record_queries": 124493,
+      "max_record_queries": 164000,
+      "walk_censored_fraction": 0.630875,
+      "blind_walk_enabled": true,
+      "config": {
+        "max_steps": 20,
+        "repeats": 2,
+        "categorical_change_probability": 0.05,
+        "batch_size": 512,
+        "seed": 42
+      }
+    },
+    "random_forest_12": {
+      "record_queries": 128527,
+      "max_record_queries": 164000,
+      "walk_censored_fraction": 0.665,
+      "blind_walk_enabled": true,
+      "config": {
+        "max_steps": 20,
+        "repeats": 2,
+        "categorical_change_probability": 0.05,
+        "batch_size": 512,
+        "seed": 42
+      }
+    },
+    "mlp_13": {
+      "record_queries": 123883,
+      "max_record_queries": 164000,
+      "walk_censored_fraction": 0.61625,
+      "blind_walk_enabled": true,
+      "config": {
+        "max_steps": 20,
+        "repeats": 2,
+        "categorical_change_probability": 0.05,
+        "batch_size": 512,
+        "seed": 42
+      }
+    },
+    "decision_tree_14": {
+      "record_queries": 110741,
+      "max_record_queries": 164000,
+      "walk_censored_fraction": 0.50725,
+      "blind_walk_enabled": true,
+      "config": {
+        "max_steps": 20,
+        "repeats": 2,
+        "categorical_change_probability": 0.05,
+        "batch_size": 512,
+        "seed": 42
+      }
+    },
+    "logistic_regression_15": {
+      "record_queries": 124613,
+      "max_record_queries": 164000,
+      "walk_censored_fraction": 0.609,
+      "blind_walk_enabled": true,
+      "config": {
+        "max_steps": 20,
+        "repeats": 2,
+        "categorical_change_probability": 0.05,
+        "batch_size": 512,
+        "seed": 42
+      }
+    },
+    "xgboost_16": {
+      "record_queries": 124905,
+      "max_record_queries": 164000,
+      "walk_censored_fraction": 0.628875,
+      "blind_walk_enabled": true,
+      "config": {
+        "max_steps": 20,
+        "repeats": 2,
+        "categorical_change_probability": 0.05,
+        "batch_size": 512,
+        "seed": 42
+      }
+    }
+  },
+  "oracle_consistency_verified": true,
+  "source_sha256": "b46811cca68b8df7019ab7ce6ef86ba82397ea30507231b6e2df25a8d06dcd76"
+}

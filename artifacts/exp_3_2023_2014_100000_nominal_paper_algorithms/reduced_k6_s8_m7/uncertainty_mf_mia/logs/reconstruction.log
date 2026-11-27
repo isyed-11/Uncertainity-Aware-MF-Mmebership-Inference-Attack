@@ -1,0 +1,64 @@
+  Reconstruction field 1/1: MAR; preparing donors
+  Fitting 100 trees for MAR on 123,757 auxiliary records
+  MAR: trees fitted; collecting leaf donors
+  MAR: reconstruction fitted in 8.4s
+  Reconstruction field 1/1: WKHP; preparing donors
+  Fitting 100 trees for WKHP on 123,757 auxiliary records
+  WKHP: trees fitted; collecting leaf donors
+  WKHP: reconstruction fitted in 360.5s
+  Reconstruction field 1/2: MAR; preparing donors
+  Fitting 100 trees for MAR on 123,757 auxiliary records
+  MAR: trees fitted; collecting leaf donors
+  MAR: reconstruction fitted in 7.5s
+  Reconstruction field 2/2: COW; preparing donors
+  Fitting 100 trees for COW on 123,757 auxiliary records
+  COW: trees fitted; collecting leaf donors
+  COW: reconstruction fitted in 7.6s
+  Reconstruction field 1/2: WKHP; preparing donors
+  Fitting 100 trees for WKHP on 123,757 auxiliary records
+  WKHP: trees fitted; collecting leaf donors
+  WKHP: reconstruction fitted in 296.1s
+  Reconstruction field 2/2: SEX; preparing donors
+  Fitting 100 trees for SEX on 123,757 auxiliary records
+  SEX: trees fitted; collecting leaf donors
+  SEX: reconstruction fitted in 6.0s
+  Reconstruction field 1/3: MAR; preparing donors
+  Fitting 100 trees for MAR on 123,757 auxiliary records
+  MAR: trees fitted; collecting leaf donors
+  MAR: reconstruction fitted in 6.8s
+  Reconstruction field 2/3: COW; preparing donors
+  Fitting 100 trees for COW on 123,757 auxiliary records
+  COW: trees fitted; collecting leaf donors
+  COW: reconstruction fitted in 6.9s
+  Reconstruction field 3/3: SEX; preparing donors
+  Fitting 100 trees for SEX on 123,757 auxiliary records
+  SEX: trees fitted; collecting leaf donors
+  SEX: reconstruction fitted in 6.0s
+  Reconstruction field 1/3: WKHP; preparing donors
+  Fitting 100 trees for WKHP on 123,757 auxiliary records
+  WKHP: trees fitted; collecting leaf donors
+  WKHP: reconstruction fitted in 286.4s
+  Reconstruction field 2/3: COW; preparing donors
+  Fitting 100 trees for COW on 123,757 auxiliary records
+  COW: trees fitted; collecting leaf donors
+  COW: reconstruction fitted in 7.4s
+  Reconstruction field 3/3: SEX; preparing donors
+  Fitting 100 trees for SEX on 123,757 auxiliary records
+  SEX: trees fitted; collecting leaf donors
+  SEX: reconstruction fitted in 6.2s
+  Reconstruction field 1/4: MAR; preparing donors
+  Fitting 100 trees for MAR on 123,757 auxiliary records
+  MAR: trees fitted; collecting leaf donors
+  MAR: reconstruction fitted in 6.8s
+  Reconstruction field 2/4: WKHP; preparing donors
+  Fitting 100 trees for WKHP on 123,757 auxiliary records
+  WKHP: trees fitted; collecting leaf donors
+  WKHP: reconstruction fitted in 275.8s
+  Reconstruction field 3/4: COW; preparing donors
+  Fitting 100 trees for COW on 123,757 auxiliary records
+  COW: trees fitted; collecting leaf donors
+  COW: reconstruction fitted in 7.0s
+  Reconstruction field 4/4: SEX; preparing donors
+  Fitting 100 trees for SEX on 123,757 auxiliary records
+  SEX: trees fitted; collecting leaf donors
+  SEX: reconstruction fitted in 5.7s

@@ -1,0 +1,5116 @@
+{
+  "k": 6,
+  "reconstruction_seed": 1042,
+  "masks": {
+    "MAR": [
+      "MAR"
+    ],
+    "WKHP": [
+      "WKHP"
+    ],
+    "MAR+COW": [
+      "MAR",
+      "COW"
+    ],
+    "WKHP+SEX": [
+      "WKHP",
+      "SEX"
+    ],
+    "MAR+COW+SEX": [
+      "MAR",
+      "COW",
+      "SEX"
+    ],
+    "WKHP+COW+SEX": [
+      "WKHP",
+      "COW",
+      "SEX"
+    ],
+    "MAR+WKHP+COW+SEX": [
+      "MAR",
+      "WKHP",
+      "COW",
+      "SEX"
+    ]
+  },
+  "n_shadow_models": 8,
+  "shadow_names": [
+    "random_forest_01",
+    "gradient_boosting_02",
+    "xgboost_03",
+    "random_forest_04",
+    "gradient_boosting_05",
+    "xgboost_06",
+    "random_forest_07",
+    "gradient_boosting_08"
+  ],
+  "mask_selection": "preselected coverage: 2 singles, 2 pairs, 2 triples, 1 quadruple; each field hidden four times",
+  "reconstruction": "sequential random-forest leaf donor sampling; approximate predictive distribution",
+  "reconstruction_chain_order": [
+    "MAR",
+    "WKHP",
+    "COW",
+    "SEX"
+  ],
+  "score_std_ddof": 0,
+  "auxiliary_year": 2014,
+  "target_year": 2023,
+  "target_labels_for_tuning": false,
+  "meta_source": "half of base-attack validation record groups",
+  "calibration_source": "other half of base-attack validation record groups",
+  "methods": [
+    "single",
+    "average",
+    "learned_mean",
+    "uncertainty"
+  ],
+  "queries": {
+    "MAR/random_forest_01": [
+      {
+        "record_queries": 50459,
+        "max_record_queries": 66010,
+        "walk_censored_fraction": 0.6316770186335404,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 50445,
+        "max_record_queries": 66010,
+        "walk_censored_fraction": 0.6360248447204969,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 50282,
+        "max_record_queries": 66010,
+        "walk_censored_fraction": 0.6322981366459627,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 50336,
+        "max_record_queries": 66010,
+        "walk_censored_fraction": 0.6338509316770187,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 50253,
+        "max_record_queries": 66010,
+        "walk_censored_fraction": 0.631055900621118,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 50501,
+        "max_record_queries": 66010,
+        "walk_censored_fraction": 0.6366459627329193,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      }
+    ],
+    "MAR/gradient_boosting_02": [
+      {
+        "record_queries": 50745,
+        "max_record_queries": 66502,
+        "walk_censored_fraction": 0.6236128236744759,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 50741,
+        "max_record_queries": 66502,
+        "walk_censored_fraction": 0.6214549938347719,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 50606,
+        "max_record_queries": 66502,
+        "walk_censored_fraction": 0.6214549938347719,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 50593,
+        "max_record_queries": 66502,
+        "walk_censored_fraction": 0.6214549938347719,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 50853,
+        "max_record_queries": 66502,
+        "walk_censored_fraction": 0.62577065351418,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 50655,
+        "max_record_queries": 66502,
+        "walk_censored_fraction": 0.6199136868064118,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      }
+    ],
+    "MAR/xgboost_03": [
+      {
+        "record_queries": 48558,
+        "max_record_queries": 64575,
+        "walk_censored_fraction": 0.6168253968253968,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 48349,
+        "max_record_queries": 64575,
+        "walk_censored_fraction": 0.6114285714285714,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 48419,
+        "max_record_queries": 64575,
+        "walk_censored_fraction": 0.6139682539682539,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 48520,
+        "max_record_queries": 64575,
+        "walk_censored_fraction": 0.6158730158730159,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 48648,
+        "max_record_queries": 64575,
+        "walk_censored_fraction": 0.6187301587301587,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 48414,
+        "max_record_queries": 64575,
+        "walk_censored_fraction": 0.6161904761904762,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      }
+    ],
+    "MAR/random_forest_04": [
+      {
+        "record_queries": 51498,
+        "max_record_queries": 65682,
+        "walk_censored_fraction": 0.6626092384519351,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 51563,
+        "max_record_queries": 65682,
+        "walk_censored_fraction": 0.66541822721598,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 51731,
+        "max_record_queries": 65682,
+        "walk_censored_fraction": 0.6660424469413233,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 51613,
+        "max_record_queries": 65682,
+        "walk_censored_fraction": 0.6657303370786517,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 51648,
+        "max_record_queries": 65682,
+        "walk_censored_fraction": 0.6651061173533084,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 51511,
+        "max_record_queries": 65682,
+        "walk_censored_fraction": 0.6638576779026217,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      }
+    ],
+    "MAR/gradient_boosting_05": [
+      {
+        "record_queries": 47914,
+        "max_record_queries": 64329,
+        "walk_censored_fraction": 0.5994263862332696,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 47807,
+        "max_record_queries": 64329,
+        "walk_censored_fraction": 0.5978330146590185,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 48055,
+        "max_record_queries": 64329,
+        "walk_censored_fraction": 0.6032504780114722,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 47815,
+        "max_record_queries": 64329,
+        "walk_censored_fraction": 0.5971956660293181,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 47807,
+        "max_record_queries": 64329,
+        "walk_censored_fraction": 0.6003824091778203,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 47836,
+        "max_record_queries": 64329,
+        "walk_censored_fraction": 0.5981516889738687,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      }
+    ],
+    "MAR/xgboost_06": [
+      {
+        "record_queries": 50347,
+        "max_record_queries": 65395,
+        "walk_censored_fraction": 0.6260188087774294,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 50523,
+        "max_record_queries": 65395,
+        "walk_censored_fraction": 0.6275862068965518,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 50090,
+        "max_record_queries": 65395,
+        "walk_censored_fraction": 0.6169278996865204,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 50111,
+        "max_record_queries": 65395,
+        "walk_censored_fraction": 0.6203761755485894,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 50146,
+        "max_record_queries": 65395,
+        "walk_censored_fraction": 0.6228840125391849,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 50265,
+        "max_record_queries": 65395,
+        "walk_censored_fraction": 0.6231974921630095,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      }
+    ],
+    "MAR/random_forest_07": [
+      {
+        "record_queries": 49777,
+        "max_record_queries": 64247,
+        "walk_censored_fraction": 0.6528398213146139,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 49925,
+        "max_record_queries": 64247,
+        "walk_censored_fraction": 0.6557115507338864,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 50045,
+        "max_record_queries": 64247,
+        "walk_censored_fraction": 0.6582641991065731,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 49830,
+        "max_record_queries": 64247,
+        "walk_censored_fraction": 0.6531589023611998,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 49710,
+        "max_record_queries": 64247,
+        "walk_censored_fraction": 0.6537970644543714,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 49987,
+        "max_record_queries": 64247,
+        "walk_censored_fraction": 0.6557115507338864,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      }
+    ],
+    "MAR/gradient_boosting_08": [
+      {
+        "record_queries": 50367,
+        "max_record_queries": 66215,
+        "walk_censored_fraction": 0.6145510835913313,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 50375,
+        "max_record_queries": 66215,
+        "walk_censored_fraction": 0.6145510835913313,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 50169,
+        "max_record_queries": 66215,
+        "walk_censored_fraction": 0.6120743034055728,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 50152,
+        "max_record_queries": 66215,
+        "walk_censored_fraction": 0.6111455108359133,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 50309,
+        "max_record_queries": 66215,
+        "walk_censored_fraction": 0.6126934984520124,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 50210,
+        "max_record_queries": 66215,
+        "walk_censored_fraction": 0.6111455108359133,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      }
+    ],
+    "WKHP/random_forest_01": [
+      {
+        "record_queries": 50731,
+        "max_record_queries": 66010,
+        "walk_censored_fraction": 0.6425465838509317,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 50692,
+        "max_record_queries": 66010,
+        "walk_censored_fraction": 0.6437888198757764,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 50191,
+        "max_record_queries": 66010,
+        "walk_censored_fraction": 0.6335403726708074,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 50511,
+        "max_record_queries": 66010,
+        "walk_censored_fraction": 0.6422360248447205,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 50572,
+        "max_record_queries": 66010,
+        "walk_censored_fraction": 0.6413043478260869,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 50606,
+        "max_record_queries": 66010,
+        "walk_censored_fraction": 0.6419254658385093,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      }
+    ],
+    "WKHP/gradient_boosting_02": [
+      {
+        "record_queries": 50089,
+        "max_record_queries": 66502,
+        "walk_censored_fraction": 0.6091245376078915,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 50246,
+        "max_record_queries": 66502,
+        "walk_censored_fraction": 0.6168310727496917,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 50501,
+        "max_record_queries": 66502,
+        "walk_censored_fraction": 0.6155980271270037,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 50381,
+        "max_record_queries": 66502,
+        "walk_censored_fraction": 0.6171393341553637,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 50821,
+        "max_record_queries": 66502,
+        "walk_censored_fraction": 0.6266954377311961,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 51012,
+        "max_record_queries": 66502,
+        "walk_censored_fraction": 0.6316276202219482,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      }
+    ],
+    "WKHP/xgboost_03": [
+      {
+        "record_queries": 48953,
+        "max_record_queries": 64575,
+        "walk_censored_fraction": 0.6228571428571429,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 49163,
+        "max_record_queries": 64575,
+        "walk_censored_fraction": 0.6228571428571429,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 49226,
+        "max_record_queries": 64575,
+        "walk_censored_fraction": 0.6295238095238095,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 49122,
+        "max_record_queries": 64575,
+        "walk_censored_fraction": 0.6244444444444445,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 48900,
+        "max_record_queries": 64575,
+        "walk_censored_fraction": 0.6171428571428571,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 48819,
+        "max_record_queries": 64575,
+        "walk_censored_fraction": 0.6196825396825397,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      }
+    ],
+    "WKHP/random_forest_04": [
+      {
+        "record_queries": 51426,
+        "max_record_queries": 65682,
+        "walk_censored_fraction": 0.6613607990012484,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 51606,
+        "max_record_queries": 65682,
+        "walk_censored_fraction": 0.6660424469413233,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 51788,
+        "max_record_queries": 65682,
+        "walk_censored_fraction": 0.6688514357053683,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 51638,
+        "max_record_queries": 65682,
+        "walk_censored_fraction": 0.666354556803995,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 51825,
+        "max_record_queries": 65682,
+        "walk_censored_fraction": 0.670099875156055,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 51427,
+        "max_record_queries": 65682,
+        "walk_censored_fraction": 0.6622971285892634,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      }
+    ],
+    "WKHP/gradient_boosting_05": [
+      {
+        "record_queries": 48355,
+        "max_record_queries": 64329,
+        "walk_censored_fraction": 0.6061185468451242,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 47812,
+        "max_record_queries": 64329,
+        "walk_censored_fraction": 0.5994263862332696,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 47931,
+        "max_record_queries": 64329,
+        "walk_censored_fraction": 0.5949649458253665,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 47375,
+        "max_record_queries": 64329,
+        "walk_censored_fraction": 0.5860420650095602,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 48444,
+        "max_record_queries": 64329,
+        "walk_censored_fraction": 0.607074569789675,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 47864,
+        "max_record_queries": 64329,
+        "walk_censored_fraction": 0.595602294455067,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      }
+    ],
+    "WKHP/xgboost_06": [
+      {
+        "record_queries": 50297,
+        "max_record_queries": 65395,
+        "walk_censored_fraction": 0.625705329153605,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 50197,
+        "max_record_queries": 65395,
+        "walk_censored_fraction": 0.6194357366771159,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 50234,
+        "max_record_queries": 65395,
+        "walk_censored_fraction": 0.6241379310344828,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 50302,
+        "max_record_queries": 65395,
+        "walk_censored_fraction": 0.6250783699059561,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 49942,
+        "max_record_queries": 65395,
+        "walk_censored_fraction": 0.6172413793103448,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 49486,
+        "max_record_queries": 65395,
+        "walk_censored_fraction": 0.613166144200627,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      }
+    ],
+    "WKHP/random_forest_07": [
+      {
+        "record_queries": 49868,
+        "max_record_queries": 64247,
+        "walk_censored_fraction": 0.6589023611997448,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 49878,
+        "max_record_queries": 64247,
+        "walk_censored_fraction": 0.6550733886407147,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 49456,
+        "max_record_queries": 64247,
+        "walk_censored_fraction": 0.6474154435226548,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 49491,
+        "max_record_queries": 64247,
+        "walk_censored_fraction": 0.6515634971282706,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 49458,
+        "max_record_queries": 64247,
+        "walk_censored_fraction": 0.6470963624760689,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 49672,
+        "max_record_queries": 64247,
+        "walk_censored_fraction": 0.6528398213146139,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      }
+    ],
+    "WKHP/gradient_boosting_08": [
+      {
+        "record_queries": 50259,
+        "max_record_queries": 66215,
+        "walk_censored_fraction": 0.6080495356037152,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 49897,
+        "max_record_queries": 66215,
+        "walk_censored_fraction": 0.6030959752321982,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 50346,
+        "max_record_queries": 66215,
+        "walk_censored_fraction": 0.6114551083591331,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 50399,
+        "max_record_queries": 66215,
+        "walk_censored_fraction": 0.6167182662538699,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 50325,
+        "max_record_queries": 66215,
+        "walk_censored_fraction": 0.6105263157894737,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 49442,
+        "max_record_queries": 66215,
+        "walk_censored_fraction": 0.5984520123839009,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      }
+    ],
+    "MAR+COW/random_forest_01": [
+      {
+        "record_queries": 50672,
+        "max_record_queries": 66010,
+        "walk_censored_fraction": 0.6394409937888199,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 50790,
+        "max_record_queries": 66010,
+        "walk_censored_fraction": 0.6406832298136645,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 50454,
+        "max_record_queries": 66010,
+        "walk_censored_fraction": 0.6307453416149068,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 50423,
+        "max_record_queries": 66010,
+        "walk_censored_fraction": 0.6332298136645963,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 50395,
+        "max_record_queries": 66010,
+        "walk_censored_fraction": 0.6341614906832298,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 50317,
+        "max_record_queries": 66010,
+        "walk_censored_fraction": 0.632919254658385,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      }
+    ],
+    "MAR+COW/gradient_boosting_02": [
+      {
+        "record_queries": 50689,
+        "max_record_queries": 66502,
+        "walk_censored_fraction": 0.6211467324290999,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 50697,
+        "max_record_queries": 66502,
+        "walk_censored_fraction": 0.6211467324290999,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 50462,
+        "max_record_queries": 66502,
+        "walk_censored_fraction": 0.6186806411837238,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 50688,
+        "max_record_queries": 66502,
+        "walk_censored_fraction": 0.6208384710234278,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 50691,
+        "max_record_queries": 66502,
+        "walk_censored_fraction": 0.6196054254007398,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 50832,
+        "max_record_queries": 66502,
+        "walk_censored_fraction": 0.62577065351418,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      }
+    ],
+    "MAR+COW/xgboost_03": [
+      {
+        "record_queries": 48582,
+        "max_record_queries": 64575,
+        "walk_censored_fraction": 0.6152380952380953,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 48460,
+        "max_record_queries": 64575,
+        "walk_censored_fraction": 0.6142857142857143,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 48488,
+        "max_record_queries": 64575,
+        "walk_censored_fraction": 0.6120634920634921,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 48537,
+        "max_record_queries": 64575,
+        "walk_censored_fraction": 0.6152380952380953,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 48871,
+        "max_record_queries": 64575,
+        "walk_censored_fraction": 0.6203174603174603,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 48515,
+        "max_record_queries": 64575,
+        "walk_censored_fraction": 0.6158730158730159,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      }
+    ],
+    "MAR+COW/random_forest_04": [
+      {
+        "record_queries": 51612,
+        "max_record_queries": 65682,
+        "walk_censored_fraction": 0.668227215980025,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 51211,
+        "max_record_queries": 65682,
+        "walk_censored_fraction": 0.6598002496878901,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 51591,
+        "max_record_queries": 65682,
+        "walk_censored_fraction": 0.6644818976279651,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 51418,
+        "max_record_queries": 65682,
+        "walk_censored_fraction": 0.66354556803995,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 51509,
+        "max_record_queries": 65682,
+        "walk_censored_fraction": 0.6666666666666666,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 51688,
+        "max_record_queries": 65682,
+        "walk_censored_fraction": 0.666354556803995,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      }
+    ],
+    "MAR+COW/gradient_boosting_05": [
+      {
+        "record_queries": 47811,
+        "max_record_queries": 64329,
+        "walk_censored_fraction": 0.5952836201402167,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 48058,
+        "max_record_queries": 64329,
+        "walk_censored_fraction": 0.5981516889738687,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 47853,
+        "max_record_queries": 64329,
+        "walk_censored_fraction": 0.5978330146590185,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 47634,
+        "max_record_queries": 64329,
+        "walk_censored_fraction": 0.5920968769917144,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 47833,
+        "max_record_queries": 64329,
+        "walk_censored_fraction": 0.5968769917144678,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 47837,
+        "max_record_queries": 64329,
+        "walk_censored_fraction": 0.5965583173996176,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      }
+    ],
+    "MAR+COW/xgboost_06": [
+      {
+        "record_queries": 50198,
+        "max_record_queries": 65395,
+        "walk_censored_fraction": 0.6216300940438871,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 50201,
+        "max_record_queries": 65395,
+        "walk_censored_fraction": 0.6225705329153605,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 50048,
+        "max_record_queries": 65395,
+        "walk_censored_fraction": 0.6159874608150471,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 49975,
+        "max_record_queries": 65395,
+        "walk_censored_fraction": 0.6175548589341693,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 50060,
+        "max_record_queries": 65395,
+        "walk_censored_fraction": 0.618808777429467,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 50156,
+        "max_record_queries": 65395,
+        "walk_censored_fraction": 0.6206896551724138,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      }
+    ],
+    "MAR+COW/random_forest_07": [
+      {
+        "record_queries": 49860,
+        "max_record_queries": 64247,
+        "walk_censored_fraction": 0.6541161455009572,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 49600,
+        "max_record_queries": 64247,
+        "walk_censored_fraction": 0.6528398213146139,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 49844,
+        "max_record_queries": 64247,
+        "walk_censored_fraction": 0.6534779834077856,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 49954,
+        "max_record_queries": 64247,
+        "walk_censored_fraction": 0.6573069559668155,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 49855,
+        "max_record_queries": 64247,
+        "walk_censored_fraction": 0.6541161455009572,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 49925,
+        "max_record_queries": 64247,
+        "walk_censored_fraction": 0.6541161455009572,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      }
+    ],
+    "MAR+COW/gradient_boosting_08": [
+      {
+        "record_queries": 50083,
+        "max_record_queries": 66215,
+        "walk_censored_fraction": 0.6095975232198142,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 50589,
+        "max_record_queries": 66215,
+        "walk_censored_fraction": 0.6160990712074303,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 50364,
+        "max_record_queries": 66215,
+        "walk_censored_fraction": 0.6130030959752322,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 50429,
+        "max_record_queries": 66215,
+        "walk_censored_fraction": 0.6145510835913313,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 50179,
+        "max_record_queries": 66215,
+        "walk_censored_fraction": 0.611764705882353,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 50555,
+        "max_record_queries": 66215,
+        "walk_censored_fraction": 0.6160990712074303,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      }
+    ],
+    "WKHP+SEX/random_forest_01": [
+      {
+        "record_queries": 50224,
+        "max_record_queries": 66010,
+        "walk_censored_fraction": 0.6357142857142857,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 50115,
+        "max_record_queries": 66010,
+        "walk_censored_fraction": 0.6322981366459627,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 50175,
+        "max_record_queries": 66010,
+        "walk_censored_fraction": 0.6338509316770187,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 49994,
+        "max_record_queries": 66010,
+        "walk_censored_fraction": 0.6319875776397516,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 49852,
+        "max_record_queries": 66010,
+        "walk_censored_fraction": 0.6298136645962733,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 50032,
+        "max_record_queries": 66010,
+        "walk_censored_fraction": 0.6304347826086957,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      }
+    ],
+    "WKHP+SEX/gradient_boosting_02": [
+      {
+        "record_queries": 50576,
+        "max_record_queries": 66502,
+        "walk_censored_fraction": 0.622996300863132,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 49788,
+        "max_record_queries": 66502,
+        "walk_censored_fraction": 0.6078914919852034,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 50537,
+        "max_record_queries": 66502,
+        "walk_censored_fraction": 0.6211467324290999,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 50385,
+        "max_record_queries": 66502,
+        "walk_censored_fraction": 0.6189889025893958,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 50072,
+        "max_record_queries": 66502,
+        "walk_censored_fraction": 0.6072749691738595,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 50078,
+        "max_record_queries": 66502,
+        "walk_censored_fraction": 0.6134401972872996,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      }
+    ],
+    "WKHP+SEX/xgboost_03": [
+      {
+        "record_queries": 49137,
+        "max_record_queries": 64575,
+        "walk_censored_fraction": 0.626031746031746,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 49110,
+        "max_record_queries": 64575,
+        "walk_censored_fraction": 0.6238095238095238,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 49848,
+        "max_record_queries": 64575,
+        "walk_censored_fraction": 0.6333333333333333,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 48912,
+        "max_record_queries": 64575,
+        "walk_censored_fraction": 0.6209523809523809,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 49163,
+        "max_record_queries": 64575,
+        "walk_censored_fraction": 0.6193650793650793,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 49526,
+        "max_record_queries": 64575,
+        "walk_censored_fraction": 0.6266666666666667,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      }
+    ],
+    "WKHP+SEX/random_forest_04": [
+      {
+        "record_queries": 51446,
+        "max_record_queries": 65682,
+        "walk_censored_fraction": 0.6619850187265918,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 51111,
+        "max_record_queries": 65682,
+        "walk_censored_fraction": 0.6566791510611736,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 50863,
+        "max_record_queries": 65682,
+        "walk_censored_fraction": 0.6544943820224719,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 51357,
+        "max_record_queries": 65682,
+        "walk_censored_fraction": 0.6573033707865169,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 51295,
+        "max_record_queries": 65682,
+        "walk_censored_fraction": 0.6629213483146067,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 51862,
+        "max_record_queries": 65682,
+        "walk_censored_fraction": 0.666354556803995,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      }
+    ],
+    "WKHP+SEX/gradient_boosting_05": [
+      {
+        "record_queries": 48399,
+        "max_record_queries": 64329,
+        "walk_censored_fraction": 0.6089866156787763,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 48405,
+        "max_record_queries": 64329,
+        "walk_censored_fraction": 0.5991077119184194,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 48050,
+        "max_record_queries": 64329,
+        "walk_censored_fraction": 0.6013384321223709,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 47928,
+        "max_record_queries": 64329,
+        "walk_censored_fraction": 0.60006373486297,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 47800,
+        "max_record_queries": 64329,
+        "walk_censored_fraction": 0.5987890376035692,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 47800,
+        "max_record_queries": 64329,
+        "walk_censored_fraction": 0.5917782026768642,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      }
+    ],
+    "WKHP+SEX/xgboost_06": [
+      {
+        "record_queries": 49665,
+        "max_record_queries": 65395,
+        "walk_censored_fraction": 0.6128526645768025,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 49611,
+        "max_record_queries": 65395,
+        "walk_censored_fraction": 0.606269592476489,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 50095,
+        "max_record_queries": 65395,
+        "walk_censored_fraction": 0.6181818181818182,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 49162,
+        "max_record_queries": 65395,
+        "walk_censored_fraction": 0.6090909090909091,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 49670,
+        "max_record_queries": 65395,
+        "walk_censored_fraction": 0.6134796238244514,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 49650,
+        "max_record_queries": 65395,
+        "walk_censored_fraction": 0.6150470219435736,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      }
+    ],
+    "WKHP+SEX/random_forest_07": [
+      {
+        "record_queries": 49878,
+        "max_record_queries": 64247,
+        "walk_censored_fraction": 0.6569878749202297,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 49849,
+        "max_record_queries": 64247,
+        "walk_censored_fraction": 0.6553924696873006,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 50198,
+        "max_record_queries": 64247,
+        "walk_censored_fraction": 0.6604977664326739,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 49696,
+        "max_record_queries": 64247,
+        "walk_censored_fraction": 0.6553924696873006,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 49600,
+        "max_record_queries": 64247,
+        "walk_censored_fraction": 0.6512444160816847,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 50347,
+        "max_record_queries": 64247,
+        "walk_censored_fraction": 0.6640076579451181,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      }
+    ],
+    "WKHP+SEX/gradient_boosting_08": [
+      {
+        "record_queries": 49581,
+        "max_record_queries": 66215,
+        "walk_censored_fraction": 0.5993808049535604,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 50164,
+        "max_record_queries": 66215,
+        "walk_censored_fraction": 0.6068111455108359,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 49707,
+        "max_record_queries": 66215,
+        "walk_censored_fraction": 0.6037151702786377,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 49834,
+        "max_record_queries": 66215,
+        "walk_censored_fraction": 0.604953560371517,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 49740,
+        "max_record_queries": 66215,
+        "walk_censored_fraction": 0.5972136222910217,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 49779,
+        "max_record_queries": 66215,
+        "walk_censored_fraction": 0.6043343653250774,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      }
+    ],
+    "MAR+COW+SEX/random_forest_01": [
+      {
+        "record_queries": 50304,
+        "max_record_queries": 66010,
+        "walk_censored_fraction": 0.6341614906832298,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 50114,
+        "max_record_queries": 66010,
+        "walk_censored_fraction": 0.6316770186335404,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 50048,
+        "max_record_queries": 66010,
+        "walk_censored_fraction": 0.6319875776397516,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 50159,
+        "max_record_queries": 66010,
+        "walk_censored_fraction": 0.6319875776397516,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 50496,
+        "max_record_queries": 66010,
+        "walk_censored_fraction": 0.636335403726708,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 50209,
+        "max_record_queries": 66010,
+        "walk_censored_fraction": 0.6298136645962733,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      }
+    ],
+    "MAR+COW+SEX/gradient_boosting_02": [
+      {
+        "record_queries": 50416,
+        "max_record_queries": 66502,
+        "walk_censored_fraction": 0.6174475955610358,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 50694,
+        "max_record_queries": 66502,
+        "walk_censored_fraction": 0.6254623921085081,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 50763,
+        "max_record_queries": 66502,
+        "walk_censored_fraction": 0.627003699136868,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 50682,
+        "max_record_queries": 66502,
+        "walk_censored_fraction": 0.6186806411837238,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 50644,
+        "max_record_queries": 66502,
+        "walk_censored_fraction": 0.6177558569667078,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 50422,
+        "max_record_queries": 66502,
+        "walk_censored_fraction": 0.6162145499383477,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      }
+    ],
+    "MAR+COW+SEX/xgboost_03": [
+      {
+        "record_queries": 48877,
+        "max_record_queries": 64575,
+        "walk_censored_fraction": 0.6212698412698413,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 48558,
+        "max_record_queries": 64575,
+        "walk_censored_fraction": 0.6139682539682539,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 48743,
+        "max_record_queries": 64575,
+        "walk_censored_fraction": 0.6187301587301587,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 48575,
+        "max_record_queries": 64575,
+        "walk_censored_fraction": 0.6139682539682539,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 48208,
+        "max_record_queries": 64575,
+        "walk_censored_fraction": 0.6088888888888889,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 48664,
+        "max_record_queries": 64575,
+        "walk_censored_fraction": 0.6196825396825397,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      }
+    ],
+    "MAR+COW+SEX/random_forest_04": [
+      {
+        "record_queries": 51254,
+        "max_record_queries": 65682,
+        "walk_censored_fraction": 0.6613607990012484,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 51171,
+        "max_record_queries": 65682,
+        "walk_censored_fraction": 0.6576154806491885,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 50981,
+        "max_record_queries": 65682,
+        "walk_censored_fraction": 0.6579275905118602,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 51632,
+        "max_record_queries": 65682,
+        "walk_censored_fraction": 0.6666666666666666,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 51451,
+        "max_record_queries": 65682,
+        "walk_censored_fraction": 0.6651061173533084,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 51339,
+        "max_record_queries": 65682,
+        "walk_censored_fraction": 0.6573033707865169,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      }
+    ],
+    "MAR+COW+SEX/gradient_boosting_05": [
+      {
+        "record_queries": 48046,
+        "max_record_queries": 64329,
+        "walk_censored_fraction": 0.5994263862332696,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 47918,
+        "max_record_queries": 64329,
+        "walk_censored_fraction": 0.5978330146590185,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 47841,
+        "max_record_queries": 64329,
+        "walk_censored_fraction": 0.5978330146590185,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 47856,
+        "max_record_queries": 64329,
+        "walk_censored_fraction": 0.5952836201402167,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 47798,
+        "max_record_queries": 64329,
+        "walk_censored_fraction": 0.5968769917144678,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 47812,
+        "max_record_queries": 64329,
+        "walk_censored_fraction": 0.5968769917144678,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      }
+    ],
+    "MAR+COW+SEX/xgboost_06": [
+      {
+        "record_queries": 50343,
+        "max_record_queries": 65395,
+        "walk_censored_fraction": 0.6272727272727273,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 49859,
+        "max_record_queries": 65395,
+        "walk_censored_fraction": 0.6159874608150471,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 49658,
+        "max_record_queries": 65395,
+        "walk_censored_fraction": 0.6137931034482759,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 50337,
+        "max_record_queries": 65395,
+        "walk_censored_fraction": 0.6247648902821317,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 50298,
+        "max_record_queries": 65395,
+        "walk_censored_fraction": 0.6278996865203762,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 50162,
+        "max_record_queries": 65395,
+        "walk_censored_fraction": 0.6219435736677116,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      }
+    ],
+    "MAR+COW+SEX/random_forest_07": [
+      {
+        "record_queries": 49667,
+        "max_record_queries": 64247,
+        "walk_censored_fraction": 0.6550733886407147,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 49398,
+        "max_record_queries": 64247,
+        "walk_censored_fraction": 0.6506062539885131,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 49516,
+        "max_record_queries": 64247,
+        "walk_censored_fraction": 0.6499680918953414,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 49762,
+        "max_record_queries": 64247,
+        "walk_censored_fraction": 0.6537970644543714,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 49536,
+        "max_record_queries": 64247,
+        "walk_censored_fraction": 0.654435226547543,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 49902,
+        "max_record_queries": 64247,
+        "walk_censored_fraction": 0.6550733886407147,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      }
+    ],
+    "MAR+COW+SEX/gradient_boosting_08": [
+      {
+        "record_queries": 49674,
+        "max_record_queries": 66215,
+        "walk_censored_fraction": 0.6015479876160991,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 50335,
+        "max_record_queries": 66215,
+        "walk_censored_fraction": 0.6114551083591331,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 49986,
+        "max_record_queries": 66215,
+        "walk_censored_fraction": 0.6071207430340557,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 50027,
+        "max_record_queries": 66215,
+        "walk_censored_fraction": 0.6055727554179566,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 49901,
+        "max_record_queries": 66215,
+        "walk_censored_fraction": 0.6043343653250774,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 50004,
+        "max_record_queries": 66215,
+        "walk_censored_fraction": 0.6061919504643963,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      }
+    ],
+    "WKHP+COW+SEX/random_forest_01": [
+      {
+        "record_queries": 50097,
+        "max_record_queries": 66010,
+        "walk_censored_fraction": 0.6301242236024844,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 50183,
+        "max_record_queries": 66010,
+        "walk_censored_fraction": 0.6369565217391304,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 50110,
+        "max_record_queries": 66010,
+        "walk_censored_fraction": 0.6288819875776398,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 50201,
+        "max_record_queries": 66010,
+        "walk_censored_fraction": 0.6332298136645963,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 50414,
+        "max_record_queries": 66010,
+        "walk_censored_fraction": 0.6385093167701863,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 50148,
+        "max_record_queries": 66010,
+        "walk_censored_fraction": 0.6388198757763975,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      }
+    ],
+    "WKHP+COW+SEX/gradient_boosting_02": [
+      {
+        "record_queries": 50672,
+        "max_record_queries": 66502,
+        "walk_censored_fraction": 0.6208384710234278,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 50107,
+        "max_record_queries": 66502,
+        "walk_censored_fraction": 0.6118988902589396,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 50364,
+        "max_record_queries": 66502,
+        "walk_censored_fraction": 0.6137484586929717,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 50304,
+        "max_record_queries": 66502,
+        "walk_censored_fraction": 0.6159062885326757,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 49662,
+        "max_record_queries": 66502,
+        "walk_censored_fraction": 0.6020345252774353,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 50253,
+        "max_record_queries": 66502,
+        "walk_censored_fraction": 0.6168310727496917,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      }
+    ],
+    "WKHP+COW+SEX/xgboost_03": [
+      {
+        "record_queries": 49529,
+        "max_record_queries": 64575,
+        "walk_censored_fraction": 0.6352380952380953,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 49139,
+        "max_record_queries": 64575,
+        "walk_censored_fraction": 0.62,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 48809,
+        "max_record_queries": 64575,
+        "walk_censored_fraction": 0.613015873015873,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 49054,
+        "max_record_queries": 64575,
+        "walk_censored_fraction": 0.6149206349206349,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 49409,
+        "max_record_queries": 64575,
+        "walk_censored_fraction": 0.6244444444444445,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 49306,
+        "max_record_queries": 64575,
+        "walk_censored_fraction": 0.6187301587301587,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      }
+    ],
+    "WKHP+COW+SEX/random_forest_04": [
+      {
+        "record_queries": 51129,
+        "max_record_queries": 65682,
+        "walk_censored_fraction": 0.6560549313358303,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 51837,
+        "max_record_queries": 65682,
+        "walk_censored_fraction": 0.6710362047440699,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 51308,
+        "max_record_queries": 65682,
+        "walk_censored_fraction": 0.6585518102372035,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 51558,
+        "max_record_queries": 65682,
+        "walk_censored_fraction": 0.6669787765293383,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 51426,
+        "max_record_queries": 65682,
+        "walk_censored_fraction": 0.6598002496878901,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 50984,
+        "max_record_queries": 65682,
+        "walk_censored_fraction": 0.6566791510611736,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      }
+    ],
+    "WKHP+COW+SEX/gradient_boosting_05": [
+      {
+        "record_queries": 47921,
+        "max_record_queries": 64329,
+        "walk_censored_fraction": 0.5933715742511153,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 47842,
+        "max_record_queries": 64329,
+        "walk_censored_fraction": 0.5949649458253665,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 47887,
+        "max_record_queries": 64329,
+        "walk_censored_fraction": 0.5943275971956661,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 48015,
+        "max_record_queries": 64329,
+        "walk_censored_fraction": 0.6010197578075207,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 48232,
+        "max_record_queries": 64329,
+        "walk_censored_fraction": 0.6016571064372211,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 47670,
+        "max_record_queries": 64329,
+        "walk_censored_fraction": 0.5946462715105163,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      }
+    ],
+    "WKHP+COW+SEX/xgboost_06": [
+      {
+        "record_queries": 49229,
+        "max_record_queries": 65395,
+        "walk_censored_fraction": 0.6078369905956112,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 49967,
+        "max_record_queries": 65395,
+        "walk_censored_fraction": 0.6231974921630095,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 49855,
+        "max_record_queries": 65395,
+        "walk_censored_fraction": 0.6200626959247649,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 49868,
+        "max_record_queries": 65395,
+        "walk_censored_fraction": 0.6178683385579937,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 49816,
+        "max_record_queries": 65395,
+        "walk_censored_fraction": 0.6194357366771159,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 49488,
+        "max_record_queries": 65395,
+        "walk_censored_fraction": 0.6159874608150471,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      }
+    ],
+    "WKHP+COW+SEX/random_forest_07": [
+      {
+        "record_queries": 49533,
+        "max_record_queries": 64247,
+        "walk_censored_fraction": 0.6461391193363114,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 50105,
+        "max_record_queries": 64247,
+        "walk_censored_fraction": 0.6576260370134014,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 49636,
+        "max_record_queries": 64247,
+        "walk_censored_fraction": 0.6486917677089981,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 49783,
+        "max_record_queries": 64247,
+        "walk_censored_fraction": 0.6579451180599872,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 49904,
+        "max_record_queries": 64247,
+        "walk_censored_fraction": 0.6585832801531589,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 50091,
+        "max_record_queries": 64247,
+        "walk_censored_fraction": 0.660178685386088,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      }
+    ],
+    "WKHP+COW+SEX/gradient_boosting_08": [
+      {
+        "record_queries": 49677,
+        "max_record_queries": 66215,
+        "walk_censored_fraction": 0.6061919504643963,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 49640,
+        "max_record_queries": 66215,
+        "walk_censored_fraction": 0.5996904024767802,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 50096,
+        "max_record_queries": 66215,
+        "walk_censored_fraction": 0.608359133126935,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 49698,
+        "max_record_queries": 66215,
+        "walk_censored_fraction": 0.6018575851393189,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 49983,
+        "max_record_queries": 66215,
+        "walk_censored_fraction": 0.6099071207430341,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 49317,
+        "max_record_queries": 66215,
+        "walk_censored_fraction": 0.6015479876160991,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      }
+    ],
+    "MAR+WKHP+COW+SEX/random_forest_01": [
+      {
+        "record_queries": 49884,
+        "max_record_queries": 66010,
+        "walk_censored_fraction": 0.6282608695652174,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 50264,
+        "max_record_queries": 66010,
+        "walk_censored_fraction": 0.6341614906832298,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 50455,
+        "max_record_queries": 66010,
+        "walk_censored_fraction": 0.6375776397515528,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 50462,
+        "max_record_queries": 66010,
+        "walk_censored_fraction": 0.636335403726708,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 49805,
+        "max_record_queries": 66010,
+        "walk_censored_fraction": 0.6251552795031056,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 50465,
+        "max_record_queries": 66010,
+        "walk_censored_fraction": 0.6360248447204969,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      }
+    ],
+    "MAR+WKHP+COW+SEX/gradient_boosting_02": [
+      {
+        "record_queries": 50595,
+        "max_record_queries": 66502,
+        "walk_censored_fraction": 0.6174475955610358,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 50495,
+        "max_record_queries": 66502,
+        "walk_censored_fraction": 0.6208384710234278,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 50724,
+        "max_record_queries": 66502,
+        "walk_censored_fraction": 0.6233045622688039,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 50509,
+        "max_record_queries": 66502,
+        "walk_censored_fraction": 0.6205302096177558,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 50489,
+        "max_record_queries": 66502,
+        "walk_censored_fraction": 0.62577065351418,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 50188,
+        "max_record_queries": 66502,
+        "walk_censored_fraction": 0.6143649815043156,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      }
+    ],
+    "MAR+WKHP+COW+SEX/xgboost_03": [
+      {
+        "record_queries": 49041,
+        "max_record_queries": 64575,
+        "walk_censored_fraction": 0.6234920634920635,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 49231,
+        "max_record_queries": 64575,
+        "walk_censored_fraction": 0.6250793650793651,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 49195,
+        "max_record_queries": 64575,
+        "walk_censored_fraction": 0.6228571428571429,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 49304,
+        "max_record_queries": 64575,
+        "walk_censored_fraction": 0.6225396825396825,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 49189,
+        "max_record_queries": 64575,
+        "walk_censored_fraction": 0.6231746031746032,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 49098,
+        "max_record_queries": 64575,
+        "walk_censored_fraction": 0.6241269841269841,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      }
+    ],
+    "MAR+WKHP+COW+SEX/random_forest_04": [
+      {
+        "record_queries": 51518,
+        "max_record_queries": 65682,
+        "walk_censored_fraction": 0.6629213483146067,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 50898,
+        "max_record_queries": 65682,
+        "walk_censored_fraction": 0.653558052434457,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 51074,
+        "max_record_queries": 65682,
+        "walk_censored_fraction": 0.6607365792759051,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 51229,
+        "max_record_queries": 65682,
+        "walk_censored_fraction": 0.6576154806491885,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 51039,
+        "max_record_queries": 65682,
+        "walk_censored_fraction": 0.6573033707865169,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 51207,
+        "max_record_queries": 65682,
+        "walk_censored_fraction": 0.6588639200998752,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      }
+    ],
+    "MAR+WKHP+COW+SEX/gradient_boosting_05": [
+      {
+        "record_queries": 47942,
+        "max_record_queries": 64329,
+        "walk_censored_fraction": 0.5952836201402167,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 48194,
+        "max_record_queries": 64329,
+        "walk_censored_fraction": 0.60006373486297,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 48140,
+        "max_record_queries": 64329,
+        "walk_censored_fraction": 0.6026131293817718,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 47896,
+        "max_record_queries": 64329,
+        "walk_censored_fraction": 0.6007010834926705,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 47443,
+        "max_record_queries": 64329,
+        "walk_censored_fraction": 0.5901848311026131,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 47579,
+        "max_record_queries": 64329,
+        "walk_censored_fraction": 0.5905035054174633,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      }
+    ],
+    "MAR+WKHP+COW+SEX/xgboost_06": [
+      {
+        "record_queries": 49549,
+        "max_record_queries": 65395,
+        "walk_censored_fraction": 0.6141065830721003,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 49683,
+        "max_record_queries": 65395,
+        "walk_censored_fraction": 0.6150470219435736,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 49818,
+        "max_record_queries": 65395,
+        "walk_censored_fraction": 0.6197492163009405,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 49701,
+        "max_record_queries": 65395,
+        "walk_censored_fraction": 0.6137931034482759,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 49985,
+        "max_record_queries": 65395,
+        "walk_censored_fraction": 0.6244514106583072,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 49761,
+        "max_record_queries": 65395,
+        "walk_censored_fraction": 0.609717868338558,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      }
+    ],
+    "MAR+WKHP+COW+SEX/random_forest_07": [
+      {
+        "record_queries": 50196,
+        "max_record_queries": 64247,
+        "walk_censored_fraction": 0.6617740906190173,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 49687,
+        "max_record_queries": 64247,
+        "walk_censored_fraction": 0.6522016592214422,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 49591,
+        "max_record_queries": 64247,
+        "walk_censored_fraction": 0.6515634971282706,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 49425,
+        "max_record_queries": 64247,
+        "walk_censored_fraction": 0.6442246330567964,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 50126,
+        "max_record_queries": 64247,
+        "walk_censored_fraction": 0.6617740906190173,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 49905,
+        "max_record_queries": 64247,
+        "walk_censored_fraction": 0.6557115507338864,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      }
+    ],
+    "MAR+WKHP+COW+SEX/gradient_boosting_08": [
+      {
+        "record_queries": 50130,
+        "max_record_queries": 66215,
+        "walk_censored_fraction": 0.6114551083591331,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 49706,
+        "max_record_queries": 66215,
+        "walk_censored_fraction": 0.6086687306501548,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 49862,
+        "max_record_queries": 66215,
+        "walk_censored_fraction": 0.6043343653250774,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 49638,
+        "max_record_queries": 66215,
+        "walk_censored_fraction": 0.6065015479876161,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 50729,
+        "max_record_queries": 66215,
+        "walk_censored_fraction": 0.6238390092879257,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 49876,
+        "max_record_queries": 66215,
+        "walk_censored_fraction": 0.603405572755418,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      }
+    ],
+    "MAR/target": [
+      {
+        "record_queries": 522392,
+        "max_record_queries": 820000,
+        "walk_censored_fraction": 0.432825,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 522325,
+        "max_record_queries": 820000,
+        "walk_censored_fraction": 0.432075,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 523000,
+        "max_record_queries": 820000,
+        "walk_censored_fraction": 0.432925,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 522809,
+        "max_record_queries": 820000,
+        "walk_censored_fraction": 0.434,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 522586,
+        "max_record_queries": 820000,
+        "walk_censored_fraction": 0.433725,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 521856,
+        "max_record_queries": 820000,
+        "walk_censored_fraction": 0.432475,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      }
+    ],
+    "WKHP/target": [
+      {
+        "record_queries": 517814,
+        "max_record_queries": 820000,
+        "walk_censored_fraction": 0.4303,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 517250,
+        "max_record_queries": 820000,
+        "walk_censored_fraction": 0.428225,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 516437,
+        "max_record_queries": 820000,
+        "walk_censored_fraction": 0.4278,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 517171,
+        "max_record_queries": 820000,
+        "walk_censored_fraction": 0.42755,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 516369,
+        "max_record_queries": 820000,
+        "walk_censored_fraction": 0.427175,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 517056,
+        "max_record_queries": 820000,
+        "walk_censored_fraction": 0.42815,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      }
+    ],
+    "MAR+COW/target": [
+      {
+        "record_queries": 519741,
+        "max_record_queries": 820000,
+        "walk_censored_fraction": 0.431675,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 520584,
+        "max_record_queries": 820000,
+        "walk_censored_fraction": 0.432575,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 520357,
+        "max_record_queries": 820000,
+        "walk_censored_fraction": 0.43195,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 519650,
+        "max_record_queries": 820000,
+        "walk_censored_fraction": 0.431575,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 519829,
+        "max_record_queries": 820000,
+        "walk_censored_fraction": 0.430925,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 520280,
+        "max_record_queries": 820000,
+        "walk_censored_fraction": 0.43175,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      }
+    ],
+    "WKHP+SEX/target": [
+      {
+        "record_queries": 516768,
+        "max_record_queries": 820000,
+        "walk_censored_fraction": 0.428475,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 516307,
+        "max_record_queries": 820000,
+        "walk_censored_fraction": 0.428475,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 515168,
+        "max_record_queries": 820000,
+        "walk_censored_fraction": 0.42785,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 516637,
+        "max_record_queries": 820000,
+        "walk_censored_fraction": 0.428825,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 514375,
+        "max_record_queries": 820000,
+        "walk_censored_fraction": 0.425675,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 516232,
+        "max_record_queries": 820000,
+        "walk_censored_fraction": 0.427425,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      }
+    ],
+    "MAR+COW+SEX/target": [
+      {
+        "record_queries": 518322,
+        "max_record_queries": 820000,
+        "walk_censored_fraction": 0.429725,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 518985,
+        "max_record_queries": 820000,
+        "walk_censored_fraction": 0.43085,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 517075,
+        "max_record_queries": 820000,
+        "walk_censored_fraction": 0.4287,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 519537,
+        "max_record_queries": 820000,
+        "walk_censored_fraction": 0.430625,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 518030,
+        "max_record_queries": 820000,
+        "walk_censored_fraction": 0.430225,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 518620,
+        "max_record_queries": 820000,
+        "walk_censored_fraction": 0.430775,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      }
+    ],
+    "WKHP+COW+SEX/target": [
+      {
+        "record_queries": 512154,
+        "max_record_queries": 820000,
+        "walk_censored_fraction": 0.425325,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 514273,
+        "max_record_queries": 820000,
+        "walk_censored_fraction": 0.42815,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 513297,
+        "max_record_queries": 820000,
+        "walk_censored_fraction": 0.42695,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 513125,
+        "max_record_queries": 820000,
+        "walk_censored_fraction": 0.4266,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 511310,
+        "max_record_queries": 820000,
+        "walk_censored_fraction": 0.424375,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 511824,
+        "max_record_queries": 820000,
+        "walk_censored_fraction": 0.4248,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      }
+    ],
+    "MAR+WKHP+COW+SEX/target": [
+      {
+        "record_queries": 510926,
+        "max_record_queries": 820000,
+        "walk_censored_fraction": 0.422625,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 511245,
+        "max_record_queries": 820000,
+        "walk_censored_fraction": 0.423525,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 511615,
+        "max_record_queries": 820000,
+        "walk_censored_fraction": 0.422275,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 510146,
+        "max_record_queries": 820000,
+        "walk_censored_fraction": 0.423975,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 512250,
+        "max_record_queries": 820000,
+        "walk_censored_fraction": 0.42535,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      },
+      {
+        "record_queries": 508594,
+        "max_record_queries": 820000,
+        "walk_censored_fraction": 0.421525,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      }
+    ]
+  },
+  "limitations": [
+    "one reconstruction seed",
+    "no DP evaluation yet",
+    "cross-year distribution shift",
+    "original blind-walk asymmetry retained",
+    "no confirmatory significance claim; repeated shadow rows require grouped inference"
+  ]
+}

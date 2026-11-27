@@ -1,0 +1,15 @@
+{
+  "target_year": 2023,
+  "evaluation_year": 2024,
+  "records": 25000,
+  "eligible_source_records": 203591,
+  "seed": 42,
+  "sampling": "stratified by income label, without replacement",
+  "positive_rate": 0.52076,
+  "accuracy": 0.81328,
+  "roc_auc": 0.898314245269889,
+  "log_loss": 0.4032306969165802,
+  "relationship_mapping_audit": null,
+  "relationship_audit_scope": "all eligible source records",
+  "notes": "Nominal >$50,000 income; no inflation adjustment. Native codes retained except audited 2018 relationship conversion. No full cross-year classification harmonization claimed."
+}

@@ -1,0 +1,10 @@
+method,records,members,accuracy,balanced_accuracy,roc_auc,tpr_at_1pct_fpr_roc,threshold,low_fpr_threshold,tpr_at_accuracy_threshold,fpr_at_accuracy_threshold,tpr_at_shadow_threshold,fpr_at_shadow_threshold,tn,fp,fn,tp
+previous_calibrated_rf,20000,10000,0.6205,0.6205,0.6830339400000001,0.0601,0.4806305646296278,0.8241384264916044,0.8006,0.5596,0.1102,0.0271,4404,5596,1994,8006
+2014_matched_offline_lira,20000,10000,0.5168,0.5168,0.528189995,0.0124,group-specific auxiliary validation cutoffs,group-specific auxiliary validation cutoffs,0.3924,0.3588,0.0123,0.0098,6412,3588,6076,3924
+2014_matched_class_conditioned_lira,20000,10000,0.51425,0.51425,0.528189995,0.0124,group-specific auxiliary validation cutoffs,group-specific auxiliary validation cutoffs,0.3867,0.3582,0.0231,0.0123,6418,3582,6133,3867
+2014_matched_difficulty_conditioned_lira,20000,10000,0.53325,0.53325,0.528189995,0.0124,group-specific auxiliary validation cutoffs,group-specific auxiliary validation cutoffs,0.4805,0.414,0.0244,0.0133,5860,4140,5195,4805
+2014_matched_class_difficulty_conditioned_lira,20000,10000,0.5324,0.5324,0.528189995,0.0124,group-specific auxiliary validation cutoffs,group-specific auxiliary validation cutoffs,0.5982,0.5334,0.0259,0.0143,4666,5334,4018,5982
+2018_small_offline_lira,20000,10000,0.52655,0.5265500000000001,0.53558265,0.0122,group-specific auxiliary validation cutoffs,group-specific auxiliary validation cutoffs,0.5543,0.5012,0.1716,0.1392,4988,5012,4457,5543
+2018_small_class_conditioned_lira,20000,10000,0.5275,0.5275,0.53558265,0.0122,group-specific auxiliary validation cutoffs,group-specific auxiliary validation cutoffs,0.5287,0.4737,0.1813,0.1435,5263,4737,4713,5287
+2018_small_difficulty_conditioned_lira,20000,10000,0.53075,0.53075,0.53558265,0.0122,group-specific auxiliary validation cutoffs,group-specific auxiliary validation cutoffs,0.8474,0.7859,0.1776,0.1386,2141,7859,1526,8474
+2018_small_class_difficulty_conditioned_lira,20000,10000,0.53515,0.53515,0.53558265,0.0122,group-specific auxiliary validation cutoffs,group-specific auxiliary validation cutoffs,0.7182,0.6479,0.1747,0.1366,3521,6479,2818,7182

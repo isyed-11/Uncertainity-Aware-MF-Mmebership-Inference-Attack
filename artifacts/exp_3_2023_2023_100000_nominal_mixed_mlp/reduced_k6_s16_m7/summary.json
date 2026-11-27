@@ -1,0 +1,272 @@
+{
+  "income_base_year": null,
+  "target_income_adjustment": {
+    "enabled": false,
+    "label": "PINCP > 50000",
+    "adjustment": "None"
+  },
+  "auxiliary_income_adjustment": {
+    "enabled": false,
+    "label": "PINCP > 50000",
+    "adjustment": "None"
+  },
+  "perturbation_protocol_audit": {
+    "shadow_numeric_fields": {
+      "AGEP": [
+        1.0,
+        17,
+        99
+      ],
+      "WKHP": [
+        2.0,
+        1,
+        99
+      ]
+    },
+    "target_extra_numeric_fields": {
+      "JWMNP": [
+        2.0,
+        0,
+        200
+      ],
+      "JWRIP": [
+        1.0,
+        1,
+        10
+      ]
+    },
+    "shadow_commuting_fields": "Categorical replacements, unchanged from original run",
+    "target_commuting_fields": "Numeric perturbations, unchanged from original run",
+    "interpretation": "Historical shadow/target commuting-field walk asymmetry is retained."
+  },
+  "walk_numeric_protocol_scope": "Extra target numeric fields only",
+  "walk_numeric_protocol": {
+    "JWMNP": [
+      2.0,
+      0,
+      200
+    ],
+    "JWRIP": [
+      1.0,
+      1,
+      10
+    ]
+  },
+  "execution_status": "acs_baseline_completed",
+  "attack_metrics_status": "oracle_consistency_verified",
+  "target_year": 2023,
+  "auxiliary_year": 2023,
+  "n_shadow_models": 16,
+  "shadow_algorithms": [
+    "random_forest",
+    "gradient_boosting",
+    "xgboost",
+    "mlp"
+  ],
+  "shadow_mlp_config": {
+    "hidden_dims": [
+      128,
+      64
+    ],
+    "dropout": 0.0,
+    "epochs": 50,
+    "batch_size": 256,
+    "learning_rate": 0.001,
+    "weight_decay": 0.0001,
+    "patience": 5,
+    "early_stopping": true,
+    "restore_best": true,
+    "monitor_train": false,
+    "device": "cpu"
+  },
+  "shadow_split_fractions": {
+    "train": 0.4,
+    "validation": 0.2,
+    "nonmembers": 0.4
+  },
+  "shadow_records_per_membership_class": 2000,
+  "auxiliary_pool_records": 73278,
+  "auxiliary_pool_source": "unused ACS 2023 records after excluding all target partitions",
+  "auxiliary_disjointness_audit": [
+    {
+      "target_partition": "validation",
+      "target_records": 10000,
+      "shadow_pool_records": 73278,
+      "overlapping_record_ids": 0
+    },
+    {
+      "target_partition": "test",
+      "target_records": 10000,
+      "shadow_pool_records": 73278,
+      "overlapping_record_ids": 0
+    },
+    {
+      "target_partition": "mia_nonmembers",
+      "target_records": 10000,
+      "shadow_pool_records": 73278,
+      "overlapping_record_ids": 0
+    },
+    {
+      "target_partition": "train",
+      "target_records": 100000,
+      "shadow_pool_records": 73278,
+      "overlapping_record_ids": 0
+    },
+    {
+      "target_partition": "mia_members",
+      "target_records": 10000,
+      "shadow_pool_records": 73278,
+      "overlapping_record_ids": 0
+    }
+  ],
+  "shadow_seeds": {
+    "random_forest_01": 42,
+    "gradient_boosting_02": 52,
+    "xgboost_03": 62,
+    "mlp_04": 72,
+    "random_forest_05": 82,
+    "gradient_boosting_06": 92,
+    "xgboost_07": 102,
+    "mlp_08": 112,
+    "random_forest_09": 122,
+    "gradient_boosting_10": 132,
+    "xgboost_11": 142,
+    "mlp_12": 152,
+    "random_forest_13": 162,
+    "gradient_boosting_14": 172,
+    "xgboost_15": 182,
+    "mlp_16": 192
+  },
+  "original_feature_count": 48,
+  "encoded_feature_count": 2689,
+  "train_size": 100000,
+  "split_config": {
+    "validation_size": 10000,
+    "test_size": 10000,
+    "mia_nonmember_size": 10000,
+    "mia_member_size": 10000,
+    "seed": 42
+  },
+  "training": {
+    "input_dim": 2689,
+    "num_classes": 2,
+    "hidden_dims": [
+      512,
+      256,
+      128
+    ],
+    "dropout": 0.0,
+    "best_epoch": 2,
+    "seed": 42,
+    "epochs_requested": 100,
+    "epochs_run": 100,
+    "batch_size": 256,
+    "learning_rate": 0.001,
+    "weight_decay": 0.0,
+    "patience": 5,
+    "device": "cpu",
+    "early_stopping": false,
+    "restore_best": false,
+    "monitor_train": true,
+    "returned_epoch": 100
+  },
+  "target_training_seconds": 933.2030000000013,
+  "target_metrics": {
+    "train": {
+      "accuracy": 0.99849,
+      "roc_auc": 0.9999850038558871,
+      "log_loss": 0.004646161571145058
+    },
+    "validation": {
+      "accuracy": 0.7865,
+      "roc_auc": 0.8611103577700634,
+      "log_loss": 1.9594026803970337
+    },
+    "test": {
+      "accuracy": 0.7952,
+      "roc_auc": 0.8676290445214159,
+      "log_loss": 1.8648079633712769
+    }
+  },
+  "shadow_attack_metrics": {
+    "train": {
+      "records": 38483,
+      "members": 19257,
+      "accuracy": 0.5494374139230309,
+      "balanced_accuracy": 0.5491366752759534,
+      "roc_auc": 0.6421658118287126,
+      "tpr_at_1pct_fpr_roc": 0.037285143064859534,
+      "threshold": 0.4573876834189775,
+      "tn": 3380,
+      "fp": 15846,
+      "fn": 1493,
+      "tp": 17764,
+      "shadow_selected_threshold": 0.5926642551708526,
+      "tpr_at_shadow_threshold": 0.016565404787869345,
+      "fpr_at_shadow_threshold": 0.0034848642463330905
+    },
+    "validation": {
+      "records": 12813,
+      "members": 6495,
+      "accuracy": 0.5149457582143135,
+      "balanced_accuracy": 0.5097839158911779,
+      "roc_auc": 0.5084016097316927,
+      "tpr_at_1pct_fpr_roc": 0.01031562740569669,
+      "threshold": 0.4573876834189775,
+      "tn": 860,
+      "fp": 5458,
+      "fn": 757,
+      "tp": 5738,
+      "shadow_selected_threshold": 0.5926642551708526,
+      "tpr_at_shadow_threshold": 0.01031562740569669,
+      "fpr_at_shadow_threshold": 0.009180120291231402
+    },
+    "test": {
+      "records": 12704,
+      "members": 6248,
+      "accuracy": 0.5064546599496221,
+      "balanced_accuracy": 0.5125024394423315,
+      "roc_auc": 0.5267820151023297,
+      "tpr_at_1pct_fpr_roc": 0.008642765685019206,
+      "threshold": 0.4573876834189775,
+      "tn": 924,
+      "fp": 5532,
+      "fn": 738,
+      "tp": 5510,
+      "shadow_selected_threshold": 0.5926642551708526,
+      "tpr_at_shadow_threshold": 0.0076824583866837385,
+      "fpr_at_shadow_threshold": 0.00929368029739777
+    }
+  },
+  "target_mia_metrics": {
+    "records": 20000,
+    "members": 10000,
+    "accuracy": 0.5622,
+    "balanced_accuracy": 0.5622,
+    "roc_auc": 0.5663771049999999,
+    "tpr_at_1pct_fpr_roc": 0.0027,
+    "threshold": 0.4573876834189775,
+    "tn": 3302,
+    "fp": 6698,
+    "fn": 2058,
+    "tp": 7942,
+    "shadow_selected_threshold": 0.5926642551708526,
+    "tpr_at_shadow_threshold": 0.001,
+    "fpr_at_shadow_threshold": 0.0041,
+    "tpr_at_accuracy_threshold": 0.7942,
+    "fpr_at_accuracy_threshold": 0.6698
+  },
+  "target_query_diagnostics": {
+    "record_queries": 526991,
+    "max_record_queries": 820000,
+    "walk_censored_fraction": 0.438975,
+    "blind_walk_enabled": true,
+    "config": {
+      "max_steps": 20,
+      "repeats": 2,
+      "categorical_change_probability": 0.05,
+      "batch_size": 512,
+      "seed": 42
+    }
+  }
+}

@@ -1,0 +1,136 @@
+{
+  "method": "PFV_single_draw",
+  "auxiliary_year": 2014,
+  "target_year": 2023,
+  "masks": {
+    "MAR": [
+      "MAR"
+    ],
+    "WKHP": [
+      "WKHP"
+    ],
+    "MAR+COW": [
+      "MAR",
+      "COW"
+    ],
+    "WKHP+SEX": [
+      "WKHP",
+      "SEX"
+    ],
+    "MAR+COW+SEX": [
+      "MAR",
+      "COW",
+      "SEX"
+    ],
+    "WKHP+COW+SEX": [
+      "WKHP",
+      "COW",
+      "SEX"
+    ],
+    "MAR+WKHP+COW+SEX": [
+      "MAR",
+      "WKHP",
+      "COW",
+      "SEX"
+    ]
+  },
+  "seed": 42,
+  "n_shadow_models": 8,
+  "naturally_missing_auxiliary_values": "excluded",
+  "classifier": "frozen complete-feature ACS 2014 attack",
+  "thresholds": "frozen auxiliary validation",
+  "diagnostics": {
+    "MAR": {
+      "record_queries": 522265,
+      "max_record_queries": 820000,
+      "walk_censored_fraction": 0.4333,
+      "blind_walk_enabled": true,
+      "config": {
+        "max_steps": 20,
+        "repeats": 2,
+        "categorical_change_probability": 0.05,
+        "batch_size": 512,
+        "seed": 42
+      }
+    },
+    "WKHP": {
+      "record_queries": 508404,
+      "max_record_queries": 820000,
+      "walk_censored_fraction": 0.42005,
+      "blind_walk_enabled": true,
+      "config": {
+        "max_steps": 20,
+        "repeats": 2,
+        "categorical_change_probability": 0.05,
+        "batch_size": 512,
+        "seed": 42
+      }
+    },
+    "MAR+COW": {
+      "record_queries": 517707,
+      "max_record_queries": 820000,
+      "walk_censored_fraction": 0.43065,
+      "blind_walk_enabled": true,
+      "config": {
+        "max_steps": 20,
+        "repeats": 2,
+        "categorical_change_probability": 0.05,
+        "batch_size": 512,
+        "seed": 42
+      }
+    },
+    "WKHP+SEX": {
+      "record_queries": 508112,
+      "max_record_queries": 820000,
+      "walk_censored_fraction": 0.420125,
+      "blind_walk_enabled": true,
+      "config": {
+        "max_steps": 20,
+        "repeats": 2,
+        "categorical_change_probability": 0.05,
+        "batch_size": 512,
+        "seed": 42
+      }
+    },
+    "MAR+COW+SEX": {
+      "record_queries": 515809,
+      "max_record_queries": 820000,
+      "walk_censored_fraction": 0.429025,
+      "blind_walk_enabled": true,
+      "config": {
+        "max_steps": 20,
+        "repeats": 2,
+        "categorical_change_probability": 0.05,
+        "batch_size": 512,
+        "seed": 42
+      }
+    },
+    "WKHP+COW+SEX": {
+      "record_queries": 503166,
+      "max_record_queries": 820000,
+      "walk_censored_fraction": 0.4162,
+      "blind_walk_enabled": true,
+      "config": {
+        "max_steps": 20,
+        "repeats": 2,
+        "categorical_change_probability": 0.05,
+        "batch_size": 512,
+        "seed": 42
+      }
+    },
+    "MAR+WKHP+COW+SEX": {
+      "record_queries": 498595,
+      "max_record_queries": 820000,
+      "walk_censored_fraction": 0.409875,
+      "blind_walk_enabled": true,
+      "config": {
+        "max_steps": 20,
+        "repeats": 2,
+        "categorical_change_probability": 0.05,
+        "batch_size": 512,
+        "seed": 42
+      }
+    }
+  },
+  "baseline_summary": "../summary.json"
+}

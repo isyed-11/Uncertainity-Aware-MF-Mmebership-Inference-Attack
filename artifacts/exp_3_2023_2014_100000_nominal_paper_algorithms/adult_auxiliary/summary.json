@@ -1,0 +1,314 @@
+{
+  "execution_status": "all_adult_cells_completed",
+  "auxiliary": "UCI Adult",
+  "auxiliary_records": 48842,
+  "shadow_schema": "adult",
+  "n_shadow_models": 16,
+  "algorithms": [
+    "random_forest",
+    "gradient_boosting",
+    "xgboost"
+  ],
+  "split_fractions": {
+    "train": 0.4,
+    "validation": 0.2,
+    "nonmembers": 0.4
+  },
+  "feature_sampling_per_membership_class": null,
+  "shadow_seeds": {
+    "random_forest_01": 42,
+    "gradient_boosting_02": 52,
+    "xgboost_03": 62,
+    "random_forest_04": 72,
+    "gradient_boosting_05": 82,
+    "xgboost_06": 92,
+    "random_forest_07": 102,
+    "gradient_boosting_08": 112,
+    "xgboost_09": 122,
+    "random_forest_10": 132,
+    "gradient_boosting_11": 142,
+    "xgboost_12": 152,
+    "random_forest_13": 162,
+    "gradient_boosting_14": 172,
+    "xgboost_15": 182,
+    "random_forest_16": 192
+  },
+  "shadow_attack_metrics": {
+    "train": {
+      "records": 375206,
+      "members": 187275,
+      "accuracy": 0.5374540918855242,
+      "balanced_accuracy": 0.537901946207828,
+      "roc_auc": 0.5703572426352872,
+      "tpr_at_1pct_fpr_roc": 0.021898277933520224,
+      "threshold": 0.4965372518314177,
+      "tn": 52949,
+      "fp": 134982,
+      "fn": 38568,
+      "tp": 148707,
+      "shadow_selected_threshold": 0.5590613738409077,
+      "tpr_at_shadow_threshold": 0.015175543986116674,
+      "fpr_at_shadow_threshold": 0.006119267177847189
+    },
+    "validation": {
+      "records": 125200,
+      "members": 62895,
+      "accuracy": 0.5155990415335463,
+      "balanced_accuracy": 0.5143942963242549,
+      "roc_auc": 0.519557935298237,
+      "tpr_at_1pct_fpr_roc": 0.01065267509340965,
+      "threshold": 0.4965372518314177,
+      "tn": 16121,
+      "fp": 46184,
+      "fn": 14463,
+      "tp": 48432,
+      "shadow_selected_threshold": 0.5590613738409077,
+      "tpr_at_shadow_threshold": 0.01065267509340965,
+      "fpr_at_shadow_threshold": 0.009999197496188108
+    },
+    "test": {
+      "records": 124762,
+      "members": 62406,
+      "accuracy": 0.5141789968099261,
+      "balanced_accuracy": 0.5140784083864095,
+      "roc_auc": 0.5192210475279049,
+      "tpr_at_1pct_fpr_roc": 0.011681569079896164,
+      "threshold": 0.4965372518314177,
+      "tn": 16405,
+      "fp": 45951,
+      "fn": 14661,
+      "tp": 47745,
+      "shadow_selected_threshold": 0.5590613738409077,
+      "tpr_at_shadow_threshold": 0.0120501233855719,
+      "fpr_at_shadow_threshold": 0.010231573545448713
+    }
+  },
+  "target_mia_metrics": {
+    "records": 20000,
+    "members": 10000,
+    "accuracy": 0.5506,
+    "balanced_accuracy": 0.5506,
+    "roc_auc": 0.567289505,
+    "tpr_at_1pct_fpr_roc": 0.0033,
+    "threshold": 0.4965372518314177,
+    "tn": 4331,
+    "fp": 5669,
+    "fn": 3319,
+    "tp": 6681,
+    "shadow_selected_threshold": 0.5590613738409077,
+    "tpr_at_shadow_threshold": 0.0008,
+    "fpr_at_shadow_threshold": 0.0036
+  },
+  "query_diagnostics": {
+    "random_forest_01": {
+      "record_queries": 1359202,
+      "max_record_queries": 1601993,
+      "walk_censored_fraction": 0.7744606249840043,
+      "blind_walk_enabled": true,
+      "config": {
+        "max_steps": 20,
+        "repeats": 2,
+        "categorical_change_probability": 0.05,
+        "batch_size": 512,
+        "seed": 42
+      }
+    },
+    "gradient_boosting_02": {
+      "record_queries": 1291598,
+      "max_record_queries": 1601993,
+      "walk_censored_fraction": 0.6746730478847286,
+      "blind_walk_enabled": true,
+      "config": {
+        "max_steps": 20,
+        "repeats": 2,
+        "categorical_change_probability": 0.05,
+        "batch_size": 512,
+        "seed": 42
+      }
+    },
+    "xgboost_03": {
+      "record_queries": 1294478,
+      "max_record_queries": 1601993,
+      "walk_censored_fraction": 0.6989993089857446,
+      "blind_walk_enabled": true,
+      "config": {
+        "max_steps": 20,
+        "repeats": 2,
+        "categorical_change_probability": 0.05,
+        "batch_size": 512,
+        "seed": 42
+      }
+    },
+    "random_forest_04": {
+      "record_queries": 1364845,
+      "max_record_queries": 1601993,
+      "walk_censored_fraction": 0.7811916156937015,
+      "blind_walk_enabled": true,
+      "config": {
+        "max_steps": 20,
+        "repeats": 2,
+        "categorical_change_probability": 0.05,
+        "batch_size": 512,
+        "seed": 42
+      }
+    },
+    "gradient_boosting_05": {
+      "record_queries": 1280626,
+      "max_record_queries": 1601993,
+      "walk_censored_fraction": 0.6569242187699946,
+      "blind_walk_enabled": true,
+      "config": {
+        "max_steps": 20,
+        "repeats": 2,
+        "categorical_change_probability": 0.05,
+        "batch_size": 512,
+        "seed": 42
+      }
+    },
+    "xgboost_06": {
+      "record_queries": 1293902,
+      "max_record_queries": 1601993,
+      "walk_censored_fraction": 0.7046681851918204,
+      "blind_walk_enabled": true,
+      "config": {
+        "max_steps": 20,
+        "repeats": 2,
+        "categorical_change_probability": 0.05,
+        "batch_size": 512,
+        "seed": 42
+      }
+    },
+    "random_forest_07": {
+      "record_queries": 1355705,
+      "max_record_queries": 1601993,
+      "walk_censored_fraction": 0.7758426534947406,
+      "blind_walk_enabled": true,
+      "config": {
+        "max_steps": 20,
+        "repeats": 2,
+        "categorical_change_probability": 0.05,
+        "batch_size": 512,
+        "seed": 42
+      }
+    },
+    "gradient_boosting_08": {
+      "record_queries": 1289017,
+      "max_record_queries": 1601993,
+      "walk_censored_fraction": 0.666687994267141,
+      "blind_walk_enabled": true,
+      "config": {
+        "max_steps": 20,
+        "repeats": 2,
+        "categorical_change_probability": 0.05,
+        "batch_size": 512,
+        "seed": 42
+      }
+    },
+    "xgboost_09": {
+      "record_queries": 1306205,
+      "max_record_queries": 1601993,
+      "walk_censored_fraction": 0.7195377882425205,
+      "blind_walk_enabled": true,
+      "config": {
+        "max_steps": 20,
+        "repeats": 2,
+        "categorical_change_probability": 0.05,
+        "batch_size": 512,
+        "seed": 42
+      }
+    },
+    "random_forest_10": {
+      "record_queries": 1354585,
+      "max_record_queries": 1601993,
+      "walk_censored_fraction": 0.7693036111893123,
+      "blind_walk_enabled": true,
+      "config": {
+        "max_steps": 20,
+        "repeats": 2,
+        "categorical_change_probability": 0.05,
+        "batch_size": 512,
+        "seed": 42
+      }
+    },
+    "gradient_boosting_11": {
+      "record_queries": 1293593,
+      "max_record_queries": 1601993,
+      "walk_censored_fraction": 0.6799324341616974,
+      "blind_walk_enabled": true,
+      "config": {
+        "max_steps": 20,
+        "repeats": 2,
+        "categorical_change_probability": 0.05,
+        "batch_size": 512,
+        "seed": 42
+      }
+    },
+    "xgboost_12": {
+      "record_queries": 1288515,
+      "max_record_queries": 1601993,
+      "walk_censored_fraction": 0.6948148337726819,
+      "blind_walk_enabled": true,
+      "config": {
+        "max_steps": 20,
+        "repeats": 2,
+        "categorical_change_probability": 0.05,
+        "batch_size": 512,
+        "seed": 42
+      }
+    },
+    "random_forest_13": {
+      "record_queries": 1368529,
+      "max_record_queries": 1601993,
+      "walk_censored_fraction": 0.7841220279988739,
+      "blind_walk_enabled": true,
+      "config": {
+        "max_steps": 20,
+        "repeats": 2,
+        "categorical_change_probability": 0.05,
+        "batch_size": 512,
+        "seed": 42
+      }
+    },
+    "gradient_boosting_14": {
+      "record_queries": 1286568,
+      "max_record_queries": 1601993,
+      "walk_censored_fraction": 0.658178281677885,
+      "blind_walk_enabled": true,
+      "config": {
+        "max_steps": 20,
+        "repeats": 2,
+        "categorical_change_probability": 0.05,
+        "batch_size": 512,
+        "seed": 42
+      }
+    },
+    "xgboost_15": {
+      "record_queries": 1312473,
+      "max_record_queries": 1601993,
+      "walk_censored_fraction": 0.7340362910449671,
+      "blind_walk_enabled": true,
+      "config": {
+        "max_steps": 20,
+        "repeats": 2,
+        "categorical_change_probability": 0.05,
+        "batch_size": 512,
+        "seed": 42
+      }
+    },
+    "random_forest_16": {
+      "record_queries": 1357531,
+      "max_record_queries": 1601993,
+      "walk_censored_fraction": 0.7727714790264377,
+      "blind_walk_enabled": true,
+      "config": {
+        "max_steps": 20,
+        "repeats": 2,
+        "categorical_change_probability": 0.05,
+        "batch_size": 512,
+        "seed": 42
+      }
+    }
+  },
+  "target_summary": "../summary.json",
+  "target_queries_reused": true
+}

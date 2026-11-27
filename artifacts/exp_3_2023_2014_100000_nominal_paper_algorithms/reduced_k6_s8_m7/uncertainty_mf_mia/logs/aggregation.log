@@ -1,0 +1,16 @@
+C:\Users\syedk\Desktop\Semester 1\Responsible AI - ECE 750\Project\MF-MIA\.venv\Lib\site-packages\sklearn\utils\parallel.py:144: UserWarning: `sklearn.utils.parallel.delayed` should be used with `sklearn.utils.parallel.Parallel` to make it possible to propagate the scikit-learn configuration of the current thread to the joblib workers.
+  warnings.warn(
+[Repeated identical warnings omitted: 1,198]
+[Repeated identical warnings omitted: 600]
+[Repeated identical warnings omitted: 1,200]
+[Repeated identical warnings omitted: 600]
+[Repeated identical warnings omitted: 1,200]
+[Repeated identical warnings omitted: 600]
+[Repeated identical warnings omitted: 1,200]
+[Repeated identical warnings omitted: 600]
+[Repeated identical warnings omitted: 1,200]
+[Repeated identical warnings omitted: 600]
+[Repeated identical warnings omitted: 1,200]
+[Repeated identical warnings omitted: 600]
+[Repeated identical warnings omitted: 1,200]
+[Repeated identical warnings omitted: 600]

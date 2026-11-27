@@ -1,0 +1,352 @@
+{
+  "income_base_year": null,
+  "target_income_adjustment": {
+    "enabled": false,
+    "label": "PINCP > 50000",
+    "adjustment": "None"
+  },
+  "auxiliary_income_adjustment": {
+    "enabled": false,
+    "label": "PINCP > 50000",
+    "adjustment": "None"
+  },
+  "perturbation_protocol_audit": {
+    "shadow_numeric_fields": {
+      "AGEP": [
+        1.0,
+        17,
+        99
+      ],
+      "WKHP": [
+        2.0,
+        1,
+        99
+      ]
+    },
+    "target_extra_numeric_fields": {
+      "JWMNP": [
+        2.0,
+        0,
+        200
+      ],
+      "JWRIP": [
+        1.0,
+        1,
+        10
+      ]
+    },
+    "shadow_commuting_fields": "Categorical replacements, unchanged from original run",
+    "target_commuting_fields": "Numeric perturbations, unchanged from original run",
+    "correction": "Prior assistant statements that the shadow commuting perturbation protocol changed were incorrect. Original and current perturbation call sources are identical."
+  },
+  "walk_numeric_protocol_scope": "Extra target numeric fields only",
+  "walk_numeric_protocol": {
+    "JWMNP": [
+      2.0,
+      0,
+      200
+    ],
+    "JWRIP": [
+      1.0,
+      1,
+      10
+    ]
+  },
+  "execution_status": "acs_baseline_completed",
+  "attack_metrics_status": "oracle_consistency_verified",
+  "target_year": 2023,
+  "auxiliary_year": 2014,
+  "n_shadow_models": 16,
+  "shadow_algorithms": [
+    "random_forest",
+    "gradient_boosting",
+    "xgboost",
+    "mlp"
+  ],
+  "shadow_algorithm_plan": [
+    "random_forest",
+    "gradient_boosting",
+    "xgboost",
+    "mlp",
+    "gradient_boosting",
+    "xgboost",
+    "random_forest",
+    "mlp",
+    "xgboost",
+    "random_forest",
+    "gradient_boosting",
+    "mlp",
+    "random_forest",
+    "gradient_boosting",
+    "xgboost",
+    "mlp"
+  ],
+  "shadow_counts": {
+    "random_forest": 4,
+    "gradient_boosting": 4,
+    "xgboost": 4,
+    "mlp": 4
+  },
+  "mlp_replacement_slots": [
+    4,
+    8,
+    12,
+    16
+  ],
+  "shadow_mlp_config": {
+    "hidden_dims": [
+      128,
+      64
+    ],
+    "dropout": 0.0,
+    "epochs": 50,
+    "batch_size": 256,
+    "learning_rate": 0.001,
+    "weight_decay": 0.0001,
+    "patience": 5,
+    "early_stopping": true,
+    "restore_best": true,
+    "monitor_train": false,
+    "device": "cpu"
+  },
+  "shadow_mlp_training": {
+    "mlp_04": {
+      "input_dim": 2581,
+      "num_classes": 2,
+      "hidden_dims": [
+        128,
+        64
+      ],
+      "dropout": 0.0,
+      "best_epoch": 3,
+      "seed": 72,
+      "epochs_requested": 50,
+      "epochs_run": 8,
+      "batch_size": 256,
+      "learning_rate": 0.001,
+      "weight_decay": 0.0001,
+      "patience": 5,
+      "device": "cpu",
+      "early_stopping": true,
+      "restore_best": true,
+      "monitor_train": false,
+      "returned_epoch": 3
+    },
+    "mlp_08": {
+      "input_dim": 2574,
+      "num_classes": 2,
+      "hidden_dims": [
+        128,
+        64
+      ],
+      "dropout": 0.0,
+      "best_epoch": 5,
+      "seed": 112,
+      "epochs_requested": 50,
+      "epochs_run": 10,
+      "batch_size": 256,
+      "learning_rate": 0.001,
+      "weight_decay": 0.0001,
+      "patience": 5,
+      "device": "cpu",
+      "early_stopping": true,
+      "restore_best": true,
+      "monitor_train": false,
+      "returned_epoch": 5
+    },
+    "mlp_12": {
+      "input_dim": 2581,
+      "num_classes": 2,
+      "hidden_dims": [
+        128,
+        64
+      ],
+      "dropout": 0.0,
+      "best_epoch": 3,
+      "seed": 152,
+      "epochs_requested": 50,
+      "epochs_run": 8,
+      "batch_size": 256,
+      "learning_rate": 0.001,
+      "weight_decay": 0.0001,
+      "patience": 5,
+      "device": "cpu",
+      "early_stopping": true,
+      "restore_best": true,
+      "monitor_train": false,
+      "returned_epoch": 3
+    },
+    "mlp_16": {
+      "input_dim": 2575,
+      "num_classes": 2,
+      "hidden_dims": [
+        128,
+        64
+      ],
+      "dropout": 0.0,
+      "best_epoch": 3,
+      "seed": 192,
+      "epochs_requested": 50,
+      "epochs_run": 8,
+      "batch_size": 256,
+      "learning_rate": 0.001,
+      "weight_decay": 0.0001,
+      "patience": 5,
+      "device": "cpu",
+      "early_stopping": true,
+      "restore_best": true,
+      "monitor_train": false,
+      "returned_epoch": 3
+    }
+  },
+  "shadow_seeds": {
+    "random_forest_01": 42,
+    "gradient_boosting_02": 52,
+    "xgboost_03": 62,
+    "mlp_04": 72,
+    "gradient_boosting_05": 82,
+    "xgboost_06": 92,
+    "random_forest_07": 102,
+    "mlp_08": 112,
+    "xgboost_09": 122,
+    "random_forest_10": 132,
+    "gradient_boosting_11": 142,
+    "mlp_12": 152,
+    "random_forest_13": 162,
+    "gradient_boosting_14": 172,
+    "xgboost_15": 182,
+    "mlp_16": 192
+  },
+  "original_feature_count": 48,
+  "encoded_feature_count": 2689,
+  "train_size": 100000,
+  "split_config": {
+    "validation_size": 10000,
+    "test_size": 10000,
+    "mia_nonmember_size": 10000,
+    "mia_member_size": 10000,
+    "seed": 42
+  },
+  "training": {
+    "input_dim": 2689,
+    "num_classes": 2,
+    "hidden_dims": [
+      512,
+      256,
+      128
+    ],
+    "dropout": 0.0,
+    "best_epoch": 2,
+    "seed": 42,
+    "epochs_requested": 100,
+    "epochs_run": 100,
+    "batch_size": 256,
+    "learning_rate": 0.001,
+    "weight_decay": 0.0,
+    "patience": 5,
+    "device": "cpu",
+    "early_stopping": false,
+    "restore_best": false,
+    "monitor_train": true,
+    "returned_epoch": 100
+  },
+  "target_training_seconds": 1686.422000000006,
+  "target_metrics": {
+    "train": {
+      "accuracy": 0.99849,
+      "roc_auc": 0.9999850038558871,
+      "log_loss": 0.004646161571145058
+    },
+    "validation": {
+      "accuracy": 0.7865,
+      "roc_auc": 0.8611103577700634,
+      "log_loss": 1.9594026803970337
+    },
+    "test": {
+      "accuracy": 0.7952,
+      "roc_auc": 0.8676290445214159,
+      "log_loss": 1.8648079633712769
+    }
+  },
+  "shadow_attack_metrics": {
+    "train": {
+      "records": 38419,
+      "members": 19317,
+      "accuracy": 0.5708373461047919,
+      "balanced_accuracy": 0.5691344643640636,
+      "roc_auc": 0.6470420574047552,
+      "tpr_at_1pct_fpr_roc": 0.036755189729254026,
+      "threshold": 0.4841824912427166,
+      "tn": 5059,
+      "fp": 14043,
+      "fn": 2445,
+      "tp": 16872,
+      "shadow_selected_threshold": 0.5923856351173958,
+      "tpr_at_shadow_threshold": 0.019671791686079618,
+      "fpr_at_shadow_threshold": 0.004135692597633756
+    },
+    "validation": {
+      "records": 12849,
+      "members": 6376,
+      "accuracy": 0.5098451241341738,
+      "balanced_accuracy": 0.5121451309861386,
+      "roc_auc": 0.5097851082413368,
+      "tpr_at_1pct_fpr_roc": 0.010508155583437892,
+      "threshold": 0.4841824912427166,
+      "tn": 1343,
+      "fp": 5130,
+      "fn": 1168,
+      "tp": 5208,
+      "shadow_selected_threshold": 0.5923856351173958,
+      "tpr_at_shadow_threshold": 0.010508155583437892,
+      "fpr_at_shadow_threshold": 0.009732735980225553
+    },
+    "test": {
+      "records": 12732,
+      "members": 6307,
+      "accuracy": 0.5062048382029531,
+      "balanced_accuracy": 0.5090736560390252,
+      "roc_auc": 0.5155742584824841,
+      "tpr_at_1pct_fpr_roc": 0.008244807356905026,
+      "threshold": 0.4841824912427166,
+      "tn": 1282,
+      "fp": 5143,
+      "fn": 1144,
+      "tp": 5163,
+      "shadow_selected_threshold": 0.5923856351173958,
+      "tpr_at_shadow_threshold": 0.01062311717139686,
+      "fpr_at_shadow_threshold": 0.013073929961089494
+    }
+  },
+  "target_mia_metrics": {
+    "records": 20000,
+    "members": 10000,
+    "accuracy": 0.5306,
+    "balanced_accuracy": 0.5306,
+    "roc_auc": 0.55950894,
+    "tpr_at_1pct_fpr_roc": 0.0024,
+    "threshold": 0.4841824912427166,
+    "tn": 5643,
+    "fp": 4357,
+    "fn": 5031,
+    "tp": 4969,
+    "shadow_selected_threshold": 0.5923856351173958,
+    "tpr_at_shadow_threshold": 0.0002,
+    "fpr_at_shadow_threshold": 0.0008,
+    "tpr_at_accuracy_threshold": 0.4969,
+    "fpr_at_accuracy_threshold": 0.4357
+  },
+  "target_query_diagnostics": {
+    "record_queries": 526991,
+    "max_record_queries": 820000,
+    "walk_censored_fraction": 0.438975,
+    "blind_walk_enabled": true,
+    "config": {
+      "max_steps": 20,
+      "repeats": 2,
+      "categorical_change_probability": 0.05,
+      "batch_size": 512,
+      "seed": 42
+    }
+  }
+}

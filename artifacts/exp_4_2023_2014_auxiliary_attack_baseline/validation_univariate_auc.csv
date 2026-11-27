@@ -1,0 +1,17 @@
+pool,feature,member_score_direction,validation_roc_auc
+pooled,class_scaled_logit,1,0.5165130623386736
+pooled,blind_walk,1,0.4950474682977456
+pooled,entropy,-1,0.5085789903632351
+pooled,cross_entropy,-1,0.5165130744416347
+random_forest,class_scaled_logit,1,0.5380579362323084
+random_forest,blind_walk,1,0.48863517890345637
+random_forest,entropy,-1,0.5186798642041881
+random_forest,cross_entropy,-1,0.5380579362323084
+gradient_boosting,class_scaled_logit,1,0.5037943033189127
+gradient_boosting,blind_walk,1,0.4948831081288108
+gradient_boosting,entropy,-1,0.5032532836766503
+gradient_boosting,cross_entropy,-1,0.5037943033189127
+xgboost,class_scaled_logit,1,0.50868285140877
+xgboost,blind_walk,1,0.5024700969338507
+xgboost,entropy,-1,0.5054528391171887
+xgboost,cross_entropy,-1,0.5086829754158453

@@ -1,0 +1,1109 @@
+{
+  "execution_status": "baseline_mia_completed",
+  "exploratory": true,
+  "target_year": 2023,
+  "auxiliary_year": 2014,
+  "train_size": 100000,
+  "features": [
+    "AGEP",
+    "COW",
+    "SCHL",
+    "MAR",
+    "OCCP",
+    "POBP",
+    "WKHP",
+    "SEX",
+    "RAC1P",
+    "CIT",
+    "CITWP",
+    "ESR",
+    "WKL",
+    "WRK",
+    "INDP",
+    "DIS",
+    "DEAR",
+    "DEYE",
+    "DREM",
+    "DPHY",
+    "DDRS",
+    "DOUT",
+    "HICOV",
+    "HINS1",
+    "HINS2",
+    "HINS3",
+    "HINS4",
+    "HINS5",
+    "HINS6",
+    "HINS7",
+    "LANX",
+    "LANP",
+    "ENG",
+    "JWMNP",
+    "JWRIP",
+    "JWAP",
+    "JWDP",
+    "POWSP",
+    "FOD1P",
+    "FOD2P",
+    "SCH",
+    "HISP",
+    "ANC1P",
+    "ANC2P",
+    "MIL",
+    "VPS",
+    "MARHT",
+    "MARHYP"
+  ],
+  "label": "nominal PINCP > 50000",
+  "split_config": {
+    "validation_size": 10000,
+    "test_size": 10000,
+    "mia_nonmember_size": 10000,
+    "mia_member_size": 10000,
+    "seed": 42
+  },
+  "public_preprocessing_records": 10000,
+  "preprocessing": "Frozen public 2014 preprocessing subset; same as Exp 4 non-private control",
+  "target_config": {
+    "hidden_dims": [
+      512,
+      256,
+      128
+    ],
+    "dropout": 0.1,
+    "epochs": 30,
+    "patience": 5,
+    "batch_size": 256,
+    "learning_rate": 0.001,
+    "weight_decay": 0.0001,
+    "seed": 42,
+    "device": "cpu",
+    "early_stopping": true,
+    "restore_best": true,
+    "monitor_train": false
+  },
+  "target_training": {
+    "input_dim": 2250,
+    "num_classes": 2,
+    "hidden_dims": [
+      512,
+      256,
+      128
+    ],
+    "dropout": 0.1,
+    "best_epoch": 2,
+    "seed": 42,
+    "epochs_requested": 30,
+    "epochs_run": 7,
+    "batch_size": 256,
+    "learning_rate": 0.001,
+    "weight_decay": 0.0001,
+    "patience": 5,
+    "device": "cpu",
+    "early_stopping": true,
+    "restore_best": true,
+    "monitor_train": false,
+    "returned_epoch": 2
+  },
+  "target_income_metrics": {
+    "train": {
+      "accuracy": 0.83083,
+      "roc_auc": 0.9136645461162882,
+      "log_loss": 0.37232038378715515
+    },
+    "validation": {
+      "accuracy": 0.8157,
+      "roc_auc": 0.8987168228602661,
+      "log_loss": 0.40111202001571655
+    },
+    "test": {
+      "accuracy": 0.8175,
+      "roc_auc": 0.9015837322174179,
+      "log_loss": 0.39591675996780396
+    }
+  },
+  "reused_exp4_context": false,
+  "shadow_count": 16,
+  "shadow_algorithms": [
+    "random_forest",
+    "gradient_boosting",
+    "xgboost"
+  ],
+  "shadow_seeds": {
+    "random_forest_01": 42,
+    "gradient_boosting_02": 52,
+    "xgboost_03": 62,
+    "random_forest_04": 72,
+    "gradient_boosting_05": 82,
+    "xgboost_06": 92,
+    "random_forest_07": 102,
+    "gradient_boosting_08": 112,
+    "xgboost_09": 122,
+    "random_forest_10": 132,
+    "gradient_boosting_11": 142,
+    "xgboost_12": 152,
+    "random_forest_13": 162,
+    "gradient_boosting_14": 172,
+    "xgboost_15": 182,
+    "random_forest_16": 192
+  },
+  "candidate_count": 84,
+  "candidates": [
+    {
+      "candidate": "pooled/loss_threshold",
+      "pool": "pooled",
+      "feature_set": "loss_only",
+      "algorithm": "loss_threshold",
+      "max_depth": null,
+      "min_samples_leaf": null
+    },
+    {
+      "candidate": "pooled/paper/logistic",
+      "pool": "pooled",
+      "feature_set": "paper",
+      "algorithm": "logistic_regression",
+      "max_depth": null,
+      "min_samples_leaf": null
+    },
+    {
+      "candidate": "pooled/paper/rf_d4_leaf20",
+      "pool": "pooled",
+      "feature_set": "paper",
+      "algorithm": "random_forest",
+      "max_depth": 4,
+      "min_samples_leaf": 20
+    },
+    {
+      "candidate": "pooled/paper/rf_d4_leaf50",
+      "pool": "pooled",
+      "feature_set": "paper",
+      "algorithm": "random_forest",
+      "max_depth": 4,
+      "min_samples_leaf": 50
+    },
+    {
+      "candidate": "pooled/paper/rf_d4_leaf100",
+      "pool": "pooled",
+      "feature_set": "paper",
+      "algorithm": "random_forest",
+      "max_depth": 4,
+      "min_samples_leaf": 100
+    },
+    {
+      "candidate": "pooled/paper/rf_d8_leaf20",
+      "pool": "pooled",
+      "feature_set": "paper",
+      "algorithm": "random_forest",
+      "max_depth": 8,
+      "min_samples_leaf": 20
+    },
+    {
+      "candidate": "pooled/paper/rf_d8_leaf50",
+      "pool": "pooled",
+      "feature_set": "paper",
+      "algorithm": "random_forest",
+      "max_depth": 8,
+      "min_samples_leaf": 50
+    },
+    {
+      "candidate": "pooled/paper/rf_d8_leaf100",
+      "pool": "pooled",
+      "feature_set": "paper",
+      "algorithm": "random_forest",
+      "max_depth": 8,
+      "min_samples_leaf": 100
+    },
+    {
+      "candidate": "pooled/paper/rf_d12_leaf20",
+      "pool": "pooled",
+      "feature_set": "paper",
+      "algorithm": "random_forest",
+      "max_depth": 12,
+      "min_samples_leaf": 20
+    },
+    {
+      "candidate": "pooled/paper/rf_d12_leaf50",
+      "pool": "pooled",
+      "feature_set": "paper",
+      "algorithm": "random_forest",
+      "max_depth": 12,
+      "min_samples_leaf": 50
+    },
+    {
+      "candidate": "pooled/paper/rf_d12_leaf100",
+      "pool": "pooled",
+      "feature_set": "paper",
+      "algorithm": "random_forest",
+      "max_depth": 12,
+      "min_samples_leaf": 100
+    },
+    {
+      "candidate": "pooled/paper_no_walk/logistic",
+      "pool": "pooled",
+      "feature_set": "paper_no_walk",
+      "algorithm": "logistic_regression",
+      "max_depth": null,
+      "min_samples_leaf": null
+    },
+    {
+      "candidate": "pooled/paper_no_walk/rf_d4_leaf20",
+      "pool": "pooled",
+      "feature_set": "paper_no_walk",
+      "algorithm": "random_forest",
+      "max_depth": 4,
+      "min_samples_leaf": 20
+    },
+    {
+      "candidate": "pooled/paper_no_walk/rf_d4_leaf50",
+      "pool": "pooled",
+      "feature_set": "paper_no_walk",
+      "algorithm": "random_forest",
+      "max_depth": 4,
+      "min_samples_leaf": 50
+    },
+    {
+      "candidate": "pooled/paper_no_walk/rf_d4_leaf100",
+      "pool": "pooled",
+      "feature_set": "paper_no_walk",
+      "algorithm": "random_forest",
+      "max_depth": 4,
+      "min_samples_leaf": 100
+    },
+    {
+      "candidate": "pooled/paper_no_walk/rf_d8_leaf20",
+      "pool": "pooled",
+      "feature_set": "paper_no_walk",
+      "algorithm": "random_forest",
+      "max_depth": 8,
+      "min_samples_leaf": 20
+    },
+    {
+      "candidate": "pooled/paper_no_walk/rf_d8_leaf50",
+      "pool": "pooled",
+      "feature_set": "paper_no_walk",
+      "algorithm": "random_forest",
+      "max_depth": 8,
+      "min_samples_leaf": 50
+    },
+    {
+      "candidate": "pooled/paper_no_walk/rf_d8_leaf100",
+      "pool": "pooled",
+      "feature_set": "paper_no_walk",
+      "algorithm": "random_forest",
+      "max_depth": 8,
+      "min_samples_leaf": 100
+    },
+    {
+      "candidate": "pooled/paper_no_walk/rf_d12_leaf20",
+      "pool": "pooled",
+      "feature_set": "paper_no_walk",
+      "algorithm": "random_forest",
+      "max_depth": 12,
+      "min_samples_leaf": 20
+    },
+    {
+      "candidate": "pooled/paper_no_walk/rf_d12_leaf50",
+      "pool": "pooled",
+      "feature_set": "paper_no_walk",
+      "algorithm": "random_forest",
+      "max_depth": 12,
+      "min_samples_leaf": 50
+    },
+    {
+      "candidate": "pooled/paper_no_walk/rf_d12_leaf100",
+      "pool": "pooled",
+      "feature_set": "paper_no_walk",
+      "algorithm": "random_forest",
+      "max_depth": 12,
+      "min_samples_leaf": 100
+    },
+    {
+      "candidate": "random_forest/loss_threshold",
+      "pool": "random_forest",
+      "feature_set": "loss_only",
+      "algorithm": "loss_threshold",
+      "max_depth": null,
+      "min_samples_leaf": null
+    },
+    {
+      "candidate": "random_forest/paper/logistic",
+      "pool": "random_forest",
+      "feature_set": "paper",
+      "algorithm": "logistic_regression",
+      "max_depth": null,
+      "min_samples_leaf": null
+    },
+    {
+      "candidate": "random_forest/paper/rf_d4_leaf20",
+      "pool": "random_forest",
+      "feature_set": "paper",
+      "algorithm": "random_forest",
+      "max_depth": 4,
+      "min_samples_leaf": 20
+    },
+    {
+      "candidate": "random_forest/paper/rf_d4_leaf50",
+      "pool": "random_forest",
+      "feature_set": "paper",
+      "algorithm": "random_forest",
+      "max_depth": 4,
+      "min_samples_leaf": 50
+    },
+    {
+      "candidate": "random_forest/paper/rf_d4_leaf100",
+      "pool": "random_forest",
+      "feature_set": "paper",
+      "algorithm": "random_forest",
+      "max_depth": 4,
+      "min_samples_leaf": 100
+    },
+    {
+      "candidate": "random_forest/paper/rf_d8_leaf20",
+      "pool": "random_forest",
+      "feature_set": "paper",
+      "algorithm": "random_forest",
+      "max_depth": 8,
+      "min_samples_leaf": 20
+    },
+    {
+      "candidate": "random_forest/paper/rf_d8_leaf50",
+      "pool": "random_forest",
+      "feature_set": "paper",
+      "algorithm": "random_forest",
+      "max_depth": 8,
+      "min_samples_leaf": 50
+    },
+    {
+      "candidate": "random_forest/paper/rf_d8_leaf100",
+      "pool": "random_forest",
+      "feature_set": "paper",
+      "algorithm": "random_forest",
+      "max_depth": 8,
+      "min_samples_leaf": 100
+    },
+    {
+      "candidate": "random_forest/paper/rf_d12_leaf20",
+      "pool": "random_forest",
+      "feature_set": "paper",
+      "algorithm": "random_forest",
+      "max_depth": 12,
+      "min_samples_leaf": 20
+    },
+    {
+      "candidate": "random_forest/paper/rf_d12_leaf50",
+      "pool": "random_forest",
+      "feature_set": "paper",
+      "algorithm": "random_forest",
+      "max_depth": 12,
+      "min_samples_leaf": 50
+    },
+    {
+      "candidate": "random_forest/paper/rf_d12_leaf100",
+      "pool": "random_forest",
+      "feature_set": "paper",
+      "algorithm": "random_forest",
+      "max_depth": 12,
+      "min_samples_leaf": 100
+    },
+    {
+      "candidate": "random_forest/paper_no_walk/logistic",
+      "pool": "random_forest",
+      "feature_set": "paper_no_walk",
+      "algorithm": "logistic_regression",
+      "max_depth": null,
+      "min_samples_leaf": null
+    },
+    {
+      "candidate": "random_forest/paper_no_walk/rf_d4_leaf20",
+      "pool": "random_forest",
+      "feature_set": "paper_no_walk",
+      "algorithm": "random_forest",
+      "max_depth": 4,
+      "min_samples_leaf": 20
+    },
+    {
+      "candidate": "random_forest/paper_no_walk/rf_d4_leaf50",
+      "pool": "random_forest",
+      "feature_set": "paper_no_walk",
+      "algorithm": "random_forest",
+      "max_depth": 4,
+      "min_samples_leaf": 50
+    },
+    {
+      "candidate": "random_forest/paper_no_walk/rf_d4_leaf100",
+      "pool": "random_forest",
+      "feature_set": "paper_no_walk",
+      "algorithm": "random_forest",
+      "max_depth": 4,
+      "min_samples_leaf": 100
+    },
+    {
+      "candidate": "random_forest/paper_no_walk/rf_d8_leaf20",
+      "pool": "random_forest",
+      "feature_set": "paper_no_walk",
+      "algorithm": "random_forest",
+      "max_depth": 8,
+      "min_samples_leaf": 20
+    },
+    {
+      "candidate": "random_forest/paper_no_walk/rf_d8_leaf50",
+      "pool": "random_forest",
+      "feature_set": "paper_no_walk",
+      "algorithm": "random_forest",
+      "max_depth": 8,
+      "min_samples_leaf": 50
+    },
+    {
+      "candidate": "random_forest/paper_no_walk/rf_d8_leaf100",
+      "pool": "random_forest",
+      "feature_set": "paper_no_walk",
+      "algorithm": "random_forest",
+      "max_depth": 8,
+      "min_samples_leaf": 100
+    },
+    {
+      "candidate": "random_forest/paper_no_walk/rf_d12_leaf20",
+      "pool": "random_forest",
+      "feature_set": "paper_no_walk",
+      "algorithm": "random_forest",
+      "max_depth": 12,
+      "min_samples_leaf": 20
+    },
+    {
+      "candidate": "random_forest/paper_no_walk/rf_d12_leaf50",
+      "pool": "random_forest",
+      "feature_set": "paper_no_walk",
+      "algorithm": "random_forest",
+      "max_depth": 12,
+      "min_samples_leaf": 50
+    },
+    {
+      "candidate": "random_forest/paper_no_walk/rf_d12_leaf100",
+      "pool": "random_forest",
+      "feature_set": "paper_no_walk",
+      "algorithm": "random_forest",
+      "max_depth": 12,
+      "min_samples_leaf": 100
+    },
+    {
+      "candidate": "gradient_boosting/loss_threshold",
+      "pool": "gradient_boosting",
+      "feature_set": "loss_only",
+      "algorithm": "loss_threshold",
+      "max_depth": null,
+      "min_samples_leaf": null
+    },
+    {
+      "candidate": "gradient_boosting/paper/logistic",
+      "pool": "gradient_boosting",
+      "feature_set": "paper",
+      "algorithm": "logistic_regression",
+      "max_depth": null,
+      "min_samples_leaf": null
+    },
+    {
+      "candidate": "gradient_boosting/paper/rf_d4_leaf20",
+      "pool": "gradient_boosting",
+      "feature_set": "paper",
+      "algorithm": "random_forest",
+      "max_depth": 4,
+      "min_samples_leaf": 20
+    },
+    {
+      "candidate": "gradient_boosting/paper/rf_d4_leaf50",
+      "pool": "gradient_boosting",
+      "feature_set": "paper",
+      "algorithm": "random_forest",
+      "max_depth": 4,
+      "min_samples_leaf": 50
+    },
+    {
+      "candidate": "gradient_boosting/paper/rf_d4_leaf100",
+      "pool": "gradient_boosting",
+      "feature_set": "paper",
+      "algorithm": "random_forest",
+      "max_depth": 4,
+      "min_samples_leaf": 100
+    },
+    {
+      "candidate": "gradient_boosting/paper/rf_d8_leaf20",
+      "pool": "gradient_boosting",
+      "feature_set": "paper",
+      "algorithm": "random_forest",
+      "max_depth": 8,
+      "min_samples_leaf": 20
+    },
+    {
+      "candidate": "gradient_boosting/paper/rf_d8_leaf50",
+      "pool": "gradient_boosting",
+      "feature_set": "paper",
+      "algorithm": "random_forest",
+      "max_depth": 8,
+      "min_samples_leaf": 50
+    },
+    {
+      "candidate": "gradient_boosting/paper/rf_d8_leaf100",
+      "pool": "gradient_boosting",
+      "feature_set": "paper",
+      "algorithm": "random_forest",
+      "max_depth": 8,
+      "min_samples_leaf": 100
+    },
+    {
+      "candidate": "gradient_boosting/paper/rf_d12_leaf20",
+      "pool": "gradient_boosting",
+      "feature_set": "paper",
+      "algorithm": "random_forest",
+      "max_depth": 12,
+      "min_samples_leaf": 20
+    },
+    {
+      "candidate": "gradient_boosting/paper/rf_d12_leaf50",
+      "pool": "gradient_boosting",
+      "feature_set": "paper",
+      "algorithm": "random_forest",
+      "max_depth": 12,
+      "min_samples_leaf": 50
+    },
+    {
+      "candidate": "gradient_boosting/paper/rf_d12_leaf100",
+      "pool": "gradient_boosting",
+      "feature_set": "paper",
+      "algorithm": "random_forest",
+      "max_depth": 12,
+      "min_samples_leaf": 100
+    },
+    {
+      "candidate": "gradient_boosting/paper_no_walk/logistic",
+      "pool": "gradient_boosting",
+      "feature_set": "paper_no_walk",
+      "algorithm": "logistic_regression",
+      "max_depth": null,
+      "min_samples_leaf": null
+    },
+    {
+      "candidate": "gradient_boosting/paper_no_walk/rf_d4_leaf20",
+      "pool": "gradient_boosting",
+      "feature_set": "paper_no_walk",
+      "algorithm": "random_forest",
+      "max_depth": 4,
+      "min_samples_leaf": 20
+    },
+    {
+      "candidate": "gradient_boosting/paper_no_walk/rf_d4_leaf50",
+      "pool": "gradient_boosting",
+      "feature_set": "paper_no_walk",
+      "algorithm": "random_forest",
+      "max_depth": 4,
+      "min_samples_leaf": 50
+    },
+    {
+      "candidate": "gradient_boosting/paper_no_walk/rf_d4_leaf100",
+      "pool": "gradient_boosting",
+      "feature_set": "paper_no_walk",
+      "algorithm": "random_forest",
+      "max_depth": 4,
+      "min_samples_leaf": 100
+    },
+    {
+      "candidate": "gradient_boosting/paper_no_walk/rf_d8_leaf20",
+      "pool": "gradient_boosting",
+      "feature_set": "paper_no_walk",
+      "algorithm": "random_forest",
+      "max_depth": 8,
+      "min_samples_leaf": 20
+    },
+    {
+      "candidate": "gradient_boosting/paper_no_walk/rf_d8_leaf50",
+      "pool": "gradient_boosting",
+      "feature_set": "paper_no_walk",
+      "algorithm": "random_forest",
+      "max_depth": 8,
+      "min_samples_leaf": 50
+    },
+    {
+      "candidate": "gradient_boosting/paper_no_walk/rf_d8_leaf100",
+      "pool": "gradient_boosting",
+      "feature_set": "paper_no_walk",
+      "algorithm": "random_forest",
+      "max_depth": 8,
+      "min_samples_leaf": 100
+    },
+    {
+      "candidate": "gradient_boosting/paper_no_walk/rf_d12_leaf20",
+      "pool": "gradient_boosting",
+      "feature_set": "paper_no_walk",
+      "algorithm": "random_forest",
+      "max_depth": 12,
+      "min_samples_leaf": 20
+    },
+    {
+      "candidate": "gradient_boosting/paper_no_walk/rf_d12_leaf50",
+      "pool": "gradient_boosting",
+      "feature_set": "paper_no_walk",
+      "algorithm": "random_forest",
+      "max_depth": 12,
+      "min_samples_leaf": 50
+    },
+    {
+      "candidate": "gradient_boosting/paper_no_walk/rf_d12_leaf100",
+      "pool": "gradient_boosting",
+      "feature_set": "paper_no_walk",
+      "algorithm": "random_forest",
+      "max_depth": 12,
+      "min_samples_leaf": 100
+    },
+    {
+      "candidate": "xgboost/loss_threshold",
+      "pool": "xgboost",
+      "feature_set": "loss_only",
+      "algorithm": "loss_threshold",
+      "max_depth": null,
+      "min_samples_leaf": null
+    },
+    {
+      "candidate": "xgboost/paper/logistic",
+      "pool": "xgboost",
+      "feature_set": "paper",
+      "algorithm": "logistic_regression",
+      "max_depth": null,
+      "min_samples_leaf": null
+    },
+    {
+      "candidate": "xgboost/paper/rf_d4_leaf20",
+      "pool": "xgboost",
+      "feature_set": "paper",
+      "algorithm": "random_forest",
+      "max_depth": 4,
+      "min_samples_leaf": 20
+    },
+    {
+      "candidate": "xgboost/paper/rf_d4_leaf50",
+      "pool": "xgboost",
+      "feature_set": "paper",
+      "algorithm": "random_forest",
+      "max_depth": 4,
+      "min_samples_leaf": 50
+    },
+    {
+      "candidate": "xgboost/paper/rf_d4_leaf100",
+      "pool": "xgboost",
+      "feature_set": "paper",
+      "algorithm": "random_forest",
+      "max_depth": 4,
+      "min_samples_leaf": 100
+    },
+    {
+      "candidate": "xgboost/paper/rf_d8_leaf20",
+      "pool": "xgboost",
+      "feature_set": "paper",
+      "algorithm": "random_forest",
+      "max_depth": 8,
+      "min_samples_leaf": 20
+    },
+    {
+      "candidate": "xgboost/paper/rf_d8_leaf50",
+      "pool": "xgboost",
+      "feature_set": "paper",
+      "algorithm": "random_forest",
+      "max_depth": 8,
+      "min_samples_leaf": 50
+    },
+    {
+      "candidate": "xgboost/paper/rf_d8_leaf100",
+      "pool": "xgboost",
+      "feature_set": "paper",
+      "algorithm": "random_forest",
+      "max_depth": 8,
+      "min_samples_leaf": 100
+    },
+    {
+      "candidate": "xgboost/paper/rf_d12_leaf20",
+      "pool": "xgboost",
+      "feature_set": "paper",
+      "algorithm": "random_forest",
+      "max_depth": 12,
+      "min_samples_leaf": 20
+    },
+    {
+      "candidate": "xgboost/paper/rf_d12_leaf50",
+      "pool": "xgboost",
+      "feature_set": "paper",
+      "algorithm": "random_forest",
+      "max_depth": 12,
+      "min_samples_leaf": 50
+    },
+    {
+      "candidate": "xgboost/paper/rf_d12_leaf100",
+      "pool": "xgboost",
+      "feature_set": "paper",
+      "algorithm": "random_forest",
+      "max_depth": 12,
+      "min_samples_leaf": 100
+    },
+    {
+      "candidate": "xgboost/paper_no_walk/logistic",
+      "pool": "xgboost",
+      "feature_set": "paper_no_walk",
+      "algorithm": "logistic_regression",
+      "max_depth": null,
+      "min_samples_leaf": null
+    },
+    {
+      "candidate": "xgboost/paper_no_walk/rf_d4_leaf20",
+      "pool": "xgboost",
+      "feature_set": "paper_no_walk",
+      "algorithm": "random_forest",
+      "max_depth": 4,
+      "min_samples_leaf": 20
+    },
+    {
+      "candidate": "xgboost/paper_no_walk/rf_d4_leaf50",
+      "pool": "xgboost",
+      "feature_set": "paper_no_walk",
+      "algorithm": "random_forest",
+      "max_depth": 4,
+      "min_samples_leaf": 50
+    },
+    {
+      "candidate": "xgboost/paper_no_walk/rf_d4_leaf100",
+      "pool": "xgboost",
+      "feature_set": "paper_no_walk",
+      "algorithm": "random_forest",
+      "max_depth": 4,
+      "min_samples_leaf": 100
+    },
+    {
+      "candidate": "xgboost/paper_no_walk/rf_d8_leaf20",
+      "pool": "xgboost",
+      "feature_set": "paper_no_walk",
+      "algorithm": "random_forest",
+      "max_depth": 8,
+      "min_samples_leaf": 20
+    },
+    {
+      "candidate": "xgboost/paper_no_walk/rf_d8_leaf50",
+      "pool": "xgboost",
+      "feature_set": "paper_no_walk",
+      "algorithm": "random_forest",
+      "max_depth": 8,
+      "min_samples_leaf": 50
+    },
+    {
+      "candidate": "xgboost/paper_no_walk/rf_d8_leaf100",
+      "pool": "xgboost",
+      "feature_set": "paper_no_walk",
+      "algorithm": "random_forest",
+      "max_depth": 8,
+      "min_samples_leaf": 100
+    },
+    {
+      "candidate": "xgboost/paper_no_walk/rf_d12_leaf20",
+      "pool": "xgboost",
+      "feature_set": "paper_no_walk",
+      "algorithm": "random_forest",
+      "max_depth": 12,
+      "min_samples_leaf": 20
+    },
+    {
+      "candidate": "xgboost/paper_no_walk/rf_d12_leaf50",
+      "pool": "xgboost",
+      "feature_set": "paper_no_walk",
+      "algorithm": "random_forest",
+      "max_depth": 12,
+      "min_samples_leaf": 50
+    },
+    {
+      "candidate": "xgboost/paper_no_walk/rf_d12_leaf100",
+      "pool": "xgboost",
+      "feature_set": "paper_no_walk",
+      "algorithm": "random_forest",
+      "max_depth": 12,
+      "min_samples_leaf": 100
+    }
+  ],
+  "selection": "Auxiliary validation ROC-AUC, balanced accuracy, then predeclared candidate order",
+  "role_assignment": "One master grouped record-ID assignment reused across pools and feature subsets",
+  "selected": {
+    "candidate": "random_forest/paper/logistic",
+    "pool": "random_forest",
+    "feature_set": "paper",
+    "algorithm": "logistic_regression",
+    "max_depth": null,
+    "min_samples_leaf": null,
+    "accuracy_threshold": 0.49091945729304776,
+    "low_fpr_threshold": 0.5674908860550368
+  },
+  "reference": {
+    "candidate": "pooled/paper/rf_d12_leaf20",
+    "pool": "pooled",
+    "feature_set": "paper",
+    "algorithm": "random_forest",
+    "max_depth": 12,
+    "min_samples_leaf": 20,
+    "accuracy_threshold": 0.5100662237877827,
+    "low_fpr_threshold": 0.5907931082794238
+  },
+  "walk_config": {
+    "max_steps": 20,
+    "repeats": 2,
+    "categorical_change_probability": 0.05,
+    "batch_size": 512,
+    "seed": 42
+  },
+  "extra_numeric_protocol": {
+    "JWMNP": [
+      2.0,
+      0,
+      200
+    ],
+    "JWRIP": [
+      1.0,
+      1,
+      10
+    ]
+  },
+  "walk_scope": "Consistent shadows and target; one four-feature extraction, no new queries for column ablation",
+  "shadow_query_audits": {
+    "random_forest_01": {
+      "record_queries": 126484,
+      "max_record_queries": 164000,
+      "walk_censored_fraction": 0.643375,
+      "blind_walk_enabled": true,
+      "config": {
+        "max_steps": 20,
+        "repeats": 2,
+        "categorical_change_probability": 0.05,
+        "batch_size": 512,
+        "seed": 42
+      }
+    },
+    "gradient_boosting_02": {
+      "record_queries": 124146,
+      "max_record_queries": 164000,
+      "walk_censored_fraction": 0.612125,
+      "blind_walk_enabled": true,
+      "config": {
+        "max_steps": 20,
+        "repeats": 2,
+        "categorical_change_probability": 0.05,
+        "batch_size": 512,
+        "seed": 42
+      }
+    },
+    "xgboost_03": {
+      "record_queries": 123387,
+      "max_record_queries": 164000,
+      "walk_censored_fraction": 0.605,
+      "blind_walk_enabled": true,
+      "config": {
+        "max_steps": 20,
+        "repeats": 2,
+        "categorical_change_probability": 0.05,
+        "batch_size": 512,
+        "seed": 42
+      }
+    },
+    "random_forest_04": {
+      "record_queries": 126149,
+      "max_record_queries": 164000,
+      "walk_censored_fraction": 0.64675,
+      "blind_walk_enabled": true,
+      "config": {
+        "max_steps": 20,
+        "repeats": 2,
+        "categorical_change_probability": 0.05,
+        "batch_size": 512,
+        "seed": 42
+      }
+    },
+    "gradient_boosting_05": {
+      "record_queries": 122939,
+      "max_record_queries": 164000,
+      "walk_censored_fraction": 0.597125,
+      "blind_walk_enabled": true,
+      "config": {
+        "max_steps": 20,
+        "repeats": 2,
+        "categorical_change_probability": 0.05,
+        "batch_size": 512,
+        "seed": 42
+      }
+    },
+    "xgboost_06": {
+      "record_queries": 123837,
+      "max_record_queries": 164000,
+      "walk_censored_fraction": 0.61075,
+      "blind_walk_enabled": true,
+      "config": {
+        "max_steps": 20,
+        "repeats": 2,
+        "categorical_change_probability": 0.05,
+        "batch_size": 512,
+        "seed": 42
+      }
+    },
+    "random_forest_07": {
+      "record_queries": 128159,
+      "max_record_queries": 164000,
+      "walk_censored_fraction": 0.65625,
+      "blind_walk_enabled": true,
+      "config": {
+        "max_steps": 20,
+        "repeats": 2,
+        "categorical_change_probability": 0.05,
+        "batch_size": 512,
+        "seed": 42
+      }
+    },
+    "gradient_boosting_08": {
+      "record_queries": 124399,
+      "max_record_queries": 164000,
+      "walk_censored_fraction": 0.612625,
+      "blind_walk_enabled": true,
+      "config": {
+        "max_steps": 20,
+        "repeats": 2,
+        "categorical_change_probability": 0.05,
+        "batch_size": 512,
+        "seed": 42
+      }
+    },
+    "xgboost_09": {
+      "record_queries": 124290,
+      "max_record_queries": 164000,
+      "walk_censored_fraction": 0.61525,
+      "blind_walk_enabled": true,
+      "config": {
+        "max_steps": 20,
+        "repeats": 2,
+        "categorical_change_probability": 0.05,
+        "batch_size": 512,
+        "seed": 42
+      }
+    },
+    "random_forest_10": {
+      "record_queries": 125843,
+      "max_record_queries": 164000,
+      "walk_censored_fraction": 0.6425,
+      "blind_walk_enabled": true,
+      "config": {
+        "max_steps": 20,
+        "repeats": 2,
+        "categorical_change_probability": 0.05,
+        "batch_size": 512,
+        "seed": 42
+      }
+    },
+    "gradient_boosting_11": {
+      "record_queries": 124371,
+      "max_record_queries": 164000,
+      "walk_censored_fraction": 0.61525,
+      "blind_walk_enabled": true,
+      "config": {
+        "max_steps": 20,
+        "repeats": 2,
+        "categorical_change_probability": 0.05,
+        "batch_size": 512,
+        "seed": 42
+      }
+    },
+    "xgboost_12": {
+      "record_queries": 126004,
+      "max_record_queries": 164000,
+      "walk_censored_fraction": 0.628,
+      "blind_walk_enabled": true,
+      "config": {
+        "max_steps": 20,
+        "repeats": 2,
+        "categorical_change_probability": 0.05,
+        "batch_size": 512,
+        "seed": 42
+      }
+    },
+    "random_forest_13": {
+      "record_queries": 127970,
+      "max_record_queries": 164000,
+      "walk_censored_fraction": 0.65575,
+      "blind_walk_enabled": true,
+      "config": {
+        "max_steps": 20,
+        "repeats": 2,
+        "categorical_change_probability": 0.05,
+        "batch_size": 512,
+        "seed": 42
+      }
+    },
+    "gradient_boosting_14": {
+      "record_queries": 124845,
+      "max_record_queries": 164000,
+      "walk_censored_fraction": 0.62125,
+      "blind_walk_enabled": true,
+      "config": {
+        "max_steps": 20,
+        "repeats": 2,
+        "categorical_change_probability": 0.05,
+        "batch_size": 512,
+        "seed": 42
+      }
+    },
+    "xgboost_15": {
+      "record_queries": 123970,
+      "max_record_queries": 164000,
+      "walk_censored_fraction": 0.610625,
+      "blind_walk_enabled": true,
+      "config": {
+        "max_steps": 20,
+        "repeats": 2,
+        "categorical_change_probability": 0.05,
+        "batch_size": 512,
+        "seed": 42
+      }
+    },
+    "random_forest_16": {
+      "record_queries": 125708,
+      "max_record_queries": 164000,
+      "walk_censored_fraction": 0.64075,
+      "blind_walk_enabled": true,
+      "config": {
+        "max_steps": 20,
+        "repeats": 2,
+        "categorical_change_probability": 0.05,
+        "batch_size": 512,
+        "seed": 42
+      }
+    }
+  },
+  "target_query_audit": {
+    "record_queries": 593850,
+    "max_record_queries": 820000,
+    "walk_censored_fraction": 0.52715,
+    "blind_walk_enabled": true,
+    "config": {
+      "max_steps": 20,
+      "repeats": 2,
+      "categorical_change_probability": 0.05,
+      "batch_size": 512,
+      "seed": 42
+    }
+  },
+  "versions": {
+    "torch": "2.15.0",
+    "numpy": "2.5.4",
+    "pandas": "3.1.1",
+    "scikit-learn": "1.9.1",
+    "xgboost": "3.4.1"
+  },
+  "checkpoints_enabled": false,
+  "logging_enabled": false,
+  "dp_training": false,
+  "missing_feature_experiments": false,
+  "mlp_shadows": false,
+  "limitations": [
+    "Existing auxiliary test and target results already inspected",
+    "Unequal pool sizes and shadow families",
+    "One target/attack seed",
+    "Native year-specific codes and auxiliary vocabulary",
+    "No guarantee of improved MIA"
+  ]
+}

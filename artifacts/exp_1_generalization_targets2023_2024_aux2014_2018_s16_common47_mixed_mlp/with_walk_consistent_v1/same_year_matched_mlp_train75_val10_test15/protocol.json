@@ -1,0 +1,1169 @@
+{
+  "execution_status": "same_year_attacks_completed",
+  "pairs": [
+    {
+      "target_year": 2023,
+      "auxiliary_year": 2023
+    },
+    {
+      "target_year": 2024,
+      "auxiliary_year": 2024
+    }
+  ],
+  "references_per_year": 16,
+  "shadow_algorithm": "MLP only",
+  "matched_target_training_recipe": {
+    "hidden_dims": [
+      512,
+      256,
+      128
+    ],
+    "dropout": 0.0,
+    "epochs": 100,
+    "batch_size": 256,
+    "learning_rate": 0.001,
+    "weight_decay": 0.0,
+    "seed": 42,
+    "device": "cpu",
+    "early_stopping": true,
+    "restore_best": true,
+    "monitor_train": true,
+    "patience": 5
+  },
+  "independent_reference_seeds": true,
+  "preprocessing": "Same common47 recipe, fitted on each model training partition only; vocabulary may differ",
+  "shadow_data": "Unused same-year rows excluding every target training/validation/test/MIA ID",
+  "shadow_split": "75% train, 10% validation, 15% test",
+  "shadow_split_rounding": "Ceil test and validation counts; remainder to training; independent seeds",
+  "standard_attack_sampling": "All OUT-test rows; exact matching IN-training subsample within each fixed record role",
+  "attack_roles_before_subsampling": true,
+  "standard_attack_exact_balance_per_role": true,
+  "training_size_matched": false,
+  "target_retrained": false,
+  "attack_features": [
+    "p_income_le_50k",
+    "p_income_gt_50k",
+    "true_class_probability",
+    "confidence",
+    "entropy",
+    "cross_entropy",
+    "correct",
+    "class_scaled_logit",
+    "modified_entropy",
+    "blind_walk"
+  ],
+  "rf_attack": "300 trees, max_depth12, min_samples_leaf20, sqrt features; grouped 60/20/20 roles",
+  "thresholds": "Shadow validation only; frozen for target and subgroup evaluation",
+  "blind_walk": true,
+  "walk_config": {
+    "max_steps": 20,
+    "repeats": 2,
+    "categorical_change_probability": 0.05,
+    "batch_size": 512,
+    "seed": 42
+  },
+  "numeric_protocol": {
+    "JWMNP": [
+      2.0,
+      0,
+      200
+    ],
+    "JWRIP": [
+      1.0,
+      1,
+      10
+    ]
+  },
+  "offline_lira": {
+    "method": "Negative OUT Gaussian log likelihood, per-record median, fixed pooled OUT std",
+    "variance_fit": "Attack-training IDs only; no target scores",
+    "minimum_out": 3,
+    "variance_floor": 1e-06,
+    "reference_query_exclusion": true,
+    "exclude_shadow_validation_from_out": true,
+    "online_in_models": false,
+    "score_direction": "Higher negative OUT log likelihood means member",
+    "implementation_reference": "https://github.com/tensorflow/privacy/blob/master/research/mi_lira_2021/plot.py"
+  },
+  "outliers": {
+    "method": "IsolationForest",
+    "fit_data": "Disjoint same-year shadow pool only",
+    "n_estimators": 100,
+    "max_samples": 256,
+    "seed": 42,
+    "top_fraction": 0.05,
+    "ranking": "Target inputs only, stable tie handling; membership labels not used"
+  },
+  "subgroup_fields": [
+    "income_gt_50k",
+    "SEX",
+    "RAC1P"
+  ],
+  "loss_gap": "validation log loss minus training log loss",
+  "years": {
+    "2023": {
+      "pool_records": 73278,
+      "model_protocols": {
+        "same_year_mlp_01": {
+          "seed": 42,
+          "training": {
+            "input_dim": 2624,
+            "num_classes": 2,
+            "hidden_dims": [
+              512,
+              256,
+              128
+            ],
+            "dropout": 0.0,
+            "best_epoch": 3,
+            "seed": 42,
+            "epochs_requested": 100,
+            "epochs_run": 8,
+            "batch_size": 256,
+            "learning_rate": 0.001,
+            "weight_decay": 0.0,
+            "patience": 5,
+            "device": "cpu",
+            "early_stopping": true,
+            "restore_best": true,
+            "monitor_train": true,
+            "returned_epoch": 3
+          },
+          "partition_sizes": {
+            "train": 54958,
+            "validation": 7328,
+            "nonmembers": 10992
+          }
+        },
+        "same_year_mlp_02": {
+          "seed": 52,
+          "training": {
+            "input_dim": 2634,
+            "num_classes": 2,
+            "hidden_dims": [
+              512,
+              256,
+              128
+            ],
+            "dropout": 0.0,
+            "best_epoch": 2,
+            "seed": 52,
+            "epochs_requested": 100,
+            "epochs_run": 7,
+            "batch_size": 256,
+            "learning_rate": 0.001,
+            "weight_decay": 0.0,
+            "patience": 5,
+            "device": "cpu",
+            "early_stopping": true,
+            "restore_best": true,
+            "monitor_train": true,
+            "returned_epoch": 2
+          },
+          "partition_sizes": {
+            "train": 54958,
+            "validation": 7328,
+            "nonmembers": 10992
+          }
+        },
+        "same_year_mlp_03": {
+          "seed": 62,
+          "training": {
+            "input_dim": 2636,
+            "num_classes": 2,
+            "hidden_dims": [
+              512,
+              256,
+              128
+            ],
+            "dropout": 0.0,
+            "best_epoch": 1,
+            "seed": 62,
+            "epochs_requested": 100,
+            "epochs_run": 6,
+            "batch_size": 256,
+            "learning_rate": 0.001,
+            "weight_decay": 0.0,
+            "patience": 5,
+            "device": "cpu",
+            "early_stopping": true,
+            "restore_best": true,
+            "monitor_train": true,
+            "returned_epoch": 1
+          },
+          "partition_sizes": {
+            "train": 54958,
+            "validation": 7328,
+            "nonmembers": 10992
+          }
+        },
+        "same_year_mlp_04": {
+          "seed": 72,
+          "training": {
+            "input_dim": 2633,
+            "num_classes": 2,
+            "hidden_dims": [
+              512,
+              256,
+              128
+            ],
+            "dropout": 0.0,
+            "best_epoch": 2,
+            "seed": 72,
+            "epochs_requested": 100,
+            "epochs_run": 7,
+            "batch_size": 256,
+            "learning_rate": 0.001,
+            "weight_decay": 0.0,
+            "patience": 5,
+            "device": "cpu",
+            "early_stopping": true,
+            "restore_best": true,
+            "monitor_train": true,
+            "returned_epoch": 2
+          },
+          "partition_sizes": {
+            "train": 54958,
+            "validation": 7328,
+            "nonmembers": 10992
+          }
+        },
+        "same_year_mlp_05": {
+          "seed": 82,
+          "training": {
+            "input_dim": 2622,
+            "num_classes": 2,
+            "hidden_dims": [
+              512,
+              256,
+              128
+            ],
+            "dropout": 0.0,
+            "best_epoch": 3,
+            "seed": 82,
+            "epochs_requested": 100,
+            "epochs_run": 8,
+            "batch_size": 256,
+            "learning_rate": 0.001,
+            "weight_decay": 0.0,
+            "patience": 5,
+            "device": "cpu",
+            "early_stopping": true,
+            "restore_best": true,
+            "monitor_train": true,
+            "returned_epoch": 3
+          },
+          "partition_sizes": {
+            "train": 54958,
+            "validation": 7328,
+            "nonmembers": 10992
+          }
+        },
+        "same_year_mlp_06": {
+          "seed": 92,
+          "training": {
+            "input_dim": 2626,
+            "num_classes": 2,
+            "hidden_dims": [
+              512,
+              256,
+              128
+            ],
+            "dropout": 0.0,
+            "best_epoch": 2,
+            "seed": 92,
+            "epochs_requested": 100,
+            "epochs_run": 7,
+            "batch_size": 256,
+            "learning_rate": 0.001,
+            "weight_decay": 0.0,
+            "patience": 5,
+            "device": "cpu",
+            "early_stopping": true,
+            "restore_best": true,
+            "monitor_train": true,
+            "returned_epoch": 2
+          },
+          "partition_sizes": {
+            "train": 54958,
+            "validation": 7328,
+            "nonmembers": 10992
+          }
+        },
+        "same_year_mlp_07": {
+          "seed": 102,
+          "training": {
+            "input_dim": 2633,
+            "num_classes": 2,
+            "hidden_dims": [
+              512,
+              256,
+              128
+            ],
+            "dropout": 0.0,
+            "best_epoch": 3,
+            "seed": 102,
+            "epochs_requested": 100,
+            "epochs_run": 8,
+            "batch_size": 256,
+            "learning_rate": 0.001,
+            "weight_decay": 0.0,
+            "patience": 5,
+            "device": "cpu",
+            "early_stopping": true,
+            "restore_best": true,
+            "monitor_train": true,
+            "returned_epoch": 3
+          },
+          "partition_sizes": {
+            "train": 54958,
+            "validation": 7328,
+            "nonmembers": 10992
+          }
+        },
+        "same_year_mlp_08": {
+          "seed": 112,
+          "training": {
+            "input_dim": 2636,
+            "num_classes": 2,
+            "hidden_dims": [
+              512,
+              256,
+              128
+            ],
+            "dropout": 0.0,
+            "best_epoch": 2,
+            "seed": 112,
+            "epochs_requested": 100,
+            "epochs_run": 7,
+            "batch_size": 256,
+            "learning_rate": 0.001,
+            "weight_decay": 0.0,
+            "patience": 5,
+            "device": "cpu",
+            "early_stopping": true,
+            "restore_best": true,
+            "monitor_train": true,
+            "returned_epoch": 2
+          },
+          "partition_sizes": {
+            "train": 54958,
+            "validation": 7328,
+            "nonmembers": 10992
+          }
+        },
+        "same_year_mlp_09": {
+          "seed": 122,
+          "training": {
+            "input_dim": 2622,
+            "num_classes": 2,
+            "hidden_dims": [
+              512,
+              256,
+              128
+            ],
+            "dropout": 0.0,
+            "best_epoch": 2,
+            "seed": 122,
+            "epochs_requested": 100,
+            "epochs_run": 7,
+            "batch_size": 256,
+            "learning_rate": 0.001,
+            "weight_decay": 0.0,
+            "patience": 5,
+            "device": "cpu",
+            "early_stopping": true,
+            "restore_best": true,
+            "monitor_train": true,
+            "returned_epoch": 2
+          },
+          "partition_sizes": {
+            "train": 54958,
+            "validation": 7328,
+            "nonmembers": 10992
+          }
+        },
+        "same_year_mlp_10": {
+          "seed": 132,
+          "training": {
+            "input_dim": 2624,
+            "num_classes": 2,
+            "hidden_dims": [
+              512,
+              256,
+              128
+            ],
+            "dropout": 0.0,
+            "best_epoch": 2,
+            "seed": 132,
+            "epochs_requested": 100,
+            "epochs_run": 7,
+            "batch_size": 256,
+            "learning_rate": 0.001,
+            "weight_decay": 0.0,
+            "patience": 5,
+            "device": "cpu",
+            "early_stopping": true,
+            "restore_best": true,
+            "monitor_train": true,
+            "returned_epoch": 2
+          },
+          "partition_sizes": {
+            "train": 54958,
+            "validation": 7328,
+            "nonmembers": 10992
+          }
+        },
+        "same_year_mlp_11": {
+          "seed": 142,
+          "training": {
+            "input_dim": 2629,
+            "num_classes": 2,
+            "hidden_dims": [
+              512,
+              256,
+              128
+            ],
+            "dropout": 0.0,
+            "best_epoch": 2,
+            "seed": 142,
+            "epochs_requested": 100,
+            "epochs_run": 7,
+            "batch_size": 256,
+            "learning_rate": 0.001,
+            "weight_decay": 0.0,
+            "patience": 5,
+            "device": "cpu",
+            "early_stopping": true,
+            "restore_best": true,
+            "monitor_train": true,
+            "returned_epoch": 2
+          },
+          "partition_sizes": {
+            "train": 54958,
+            "validation": 7328,
+            "nonmembers": 10992
+          }
+        },
+        "same_year_mlp_12": {
+          "seed": 152,
+          "training": {
+            "input_dim": 2630,
+            "num_classes": 2,
+            "hidden_dims": [
+              512,
+              256,
+              128
+            ],
+            "dropout": 0.0,
+            "best_epoch": 2,
+            "seed": 152,
+            "epochs_requested": 100,
+            "epochs_run": 7,
+            "batch_size": 256,
+            "learning_rate": 0.001,
+            "weight_decay": 0.0,
+            "patience": 5,
+            "device": "cpu",
+            "early_stopping": true,
+            "restore_best": true,
+            "monitor_train": true,
+            "returned_epoch": 2
+          },
+          "partition_sizes": {
+            "train": 54958,
+            "validation": 7328,
+            "nonmembers": 10992
+          }
+        },
+        "same_year_mlp_13": {
+          "seed": 162,
+          "training": {
+            "input_dim": 2634,
+            "num_classes": 2,
+            "hidden_dims": [
+              512,
+              256,
+              128
+            ],
+            "dropout": 0.0,
+            "best_epoch": 3,
+            "seed": 162,
+            "epochs_requested": 100,
+            "epochs_run": 8,
+            "batch_size": 256,
+            "learning_rate": 0.001,
+            "weight_decay": 0.0,
+            "patience": 5,
+            "device": "cpu",
+            "early_stopping": true,
+            "restore_best": true,
+            "monitor_train": true,
+            "returned_epoch": 3
+          },
+          "partition_sizes": {
+            "train": 54958,
+            "validation": 7328,
+            "nonmembers": 10992
+          }
+        },
+        "same_year_mlp_14": {
+          "seed": 172,
+          "training": {
+            "input_dim": 2638,
+            "num_classes": 2,
+            "hidden_dims": [
+              512,
+              256,
+              128
+            ],
+            "dropout": 0.0,
+            "best_epoch": 3,
+            "seed": 172,
+            "epochs_requested": 100,
+            "epochs_run": 8,
+            "batch_size": 256,
+            "learning_rate": 0.001,
+            "weight_decay": 0.0,
+            "patience": 5,
+            "device": "cpu",
+            "early_stopping": true,
+            "restore_best": true,
+            "monitor_train": true,
+            "returned_epoch": 3
+          },
+          "partition_sizes": {
+            "train": 54958,
+            "validation": 7328,
+            "nonmembers": 10992
+          }
+        },
+        "same_year_mlp_15": {
+          "seed": 182,
+          "training": {
+            "input_dim": 2630,
+            "num_classes": 2,
+            "hidden_dims": [
+              512,
+              256,
+              128
+            ],
+            "dropout": 0.0,
+            "best_epoch": 2,
+            "seed": 182,
+            "epochs_requested": 100,
+            "epochs_run": 7,
+            "batch_size": 256,
+            "learning_rate": 0.001,
+            "weight_decay": 0.0,
+            "patience": 5,
+            "device": "cpu",
+            "early_stopping": true,
+            "restore_best": true,
+            "monitor_train": true,
+            "returned_epoch": 2
+          },
+          "partition_sizes": {
+            "train": 54958,
+            "validation": 7328,
+            "nonmembers": 10992
+          }
+        },
+        "same_year_mlp_16": {
+          "seed": 192,
+          "training": {
+            "input_dim": 2629,
+            "num_classes": 2,
+            "hidden_dims": [
+              512,
+              256,
+              128
+            ],
+            "dropout": 0.0,
+            "best_epoch": 1,
+            "seed": 192,
+            "epochs_requested": 100,
+            "epochs_run": 6,
+            "batch_size": 256,
+            "learning_rate": 0.001,
+            "weight_decay": 0.0,
+            "patience": 5,
+            "device": "cpu",
+            "early_stopping": true,
+            "restore_best": true,
+            "monitor_train": true,
+            "returned_epoch": 1
+          },
+          "partition_sizes": {
+            "train": 54958,
+            "validation": 7328,
+            "nonmembers": 10992
+          }
+        }
+      },
+      "offline_calibration_skipped_rows": 212453,
+      "offline_calibration_kept_rows": 139291,
+      "offline_out_reference_count_summary": {
+        "minimum": 3,
+        "median": 3.0,
+        "maximum": 10
+      },
+      "offline_scale": 1.9839342874173915,
+      "target_generalization": {
+        "train_accuracy": 0.84382,
+        "validation_accuracy": 0.8235,
+        "train_log_loss": 0.3521077334880829,
+        "validation_log_loss": 0.3927662968635559,
+        "validation_minus_train_log_loss": 0.04065856337547302,
+        "train_minus_validation_accuracy": 0.020320000000000005,
+        "validation_available": true,
+        "holdout_partition": "test",
+        "holdout_accuracy": 0.8253,
+        "holdout_log_loss": 0.3850441873073578,
+        "holdout_minus_train_log_loss": 0.0329364538192749,
+        "train_minus_holdout_accuracy": 0.01851999999999998
+      },
+      "rich_rf_threshold": 0.49641351147037077,
+      "rich_rf_low_fpr_threshold": 0.5461892265019582,
+      "offline_threshold": 1.6196802290416503,
+      "offline_low_fpr_threshold": 2.0111924528837233
+    },
+    "2024": {
+      "pool_records": 73591,
+      "model_protocols": {
+        "same_year_mlp_01": {
+          "seed": 42,
+          "training": {
+            "input_dim": 2641,
+            "num_classes": 2,
+            "hidden_dims": [
+              512,
+              256,
+              128
+            ],
+            "dropout": 0.0,
+            "best_epoch": 2,
+            "seed": 42,
+            "epochs_requested": 100,
+            "epochs_run": 7,
+            "batch_size": 256,
+            "learning_rate": 0.001,
+            "weight_decay": 0.0,
+            "patience": 5,
+            "device": "cpu",
+            "early_stopping": true,
+            "restore_best": true,
+            "monitor_train": true,
+            "returned_epoch": 2
+          },
+          "partition_sizes": {
+            "train": 55192,
+            "validation": 7360,
+            "nonmembers": 11039
+          }
+        },
+        "same_year_mlp_02": {
+          "seed": 52,
+          "training": {
+            "input_dim": 2644,
+            "num_classes": 2,
+            "hidden_dims": [
+              512,
+              256,
+              128
+            ],
+            "dropout": 0.0,
+            "best_epoch": 3,
+            "seed": 52,
+            "epochs_requested": 100,
+            "epochs_run": 8,
+            "batch_size": 256,
+            "learning_rate": 0.001,
+            "weight_decay": 0.0,
+            "patience": 5,
+            "device": "cpu",
+            "early_stopping": true,
+            "restore_best": true,
+            "monitor_train": true,
+            "returned_epoch": 3
+          },
+          "partition_sizes": {
+            "train": 55192,
+            "validation": 7360,
+            "nonmembers": 11039
+          }
+        },
+        "same_year_mlp_03": {
+          "seed": 62,
+          "training": {
+            "input_dim": 2648,
+            "num_classes": 2,
+            "hidden_dims": [
+              512,
+              256,
+              128
+            ],
+            "dropout": 0.0,
+            "best_epoch": 2,
+            "seed": 62,
+            "epochs_requested": 100,
+            "epochs_run": 7,
+            "batch_size": 256,
+            "learning_rate": 0.001,
+            "weight_decay": 0.0,
+            "patience": 5,
+            "device": "cpu",
+            "early_stopping": true,
+            "restore_best": true,
+            "monitor_train": true,
+            "returned_epoch": 2
+          },
+          "partition_sizes": {
+            "train": 55192,
+            "validation": 7360,
+            "nonmembers": 11039
+          }
+        },
+        "same_year_mlp_04": {
+          "seed": 72,
+          "training": {
+            "input_dim": 2638,
+            "num_classes": 2,
+            "hidden_dims": [
+              512,
+              256,
+              128
+            ],
+            "dropout": 0.0,
+            "best_epoch": 2,
+            "seed": 72,
+            "epochs_requested": 100,
+            "epochs_run": 7,
+            "batch_size": 256,
+            "learning_rate": 0.001,
+            "weight_decay": 0.0,
+            "patience": 5,
+            "device": "cpu",
+            "early_stopping": true,
+            "restore_best": true,
+            "monitor_train": true,
+            "returned_epoch": 2
+          },
+          "partition_sizes": {
+            "train": 55192,
+            "validation": 7360,
+            "nonmembers": 11039
+          }
+        },
+        "same_year_mlp_05": {
+          "seed": 82,
+          "training": {
+            "input_dim": 2636,
+            "num_classes": 2,
+            "hidden_dims": [
+              512,
+              256,
+              128
+            ],
+            "dropout": 0.0,
+            "best_epoch": 2,
+            "seed": 82,
+            "epochs_requested": 100,
+            "epochs_run": 7,
+            "batch_size": 256,
+            "learning_rate": 0.001,
+            "weight_decay": 0.0,
+            "patience": 5,
+            "device": "cpu",
+            "early_stopping": true,
+            "restore_best": true,
+            "monitor_train": true,
+            "returned_epoch": 2
+          },
+          "partition_sizes": {
+            "train": 55192,
+            "validation": 7360,
+            "nonmembers": 11039
+          }
+        },
+        "same_year_mlp_06": {
+          "seed": 92,
+          "training": {
+            "input_dim": 2643,
+            "num_classes": 2,
+            "hidden_dims": [
+              512,
+              256,
+              128
+            ],
+            "dropout": 0.0,
+            "best_epoch": 2,
+            "seed": 92,
+            "epochs_requested": 100,
+            "epochs_run": 7,
+            "batch_size": 256,
+            "learning_rate": 0.001,
+            "weight_decay": 0.0,
+            "patience": 5,
+            "device": "cpu",
+            "early_stopping": true,
+            "restore_best": true,
+            "monitor_train": true,
+            "returned_epoch": 2
+          },
+          "partition_sizes": {
+            "train": 55192,
+            "validation": 7360,
+            "nonmembers": 11039
+          }
+        },
+        "same_year_mlp_07": {
+          "seed": 102,
+          "training": {
+            "input_dim": 2635,
+            "num_classes": 2,
+            "hidden_dims": [
+              512,
+              256,
+              128
+            ],
+            "dropout": 0.0,
+            "best_epoch": 2,
+            "seed": 102,
+            "epochs_requested": 100,
+            "epochs_run": 7,
+            "batch_size": 256,
+            "learning_rate": 0.001,
+            "weight_decay": 0.0,
+            "patience": 5,
+            "device": "cpu",
+            "early_stopping": true,
+            "restore_best": true,
+            "monitor_train": true,
+            "returned_epoch": 2
+          },
+          "partition_sizes": {
+            "train": 55192,
+            "validation": 7360,
+            "nonmembers": 11039
+          }
+        },
+        "same_year_mlp_08": {
+          "seed": 112,
+          "training": {
+            "input_dim": 2644,
+            "num_classes": 2,
+            "hidden_dims": [
+              512,
+              256,
+              128
+            ],
+            "dropout": 0.0,
+            "best_epoch": 1,
+            "seed": 112,
+            "epochs_requested": 100,
+            "epochs_run": 6,
+            "batch_size": 256,
+            "learning_rate": 0.001,
+            "weight_decay": 0.0,
+            "patience": 5,
+            "device": "cpu",
+            "early_stopping": true,
+            "restore_best": true,
+            "monitor_train": true,
+            "returned_epoch": 1
+          },
+          "partition_sizes": {
+            "train": 55192,
+            "validation": 7360,
+            "nonmembers": 11039
+          }
+        },
+        "same_year_mlp_09": {
+          "seed": 122,
+          "training": {
+            "input_dim": 2632,
+            "num_classes": 2,
+            "hidden_dims": [
+              512,
+              256,
+              128
+            ],
+            "dropout": 0.0,
+            "best_epoch": 1,
+            "seed": 122,
+            "epochs_requested": 100,
+            "epochs_run": 6,
+            "batch_size": 256,
+            "learning_rate": 0.001,
+            "weight_decay": 0.0,
+            "patience": 5,
+            "device": "cpu",
+            "early_stopping": true,
+            "restore_best": true,
+            "monitor_train": true,
+            "returned_epoch": 1
+          },
+          "partition_sizes": {
+            "train": 55192,
+            "validation": 7360,
+            "nonmembers": 11039
+          }
+        },
+        "same_year_mlp_10": {
+          "seed": 132,
+          "training": {
+            "input_dim": 2637,
+            "num_classes": 2,
+            "hidden_dims": [
+              512,
+              256,
+              128
+            ],
+            "dropout": 0.0,
+            "best_epoch": 2,
+            "seed": 132,
+            "epochs_requested": 100,
+            "epochs_run": 7,
+            "batch_size": 256,
+            "learning_rate": 0.001,
+            "weight_decay": 0.0,
+            "patience": 5,
+            "device": "cpu",
+            "early_stopping": true,
+            "restore_best": true,
+            "monitor_train": true,
+            "returned_epoch": 2
+          },
+          "partition_sizes": {
+            "train": 55192,
+            "validation": 7360,
+            "nonmembers": 11039
+          }
+        },
+        "same_year_mlp_11": {
+          "seed": 142,
+          "training": {
+            "input_dim": 2632,
+            "num_classes": 2,
+            "hidden_dims": [
+              512,
+              256,
+              128
+            ],
+            "dropout": 0.0,
+            "best_epoch": 2,
+            "seed": 142,
+            "epochs_requested": 100,
+            "epochs_run": 7,
+            "batch_size": 256,
+            "learning_rate": 0.001,
+            "weight_decay": 0.0,
+            "patience": 5,
+            "device": "cpu",
+            "early_stopping": true,
+            "restore_best": true,
+            "monitor_train": true,
+            "returned_epoch": 2
+          },
+          "partition_sizes": {
+            "train": 55192,
+            "validation": 7360,
+            "nonmembers": 11039
+          }
+        },
+        "same_year_mlp_12": {
+          "seed": 152,
+          "training": {
+            "input_dim": 2645,
+            "num_classes": 2,
+            "hidden_dims": [
+              512,
+              256,
+              128
+            ],
+            "dropout": 0.0,
+            "best_epoch": 2,
+            "seed": 152,
+            "epochs_requested": 100,
+            "epochs_run": 7,
+            "batch_size": 256,
+            "learning_rate": 0.001,
+            "weight_decay": 0.0,
+            "patience": 5,
+            "device": "cpu",
+            "early_stopping": true,
+            "restore_best": true,
+            "monitor_train": true,
+            "returned_epoch": 2
+          },
+          "partition_sizes": {
+            "train": 55192,
+            "validation": 7360,
+            "nonmembers": 11039
+          }
+        },
+        "same_year_mlp_13": {
+          "seed": 162,
+          "training": {
+            "input_dim": 2638,
+            "num_classes": 2,
+            "hidden_dims": [
+              512,
+              256,
+              128
+            ],
+            "dropout": 0.0,
+            "best_epoch": 1,
+            "seed": 162,
+            "epochs_requested": 100,
+            "epochs_run": 6,
+            "batch_size": 256,
+            "learning_rate": 0.001,
+            "weight_decay": 0.0,
+            "patience": 5,
+            "device": "cpu",
+            "early_stopping": true,
+            "restore_best": true,
+            "monitor_train": true,
+            "returned_epoch": 1
+          },
+          "partition_sizes": {
+            "train": 55192,
+            "validation": 7360,
+            "nonmembers": 11039
+          }
+        },
+        "same_year_mlp_14": {
+          "seed": 172,
+          "training": {
+            "input_dim": 2641,
+            "num_classes": 2,
+            "hidden_dims": [
+              512,
+              256,
+              128
+            ],
+            "dropout": 0.0,
+            "best_epoch": 2,
+            "seed": 172,
+            "epochs_requested": 100,
+            "epochs_run": 7,
+            "batch_size": 256,
+            "learning_rate": 0.001,
+            "weight_decay": 0.0,
+            "patience": 5,
+            "device": "cpu",
+            "early_stopping": true,
+            "restore_best": true,
+            "monitor_train": true,
+            "returned_epoch": 2
+          },
+          "partition_sizes": {
+            "train": 55192,
+            "validation": 7360,
+            "nonmembers": 11039
+          }
+        },
+        "same_year_mlp_15": {
+          "seed": 182,
+          "training": {
+            "input_dim": 2639,
+            "num_classes": 2,
+            "hidden_dims": [
+              512,
+              256,
+              128
+            ],
+            "dropout": 0.0,
+            "best_epoch": 2,
+            "seed": 182,
+            "epochs_requested": 100,
+            "epochs_run": 7,
+            "batch_size": 256,
+            "learning_rate": 0.001,
+            "weight_decay": 0.0,
+            "patience": 5,
+            "device": "cpu",
+            "early_stopping": true,
+            "restore_best": true,
+            "monitor_train": true,
+            "returned_epoch": 2
+          },
+          "partition_sizes": {
+            "train": 55192,
+            "validation": 7360,
+            "nonmembers": 11039
+          }
+        },
+        "same_year_mlp_16": {
+          "seed": 192,
+          "training": {
+            "input_dim": 2632,
+            "num_classes": 2,
+            "hidden_dims": [
+              512,
+              256,
+              128
+            ],
+            "dropout": 0.0,
+            "best_epoch": 2,
+            "seed": 192,
+            "epochs_requested": 100,
+            "epochs_run": 7,
+            "batch_size": 256,
+            "learning_rate": 0.001,
+            "weight_decay": 0.0,
+            "patience": 5,
+            "device": "cpu",
+            "early_stopping": true,
+            "restore_best": true,
+            "monitor_train": true,
+            "returned_epoch": 2
+          },
+          "partition_sizes": {
+            "train": 55192,
+            "validation": 7360,
+            "nonmembers": 11039
+          }
+        }
+      },
+      "offline_calibration_skipped_rows": 212986,
+      "offline_calibration_kept_rows": 140262,
+      "offline_out_reference_count_summary": {
+        "minimum": 3,
+        "median": 3.0,
+        "maximum": 10
+      },
+      "offline_scale": 1.9104571650092201,
+      "target_generalization": {
+        "train_accuracy": 0.8407,
+        "validation_accuracy": 0.8203,
+        "train_log_loss": 0.35498225688934326,
+        "validation_log_loss": 0.3906618654727936,
+        "validation_minus_train_log_loss": 0.03567960858345032,
+        "train_minus_validation_accuracy": 0.020399999999999974,
+        "validation_available": true,
+        "holdout_partition": "test",
+        "holdout_accuracy": 0.8188,
+        "holdout_log_loss": 0.3973965048789978,
+        "holdout_minus_train_log_loss": 0.04241424798965454,
+        "train_minus_holdout_accuracy": 0.02190000000000003
+      },
+      "rich_rf_threshold": 0.4901235023400026,
+      "rich_rf_low_fpr_threshold": 0.5344814239825294,
+      "offline_threshold": 1.5929342836065894,
+      "offline_low_fpr_threshold": 1.8716714947494242
+    }
+  },
+  "checkpoints_enabled": false,
+  "logging_enabled": false,
+  "limitations": [
+    "Smaller reference training sets than target",
+    "Finite OUT reference support",
+    "Learned encoder vocabularies/input dimensions may differ",
+    "Offline rather than online LiRA",
+    "One target seed per year",
+    "Near-chance scores do not prove privacy"
+  ]
+}

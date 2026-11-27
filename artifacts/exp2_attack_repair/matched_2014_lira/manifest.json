@@ -1,0 +1,24 @@
+{
+  "auxiliary_year": 2014,
+  "target_year": 2018,
+  "reference_count": 4,
+  "reference_train_size": 145000,
+  "training": {
+    "hidden_dims": [
+      512,
+      256,
+      128
+    ],
+    "dropout": 0.0,
+    "epochs": 100,
+    "batch_size": 256,
+    "learning_rate": 0.001,
+    "weight_decay": 0.0,
+    "device": "cpu",
+    "early_stopping": false,
+    "restore_best": false,
+    "monitor_train": false
+  },
+  "target_checkpoint_sha256": "c486f40d89226f70b8bc67fc697e6fbb4e87588c0f2b46c3560ede1564e04f37",
+  "auxiliary_archive_sha256": "a0f14358e667df979c862b92f60634e441f215c53f08eb878ae52d18703225ba"
+}

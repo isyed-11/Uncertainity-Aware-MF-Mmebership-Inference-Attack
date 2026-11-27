@@ -1,0 +1,1186 @@
+{
+  "study_variant": "Fixed 100-epoch unregularized DP study",
+  "historical_reference": {
+    "target_mia_accuracy": 0.62625,
+    "source": "artifacts/exp_3_2023_2014_100000_nominal_paper_algorithms/summary.json",
+    "role": "Historical context only; not a new result or exact reproduction"
+  },
+  "accounting_calibration": "Exact private-loader steps; conservative Opacus accountant rate",
+  "execution_status": "complete",
+  "target_year": 2023,
+  "auxiliary_year": 2014,
+  "epsilon_budgets": [
+    0.5,
+    1,
+    2,
+    5,
+    10,
+    25,
+    50
+  ],
+  "delta": 1e-06,
+  "train_size": 100000,
+  "feature_count": 48,
+  "features": [
+    "AGEP",
+    "COW",
+    "SCHL",
+    "MAR",
+    "OCCP",
+    "POBP",
+    "WKHP",
+    "SEX",
+    "RAC1P",
+    "CIT",
+    "CITWP",
+    "ESR",
+    "WKL",
+    "WRK",
+    "INDP",
+    "DIS",
+    "DEAR",
+    "DEYE",
+    "DREM",
+    "DPHY",
+    "DDRS",
+    "DOUT",
+    "HICOV",
+    "HINS1",
+    "HINS2",
+    "HINS3",
+    "HINS4",
+    "HINS5",
+    "HINS6",
+    "HINS7",
+    "LANX",
+    "LANP",
+    "ENG",
+    "JWMNP",
+    "JWRIP",
+    "JWAP",
+    "JWDP",
+    "POWSP",
+    "FOD1P",
+    "FOD2P",
+    "SCH",
+    "HISP",
+    "ANC1P",
+    "ANC2P",
+    "MIL",
+    "VPS",
+    "MARHT",
+    "MARHYP"
+  ],
+  "label": "nominal PINCP > 50000",
+  "split_config": {
+    "validation_size": 10000,
+    "test_size": 10000,
+    "mia_nonmember_size": 10000,
+    "mia_member_size": 10000,
+    "seed": 42
+  },
+  "target_partition_sizes": {
+    "validation": 10000,
+    "test": 10000,
+    "mia_nonmembers": 10000,
+    "train": 100000,
+    "mia_members": 10000
+  },
+  "public_preprocessing_records": 10000,
+  "preprocessing_scope": "Fixed public 2014 subset, disjoint from shadow pool; shared by all targets",
+  "public_validation": "Fixed 2023 validation split outside protected training records",
+  "training_config": {
+    "hidden_dims": [
+      512,
+      256,
+      128
+    ],
+    "dropout": 0.0,
+    "max_epochs": 100,
+    "patience": 5,
+    "min_delta": 0.0,
+    "batch_size": 256,
+    "max_physical_batch_size": 32,
+    "learning_rate": 0.001,
+    "weight_decay": 0.0,
+    "max_grad_norm": 1.0,
+    "seed": 42,
+    "device": "cpu",
+    "selection_metric": "log_loss",
+    "strict_accounting": true,
+    "early_stopping": false,
+    "restore_best": false
+  },
+  "target_results": {
+    "non_private": {
+      "private": false,
+      "epsilon_requested": null,
+      "epsilon_fixed_schedule_bound": null,
+      "epsilon_at_stop_diagnostic": null,
+      "delta": null,
+      "accountant": null,
+      "epsilon_reporting": "Fixed maximum-schedule bound; stopped-time epsilon is diagnostic only",
+      "noise_multiplier": null,
+      "sample_rate": null,
+      "sampler_sample_rate": null,
+      "accountant_sample_rate": null,
+      "bound_sample_rate": null,
+      "strict_accounting": true,
+      "max_grad_norm": null,
+      "planned_optimizer_steps": 39100,
+      "actual_optimizer_steps": 39100,
+      "max_epochs": 100,
+      "epochs_run": 100,
+      "best_epoch": 2,
+      "returned_epoch": 100,
+      "patience": 5,
+      "min_delta": 0.0,
+      "selection_metric": "log_loss",
+      "selection_rule": "Final epoch; validation does not select weights",
+      "input_dim": 2250,
+      "hidden_dims": [
+        512,
+        256,
+        128
+      ],
+      "dropout": 0.0,
+      "batch_size": 256,
+      "max_physical_batch_size": 32,
+      "learning_rate": 0.001,
+      "weight_decay": 0.0,
+      "optimizer": "Adam",
+      "seed": 42,
+      "device": "cpu",
+      "training_seconds": 245.35083707608283,
+      "secure_mode": null,
+      "private_rng": null,
+      "early_stopping": false,
+      "restore_best": false,
+      "validation_scope": "Fixed public held-out records outside protected training set",
+      "income_metrics": {
+        "train": {
+          "accuracy": 0.99841,
+          "roc_auc": 0.9999918931220929,
+          "log_loss": 0.004461667034775019
+        },
+        "validation": {
+          "accuracy": 0.7813,
+          "roc_auc": 0.857534061148786,
+          "log_loss": 1.9408026933670044
+        },
+        "test": {
+          "accuracy": 0.7854,
+          "roc_auc": 0.8618062648961525,
+          "log_loss": 1.9085990190505981
+        }
+      },
+      "membership_metrics": {
+        "records": 20000,
+        "members": 10000,
+        "accuracy": 0.57955,
+        "balanced_accuracy": 0.57955,
+        "roc_auc": 0.60953137,
+        "tpr_at_1pct_fpr_roc": 0.0016,
+        "threshold": 0.5006193936026083,
+        "tn": 4624,
+        "fp": 5376,
+        "fn": 3033,
+        "tp": 6967,
+        "shadow_selected_threshold": 0.5988385780404717,
+        "tpr_at_shadow_threshold": 0.0001,
+        "fpr_at_shadow_threshold": 0.0014
+      },
+      "query_audit": {
+        "record_queries": 523901,
+        "max_record_queries": 820000,
+        "walk_censored_fraction": 0.44065,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      }
+    },
+    "epsilon_0.5": {
+      "private": true,
+      "epsilon_requested": 0.5,
+      "epsilon_fixed_schedule_bound": 0.49153704549908755,
+      "epsilon_at_stop_diagnostic": 0.49153704549908755,
+      "delta": 1e-06,
+      "accountant": "rdp",
+      "epsilon_reporting": "Fixed maximum-schedule bound; stopped-time epsilon is diagnostic only",
+      "noise_multiplier": 4.53125,
+      "sample_rate": 0.0025575447570332483,
+      "sampler_sample_rate": 0.0025575447570332483,
+      "accountant_sample_rate": 0.002564102564102564,
+      "bound_sample_rate": 0.002564102564102564,
+      "strict_accounting": true,
+      "max_grad_norm": 1.0,
+      "planned_optimizer_steps": 39000,
+      "actual_optimizer_steps": 39000,
+      "max_epochs": 100,
+      "epochs_run": 100,
+      "best_epoch": 1,
+      "returned_epoch": 100,
+      "patience": 5,
+      "min_delta": 0.0,
+      "selection_metric": "log_loss",
+      "selection_rule": "Final epoch; validation does not select weights",
+      "input_dim": 2250,
+      "hidden_dims": [
+        512,
+        256,
+        128
+      ],
+      "dropout": 0.0,
+      "batch_size": 256,
+      "max_physical_batch_size": 32,
+      "learning_rate": 0.001,
+      "weight_decay": 0.0,
+      "optimizer": "Adam",
+      "seed": 42,
+      "device": "cpu",
+      "training_seconds": 15537.832502411678,
+      "secure_mode": false,
+      "private_rng": "Independent nondeterministic sampling/noise generators; seeds not saved",
+      "early_stopping": false,
+      "restore_best": false,
+      "validation_scope": "Fixed public held-out records outside protected training set",
+      "income_metrics": {
+        "train": {
+          "accuracy": 0.79005,
+          "roc_auc": 0.8684228259433574,
+          "log_loss": 1.0456725358963013
+        },
+        "validation": {
+          "accuracy": 0.7837,
+          "roc_auc": 0.8636778240609184,
+          "log_loss": 1.0659691095352173
+        },
+        "test": {
+          "accuracy": 0.7899,
+          "roc_auc": 0.8676146043735488,
+          "log_loss": 1.055786371231079
+        }
+      },
+      "membership_metrics": {
+        "records": 20000,
+        "members": 10000,
+        "accuracy": 0.50575,
+        "balanced_accuracy": 0.5057499999999999,
+        "roc_auc": 0.5069173899999999,
+        "tpr_at_1pct_fpr_roc": 0.0136,
+        "threshold": 0.5006193936026083,
+        "tn": 4960,
+        "fp": 5040,
+        "fn": 4845,
+        "tp": 5155,
+        "shadow_selected_threshold": 0.5988385780404717,
+        "tpr_at_shadow_threshold": 0.0038,
+        "fpr_at_shadow_threshold": 0.0037
+      },
+      "query_audit": {
+        "record_queries": 523225,
+        "max_record_queries": 820000,
+        "walk_censored_fraction": 0.42325,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      }
+    },
+    "epsilon_1": {
+      "private": true,
+      "epsilon_requested": 1,
+      "epsilon_fixed_schedule_bound": 0.9938258828556501,
+      "epsilon_at_stop_diagnostic": 0.9938258828556501,
+      "delta": 1e-06,
+      "accountant": "rdp",
+      "epsilon_reporting": "Fixed maximum-schedule bound; stopped-time epsilon is diagnostic only",
+      "noise_multiplier": 2.421875,
+      "sample_rate": 0.0025575447570332483,
+      "sampler_sample_rate": 0.0025575447570332483,
+      "accountant_sample_rate": 0.002564102564102564,
+      "bound_sample_rate": 0.002564102564102564,
+      "strict_accounting": true,
+      "max_grad_norm": 1.0,
+      "planned_optimizer_steps": 39000,
+      "actual_optimizer_steps": 39000,
+      "max_epochs": 100,
+      "epochs_run": 100,
+      "best_epoch": 1,
+      "returned_epoch": 100,
+      "patience": 5,
+      "min_delta": 0.0,
+      "selection_metric": "log_loss",
+      "selection_rule": "Final epoch; validation does not select weights",
+      "input_dim": 2250,
+      "hidden_dims": [
+        512,
+        256,
+        128
+      ],
+      "dropout": 0.0,
+      "batch_size": 256,
+      "max_physical_batch_size": 32,
+      "learning_rate": 0.001,
+      "weight_decay": 0.0,
+      "optimizer": "Adam",
+      "seed": 42,
+      "device": "cpu",
+      "training_seconds": 14121.851754656993,
+      "secure_mode": false,
+      "private_rng": "Independent nondeterministic sampling/noise generators; seeds not saved",
+      "early_stopping": false,
+      "restore_best": false,
+      "validation_scope": "Fixed public held-out records outside protected training set",
+      "income_metrics": {
+        "train": {
+          "accuracy": 0.80238,
+          "roc_auc": 0.8771513796247581,
+          "log_loss": 0.9770374298095703
+        },
+        "validation": {
+          "accuracy": 0.7942,
+          "roc_auc": 0.8684257726799122,
+          "log_loss": 1.0240623950958252
+        },
+        "test": {
+          "accuracy": 0.7999,
+          "roc_auc": 0.8736202658715224,
+          "log_loss": 0.9942231178283691
+        }
+      },
+      "membership_metrics": {
+        "records": 20000,
+        "members": 10000,
+        "accuracy": 0.4998,
+        "balanced_accuracy": 0.4998,
+        "roc_auc": 0.49969459000000005,
+        "tpr_at_1pct_fpr_roc": 0.0106,
+        "threshold": 0.5006193936026083,
+        "tn": 4611,
+        "fp": 5389,
+        "fn": 4615,
+        "tp": 5385,
+        "shadow_selected_threshold": 0.5988385780404717,
+        "tpr_at_shadow_threshold": 0.0034,
+        "fpr_at_shadow_threshold": 0.0035
+      },
+      "query_audit": {
+        "record_queries": 549011,
+        "max_record_queries": 820000,
+        "walk_censored_fraction": 0.456,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      }
+    },
+    "epsilon_2": {
+      "private": true,
+      "epsilon_requested": 2,
+      "epsilon_fixed_schedule_bound": 1.9959869994231603,
+      "epsilon_at_stop_diagnostic": 1.9959869994231603,
+      "delta": 1e-06,
+      "accountant": "rdp",
+      "epsilon_reporting": "Fixed maximum-schedule bound; stopped-time epsilon is diagnostic only",
+      "noise_multiplier": 1.396484375,
+      "sample_rate": 0.0025575447570332483,
+      "sampler_sample_rate": 0.0025575447570332483,
+      "accountant_sample_rate": 0.002564102564102564,
+      "bound_sample_rate": 0.002564102564102564,
+      "strict_accounting": true,
+      "max_grad_norm": 1.0,
+      "planned_optimizer_steps": 39000,
+      "actual_optimizer_steps": 39000,
+      "max_epochs": 100,
+      "epochs_run": 100,
+      "best_epoch": 1,
+      "returned_epoch": 100,
+      "patience": 5,
+      "min_delta": 0.0,
+      "selection_metric": "log_loss",
+      "selection_rule": "Final epoch; validation does not select weights",
+      "input_dim": 2250,
+      "hidden_dims": [
+        512,
+        256,
+        128
+      ],
+      "dropout": 0.0,
+      "batch_size": 256,
+      "max_physical_batch_size": 32,
+      "learning_rate": 0.001,
+      "weight_decay": 0.0,
+      "optimizer": "Adam",
+      "seed": 42,
+      "device": "cpu",
+      "training_seconds": 15728.69471465284,
+      "secure_mode": false,
+      "private_rng": "Independent nondeterministic sampling/noise generators; seeds not saved",
+      "early_stopping": false,
+      "restore_best": false,
+      "validation_scope": "Fixed public held-out records outside protected training set",
+      "income_metrics": {
+        "train": {
+          "accuracy": 0.80953,
+          "roc_auc": 0.8838919168013204,
+          "log_loss": 0.89927077293396
+        },
+        "validation": {
+          "accuracy": 0.8004,
+          "roc_auc": 0.8782121728926503,
+          "log_loss": 0.9287826418876648
+        },
+        "test": {
+          "accuracy": 0.799,
+          "roc_auc": 0.8775647662632066,
+          "log_loss": 0.9451611042022705
+        }
+      },
+      "membership_metrics": {
+        "records": 20000,
+        "members": 10000,
+        "accuracy": 0.5016,
+        "balanced_accuracy": 0.5016,
+        "roc_auc": 0.503518215,
+        "tpr_at_1pct_fpr_roc": 0.0093,
+        "threshold": 0.5006193936026083,
+        "tn": 4585,
+        "fp": 5415,
+        "fn": 4553,
+        "tp": 5447,
+        "shadow_selected_threshold": 0.5988385780404717,
+        "tpr_at_shadow_threshold": 0.0038,
+        "fpr_at_shadow_threshold": 0.0047
+      },
+      "query_audit": {
+        "record_queries": 557536,
+        "max_record_queries": 820000,
+        "walk_censored_fraction": 0.482275,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      }
+    },
+    "epsilon_5": {
+      "private": true,
+      "epsilon_requested": 5,
+      "epsilon_fixed_schedule_bound": 4.993632684772324,
+      "epsilon_at_stop_diagnostic": 4.993632684772324,
+      "delta": 1e-06,
+      "accountant": "rdp",
+      "epsilon_reporting": "Fixed maximum-schedule bound; stopped-time epsilon is diagnostic only",
+      "noise_multiplier": 0.8270263671875,
+      "sample_rate": 0.0025575447570332483,
+      "sampler_sample_rate": 0.0025575447570332483,
+      "accountant_sample_rate": 0.002564102564102564,
+      "bound_sample_rate": 0.002564102564102564,
+      "strict_accounting": true,
+      "max_grad_norm": 1.0,
+      "planned_optimizer_steps": 39000,
+      "actual_optimizer_steps": 39000,
+      "max_epochs": 100,
+      "epochs_run": 100,
+      "best_epoch": 4,
+      "returned_epoch": 100,
+      "patience": 5,
+      "min_delta": 0.0,
+      "selection_metric": "log_loss",
+      "selection_rule": "Final epoch; validation does not select weights",
+      "input_dim": 2250,
+      "hidden_dims": [
+        512,
+        256,
+        128
+      ],
+      "dropout": 0.0,
+      "batch_size": 256,
+      "max_physical_batch_size": 32,
+      "learning_rate": 0.001,
+      "weight_decay": 0.0,
+      "optimizer": "Adam",
+      "seed": 42,
+      "device": "cpu",
+      "training_seconds": 15046.940121041145,
+      "secure_mode": false,
+      "private_rng": "Independent nondeterministic sampling/noise generators; seeds not saved",
+      "early_stopping": false,
+      "restore_best": false,
+      "validation_scope": "Fixed public held-out records outside protected training set",
+      "income_metrics": {
+        "train": {
+          "accuracy": 0.81782,
+          "roc_auc": 0.8900554222326076,
+          "log_loss": 0.8447686433792114
+        },
+        "validation": {
+          "accuracy": 0.806,
+          "roc_auc": 0.8797416285542765,
+          "log_loss": 0.8995558619499207
+        },
+        "test": {
+          "accuracy": 0.8077,
+          "roc_auc": 0.8818065496990688,
+          "log_loss": 0.8957727551460266
+        }
+      },
+      "membership_metrics": {
+        "records": 20000,
+        "members": 10000,
+        "accuracy": 0.501,
+        "balanced_accuracy": 0.501,
+        "roc_auc": 0.5032622699999999,
+        "tpr_at_1pct_fpr_roc": 0.0114,
+        "threshold": 0.5006193936026083,
+        "tn": 4826,
+        "fp": 5174,
+        "fn": 4806,
+        "tp": 5194,
+        "shadow_selected_threshold": 0.5988385780404717,
+        "tpr_at_shadow_threshold": 0.0042,
+        "fpr_at_shadow_threshold": 0.0023
+      },
+      "query_audit": {
+        "record_queries": 579064,
+        "max_record_queries": 820000,
+        "walk_censored_fraction": 0.5111,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      }
+    },
+    "epsilon_10": {
+      "private": true,
+      "epsilon_requested": 10,
+      "epsilon_fixed_schedule_bound": 9.991104099483632,
+      "epsilon_at_stop_diagnostic": 9.991104099483632,
+      "delta": 1e-06,
+      "accountant": "rdp",
+      "epsilon_reporting": "Fixed maximum-schedule bound; stopped-time epsilon is diagnostic only",
+      "noise_multiplier": 0.64697265625,
+      "sample_rate": 0.0025575447570332483,
+      "sampler_sample_rate": 0.0025575447570332483,
+      "accountant_sample_rate": 0.002564102564102564,
+      "bound_sample_rate": 0.002564102564102564,
+      "strict_accounting": true,
+      "max_grad_norm": 1.0,
+      "planned_optimizer_steps": 39000,
+      "actual_optimizer_steps": 39000,
+      "max_epochs": 100,
+      "epochs_run": 100,
+      "best_epoch": 1,
+      "returned_epoch": 100,
+      "patience": 5,
+      "min_delta": 0.0,
+      "selection_metric": "log_loss",
+      "selection_rule": "Final epoch; validation does not select weights",
+      "input_dim": 2250,
+      "hidden_dims": [
+        512,
+        256,
+        128
+      ],
+      "dropout": 0.0,
+      "batch_size": 256,
+      "max_physical_batch_size": 32,
+      "learning_rate": 0.001,
+      "weight_decay": 0.0,
+      "optimizer": "Adam",
+      "seed": 42,
+      "device": "cpu",
+      "training_seconds": 15041.16678219894,
+      "secure_mode": false,
+      "private_rng": "Independent nondeterministic sampling/noise generators; seeds not saved",
+      "early_stopping": false,
+      "restore_best": false,
+      "validation_scope": "Fixed public held-out records outside protected training set",
+      "income_metrics": {
+        "train": {
+          "accuracy": 0.82109,
+          "roc_auc": 0.8934799435422573,
+          "log_loss": 0.8592090010643005
+        },
+        "validation": {
+          "accuracy": 0.8065,
+          "roc_auc": 0.8804525158337623,
+          "log_loss": 0.9354270696640015
+        },
+        "test": {
+          "accuracy": 0.8113,
+          "roc_auc": 0.8845034973158125,
+          "log_loss": 0.9243997931480408
+        }
+      },
+      "membership_metrics": {
+        "records": 20000,
+        "members": 10000,
+        "accuracy": 0.5021,
+        "balanced_accuracy": 0.5021,
+        "roc_auc": 0.5038246300000001,
+        "tpr_at_1pct_fpr_roc": 0.0094,
+        "threshold": 0.5006193936026083,
+        "tn": 4846,
+        "fp": 5154,
+        "fn": 4804,
+        "tp": 5196,
+        "shadow_selected_threshold": 0.5988385780404717,
+        "tpr_at_shadow_threshold": 0.003,
+        "fpr_at_shadow_threshold": 0.003
+      },
+      "query_audit": {
+        "record_queries": 559710,
+        "max_record_queries": 820000,
+        "walk_censored_fraction": 0.478,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      }
+    },
+    "epsilon_25": {
+      "private": true,
+      "epsilon_requested": 25,
+      "epsilon_fixed_schedule_bound": 24.997074905006645,
+      "epsilon_at_stop_diagnostic": 24.997074905006645,
+      "delta": 1e-06,
+      "accountant": "rdp",
+      "epsilon_reporting": "Fixed maximum-schedule bound; stopped-time epsilon is diagnostic only",
+      "noise_multiplier": 0.5055618286132812,
+      "sample_rate": 0.0025575447570332483,
+      "sampler_sample_rate": 0.0025575447570332483,
+      "accountant_sample_rate": 0.002564102564102564,
+      "bound_sample_rate": 0.002564102564102564,
+      "strict_accounting": true,
+      "max_grad_norm": 1.0,
+      "planned_optimizer_steps": 39000,
+      "actual_optimizer_steps": 39000,
+      "max_epochs": 100,
+      "epochs_run": 100,
+      "best_epoch": 2,
+      "returned_epoch": 100,
+      "patience": 5,
+      "min_delta": 0.0,
+      "selection_metric": "log_loss",
+      "selection_rule": "Final epoch; validation does not select weights",
+      "input_dim": 2250,
+      "hidden_dims": [
+        512,
+        256,
+        128
+      ],
+      "dropout": 0.0,
+      "batch_size": 256,
+      "max_physical_batch_size": 32,
+      "learning_rate": 0.001,
+      "weight_decay": 0.0,
+      "optimizer": "Adam",
+      "seed": 42,
+      "device": "cpu",
+      "training_seconds": 15142.018087591976,
+      "secure_mode": false,
+      "private_rng": "Independent nondeterministic sampling/noise generators; seeds not saved",
+      "early_stopping": false,
+      "restore_best": false,
+      "validation_scope": "Fixed public held-out records outside protected training set",
+      "income_metrics": {
+        "train": {
+          "accuracy": 0.82628,
+          "roc_auc": 0.8986329104622697,
+          "log_loss": 0.7957941889762878
+        },
+        "validation": {
+          "accuracy": 0.8067,
+          "roc_auc": 0.8822880946300891,
+          "log_loss": 0.8864378929138184
+        },
+        "test": {
+          "accuracy": 0.812,
+          "roc_auc": 0.8871345442577332,
+          "log_loss": 0.8716005682945251
+        }
+      },
+      "membership_metrics": {
+        "records": 20000,
+        "members": 10000,
+        "accuracy": 0.50795,
+        "balanced_accuracy": 0.50795,
+        "roc_auc": 0.512067725,
+        "tpr_at_1pct_fpr_roc": 0.0092,
+        "threshold": 0.5006193936026083,
+        "tn": 4897,
+        "fp": 5103,
+        "fn": 4738,
+        "tp": 5262,
+        "shadow_selected_threshold": 0.5988385780404717,
+        "tpr_at_shadow_threshold": 0.0026,
+        "fpr_at_shadow_threshold": 0.0034
+      },
+      "query_audit": {
+        "record_queries": 562596,
+        "max_record_queries": 820000,
+        "walk_censored_fraction": 0.47975,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      }
+    },
+    "epsilon_50": {
+      "private": true,
+      "epsilon_requested": 50,
+      "epsilon_fixed_schedule_bound": 49.99275118453144,
+      "epsilon_at_stop_diagnostic": 49.99275118453144,
+      "delta": 1e-06,
+      "accountant": "rdp",
+      "epsilon_reporting": "Fixed maximum-schedule bound; stopped-time epsilon is diagnostic only",
+      "noise_multiplier": 0.4286766052246094,
+      "sample_rate": 0.0025575447570332483,
+      "sampler_sample_rate": 0.0025575447570332483,
+      "accountant_sample_rate": 0.002564102564102564,
+      "bound_sample_rate": 0.002564102564102564,
+      "strict_accounting": true,
+      "max_grad_norm": 1.0,
+      "planned_optimizer_steps": 39000,
+      "actual_optimizer_steps": 39000,
+      "max_epochs": 100,
+      "epochs_run": 100,
+      "best_epoch": 2,
+      "returned_epoch": 100,
+      "patience": 5,
+      "min_delta": 0.0,
+      "selection_metric": "log_loss",
+      "selection_rule": "Final epoch; validation does not select weights",
+      "input_dim": 2250,
+      "hidden_dims": [
+        512,
+        256,
+        128
+      ],
+      "dropout": 0.0,
+      "batch_size": 256,
+      "max_physical_batch_size": 32,
+      "learning_rate": 0.001,
+      "weight_decay": 0.0,
+      "optimizer": "Adam",
+      "seed": 42,
+      "device": "cpu",
+      "training_seconds": 15225.766361412127,
+      "secure_mode": false,
+      "private_rng": "Independent nondeterministic sampling/noise generators; seeds not saved",
+      "early_stopping": false,
+      "restore_best": false,
+      "validation_scope": "Fixed public held-out records outside protected training set",
+      "income_metrics": {
+        "train": {
+          "accuracy": 0.8296,
+          "roc_auc": 0.9020918221024103,
+          "log_loss": 0.8323740363121033
+        },
+        "validation": {
+          "accuracy": 0.8093,
+          "roc_auc": 0.886152154198059,
+          "log_loss": 0.9410510063171387
+        },
+        "test": {
+          "accuracy": 0.8135,
+          "roc_auc": 0.887029263179655,
+          "log_loss": 0.9294232130050659
+        }
+      },
+      "membership_metrics": {
+        "records": 20000,
+        "members": 10000,
+        "accuracy": 0.50405,
+        "balanced_accuracy": 0.50405,
+        "roc_auc": 0.5085615450000001,
+        "tpr_at_1pct_fpr_roc": 0.0099,
+        "threshold": 0.5006193936026083,
+        "tn": 4714,
+        "fp": 5286,
+        "fn": 4633,
+        "tp": 5367,
+        "shadow_selected_threshold": 0.5988385780404717,
+        "tpr_at_shadow_threshold": 0.0024,
+        "fpr_at_shadow_threshold": 0.0028
+      },
+      "query_audit": {
+        "record_queries": 566711,
+        "max_record_queries": 820000,
+        "walk_censored_fraction": 0.489175,
+        "blind_walk_enabled": true,
+        "config": {
+          "max_steps": 20,
+          "repeats": 2,
+          "categorical_change_probability": 0.05,
+          "batch_size": 512,
+          "seed": 42
+        }
+      }
+    }
+  },
+  "privacy_scope": "Individual target model; record-level DP conditional on fixed partition/public data",
+  "privacy_bound": "Fixed full 100-epoch schedule; final accountant epsilon agrees with bound",
+  "secure_mode": false,
+  "research_outputs_are_dp_releases": false,
+  "multiple_models": "Per-model bounds; joint release requires composition; control is non-private",
+  "n_shadow_models": 16,
+  "shadow_algorithms": [
+    "random_forest",
+    "gradient_boosting",
+    "xgboost"
+  ],
+  "shadow_seeds": {
+    "random_forest_01": 42,
+    "gradient_boosting_02": 52,
+    "xgboost_03": 62,
+    "random_forest_04": 72,
+    "gradient_boosting_05": 82,
+    "xgboost_06": 92,
+    "random_forest_07": 102,
+    "gradient_boosting_08": 112,
+    "xgboost_09": 122,
+    "random_forest_10": 132,
+    "gradient_boosting_11": 142,
+    "xgboost_12": 152,
+    "random_forest_13": 162,
+    "gradient_boosting_14": 172,
+    "xgboost_15": 182,
+    "random_forest_16": 192
+  },
+  "records_per_class_per_shadow": 2000,
+  "attack": "Frozen complete-feature RF transfer attack; non-DP tree shadows",
+  "attack_features": [
+    "class_scaled_logit",
+    "blind_walk",
+    "entropy",
+    "cross_entropy"
+  ],
+  "include_blind_walk": true,
+  "walk_config": {
+    "max_steps": 20,
+    "repeats": 2,
+    "categorical_change_probability": 0.05,
+    "batch_size": 512,
+    "seed": 42
+  },
+  "extra_numeric_protocol": {
+    "JWMNP": [
+      2.0,
+      0,
+      200
+    ],
+    "JWRIP": [
+      1.0,
+      1,
+      10
+    ]
+  },
+  "walk_scope": "Consistent extra numeric protocol for shadows and targets",
+  "shadow_query_audits": {
+    "random_forest_01": {
+      "record_queries": 126484,
+      "max_record_queries": 164000,
+      "walk_censored_fraction": 0.643375,
+      "blind_walk_enabled": true,
+      "config": {
+        "max_steps": 20,
+        "repeats": 2,
+        "categorical_change_probability": 0.05,
+        "batch_size": 512,
+        "seed": 42
+      }
+    },
+    "gradient_boosting_02": {
+      "record_queries": 124145,
+      "max_record_queries": 164000,
+      "walk_censored_fraction": 0.612125,
+      "blind_walk_enabled": true,
+      "config": {
+        "max_steps": 20,
+        "repeats": 2,
+        "categorical_change_probability": 0.05,
+        "batch_size": 512,
+        "seed": 42
+      }
+    },
+    "xgboost_03": {
+      "record_queries": 123980,
+      "max_record_queries": 164000,
+      "walk_censored_fraction": 0.609,
+      "blind_walk_enabled": true,
+      "config": {
+        "max_steps": 20,
+        "repeats": 2,
+        "categorical_change_probability": 0.05,
+        "batch_size": 512,
+        "seed": 42
+      }
+    },
+    "random_forest_04": {
+      "record_queries": 126149,
+      "max_record_queries": 164000,
+      "walk_censored_fraction": 0.64675,
+      "blind_walk_enabled": true,
+      "config": {
+        "max_steps": 20,
+        "repeats": 2,
+        "categorical_change_probability": 0.05,
+        "batch_size": 512,
+        "seed": 42
+      }
+    },
+    "gradient_boosting_05": {
+      "record_queries": 122939,
+      "max_record_queries": 164000,
+      "walk_censored_fraction": 0.597125,
+      "blind_walk_enabled": true,
+      "config": {
+        "max_steps": 20,
+        "repeats": 2,
+        "categorical_change_probability": 0.05,
+        "batch_size": 512,
+        "seed": 42
+      }
+    },
+    "xgboost_06": {
+      "record_queries": 123608,
+      "max_record_queries": 164000,
+      "walk_censored_fraction": 0.60875,
+      "blind_walk_enabled": true,
+      "config": {
+        "max_steps": 20,
+        "repeats": 2,
+        "categorical_change_probability": 0.05,
+        "batch_size": 512,
+        "seed": 42
+      }
+    },
+    "random_forest_07": {
+      "record_queries": 128159,
+      "max_record_queries": 164000,
+      "walk_censored_fraction": 0.65625,
+      "blind_walk_enabled": true,
+      "config": {
+        "max_steps": 20,
+        "repeats": 2,
+        "categorical_change_probability": 0.05,
+        "batch_size": 512,
+        "seed": 42
+      }
+    },
+    "gradient_boosting_08": {
+      "record_queries": 124399,
+      "max_record_queries": 164000,
+      "walk_censored_fraction": 0.612625,
+      "blind_walk_enabled": true,
+      "config": {
+        "max_steps": 20,
+        "repeats": 2,
+        "categorical_change_probability": 0.05,
+        "batch_size": 512,
+        "seed": 42
+      }
+    },
+    "xgboost_09": {
+      "record_queries": 124179,
+      "max_record_queries": 164000,
+      "walk_censored_fraction": 0.6135,
+      "blind_walk_enabled": true,
+      "config": {
+        "max_steps": 20,
+        "repeats": 2,
+        "categorical_change_probability": 0.05,
+        "batch_size": 512,
+        "seed": 42
+      }
+    },
+    "random_forest_10": {
+      "record_queries": 125843,
+      "max_record_queries": 164000,
+      "walk_censored_fraction": 0.6425,
+      "blind_walk_enabled": true,
+      "config": {
+        "max_steps": 20,
+        "repeats": 2,
+        "categorical_change_probability": 0.05,
+        "batch_size": 512,
+        "seed": 42
+      }
+    },
+    "gradient_boosting_11": {
+      "record_queries": 124371,
+      "max_record_queries": 164000,
+      "walk_censored_fraction": 0.61525,
+      "blind_walk_enabled": true,
+      "config": {
+        "max_steps": 20,
+        "repeats": 2,
+        "categorical_change_probability": 0.05,
+        "batch_size": 512,
+        "seed": 42
+      }
+    },
+    "xgboost_12": {
+      "record_queries": 125749,
+      "max_record_queries": 164000,
+      "walk_censored_fraction": 0.625125,
+      "blind_walk_enabled": true,
+      "config": {
+        "max_steps": 20,
+        "repeats": 2,
+        "categorical_change_probability": 0.05,
+        "batch_size": 512,
+        "seed": 42
+      }
+    },
+    "random_forest_13": {
+      "record_queries": 127970,
+      "max_record_queries": 164000,
+      "walk_censored_fraction": 0.65575,
+      "blind_walk_enabled": true,
+      "config": {
+        "max_steps": 20,
+        "repeats": 2,
+        "categorical_change_probability": 0.05,
+        "batch_size": 512,
+        "seed": 42
+      }
+    },
+    "gradient_boosting_14": {
+      "record_queries": 124845,
+      "max_record_queries": 164000,
+      "walk_censored_fraction": 0.62125,
+      "blind_walk_enabled": true,
+      "config": {
+        "max_steps": 20,
+        "repeats": 2,
+        "categorical_change_probability": 0.05,
+        "batch_size": 512,
+        "seed": 42
+      }
+    },
+    "xgboost_15": {
+      "record_queries": 123783,
+      "max_record_queries": 164000,
+      "walk_censored_fraction": 0.61,
+      "blind_walk_enabled": true,
+      "config": {
+        "max_steps": 20,
+        "repeats": 2,
+        "categorical_change_probability": 0.05,
+        "batch_size": 512,
+        "seed": 42
+      }
+    },
+    "random_forest_16": {
+      "record_queries": 125708,
+      "max_record_queries": 164000,
+      "walk_censored_fraction": 0.64075,
+      "blind_walk_enabled": true,
+      "config": {
+        "max_steps": 20,
+        "repeats": 2,
+        "categorical_change_probability": 0.05,
+        "batch_size": 512,
+        "seed": 42
+      }
+    }
+  },
+  "auxiliary_attack_metrics": {
+    "train": {
+      "records": 38335,
+      "members": 19035,
+      "accuracy": 0.6034955001956437,
+      "balanced_accuracy": 0.6039930262088788,
+      "roc_auc": 0.6493414000117046,
+      "tpr_at_1pct_fpr_roc": 0.0378775939059627,
+      "threshold": 0.5006193936026083,
+      "tn": 10268,
+      "fp": 9032,
+      "fn": 6168,
+      "tp": 12867,
+      "shadow_selected_threshold": 0.5988385780404717,
+      "tpr_at_shadow_threshold": 0.02085631731021802,
+      "fpr_at_shadow_threshold": 0.004715025906735751
+    },
+    "validation": {
+      "records": 12855,
+      "members": 6451,
+      "accuracy": 0.5167639050952937,
+      "balanced_accuracy": 0.5165094314503288,
+      "roc_auc": 0.5186801701502055,
+      "tpr_at_1pct_fpr_roc": 0.013176251743915672,
+      "threshold": 0.5006193936026083,
+      "tn": 2862,
+      "fp": 3542,
+      "fn": 2670,
+      "tp": 3781,
+      "shadow_selected_threshold": 0.5988385780404717,
+      "tpr_at_shadow_threshold": 0.013176251743915672,
+      "fpr_at_shadow_threshold": 0.009837601499063086
+    },
+    "test": {
+      "records": 12810,
+      "members": 6514,
+      "accuracy": 0.514207650273224,
+      "balanced_accuracy": 0.512957308449907,
+      "roc_auc": 0.5129417520820174,
+      "tpr_at_1pct_fpr_roc": 0.009978507829290759,
+      "threshold": 0.5006193936026083,
+      "tn": 2767,
+      "fp": 3529,
+      "fn": 2694,
+      "tp": 3820,
+      "shadow_selected_threshold": 0.5988385780404717,
+      "tpr_at_shadow_threshold": 0.012281240405280933,
+      "fpr_at_shadow_threshold": 0.011435832274459974
+    }
+  },
+  "accuracy_threshold": 0.5006193936026083,
+  "low_fpr_threshold": 0.5988385780404717,
+  "plots": "Equally spaced categorical requested epsilon labels; non-private horizontal reference",
+  "versions": {
+    "torch": "2.15.0+cpu",
+    "opacus": "1.6.0",
+    "numpy": "2.5.4",
+    "pandas": "3.1.1",
+    "scikit-learn": "1.9.1",
+    "xgboost": "3.4.1",
+    "matplotlib": "3.11.2"
+  },
+  "checkpoints_enabled": false,
+  "logging_enabled": false,
+  "missing_feature_experiments": false,
+  "repeated_seed_confirmation": false
+}

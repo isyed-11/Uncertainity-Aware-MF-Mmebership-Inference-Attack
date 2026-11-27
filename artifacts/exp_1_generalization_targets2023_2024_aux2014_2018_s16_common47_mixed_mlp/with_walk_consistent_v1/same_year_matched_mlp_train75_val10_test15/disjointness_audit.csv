@@ -1,0 +1,11 @@
+target_partition,target_records,shadow_pool_records,overlapping_record_ids,target_year
+validation,10000,73278,0,2023
+test,10000,73278,0,2023
+mia_nonmembers,10000,73278,0,2023
+train,100000,73278,0,2023
+mia_members,10000,73278,0,2023
+validation,10000,73591,0,2024
+test,10000,73591,0,2024
+mia_nonmembers,10000,73591,0,2024
+train,100000,73591,0,2024
+mia_members,10000,73591,0,2024

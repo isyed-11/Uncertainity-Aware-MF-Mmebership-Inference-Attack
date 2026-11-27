@@ -1,0 +1,5 @@
+{
+  "status": "superseded_by_completed_run",
+  "summary": "summary.json",
+  "note": "The corrected run completed all cells and verified probability oracle consistency for all 16 shadows."
+}

@@ -1,0 +1,232 @@
+{
+  "income_base_year": 2023,
+  "target_income_adjustment": {
+    "base_year": 2023,
+    "survey_year": 2023,
+    "label_threshold": 50000,
+    "adjinc_divisor": 1000000,
+    "cpi_series": "CPI-U US city average all items, annual NSA",
+    "cpi_values": {
+      "2014": 236.736,
+      "2023": 304.702
+    },
+    "cpi_ratio": 1.0,
+    "cpi_source": "https://www.bls.gov/cpi/tables/supplemental-files/historical-cpi-u-202401.pdf",
+    "acs_source": "https://www2.census.gov/programs-surveys/acs/tech_docs/pums/accuracy/2023AccuracyPUMS.pdf",
+    "eligibility": "Original nominal ACSIncome eligibility retained",
+    "labels_changed_from_nominal": 5642
+  },
+  "auxiliary_income_adjustment": {
+    "base_year": 2023,
+    "survey_year": 2014,
+    "label_threshold": 50000,
+    "adjinc_divisor": 1000000,
+    "cpi_series": "CPI-U US city average all items, annual NSA",
+    "cpi_values": {
+      "2014": 236.736,
+      "2023": 304.702
+    },
+    "cpi_ratio": 1.287096174641795,
+    "cpi_source": "https://www.bls.gov/cpi/tables/supplemental-files/historical-cpi-u-202401.pdf",
+    "acs_source": "https://www2.census.gov/programs-surveys/acs/tech_docs/pums/accuracy/2023AccuracyPUMS.pdf",
+    "eligibility": "Original nominal ACSIncome eligibility retained",
+    "labels_changed_from_nominal": 20825
+  },
+  "walk_numeric_protocol": {
+    "JWMNP": [
+      2.0,
+      0,
+      200
+    ],
+    "JWRIP": [
+      1.0,
+      1,
+      10
+    ]
+  },
+  "execution_status": "all_cells_completed",
+  "attack_metrics_status": "oracle_consistency_verified",
+  "target_year": 2023,
+  "auxiliary_year": 2014,
+  "n_shadow_models": 16,
+  "shadow_seeds": {
+    "xgboost_01": 42,
+    "random_forest_02": 52,
+    "mlp_03": 62,
+    "decision_tree_04": 72,
+    "logistic_regression_05": 82,
+    "xgboost_06": 92,
+    "random_forest_07": 102,
+    "mlp_08": 112,
+    "decision_tree_09": 122,
+    "logistic_regression_10": 132,
+    "xgboost_11": 142,
+    "random_forest_12": 152,
+    "mlp_13": 162,
+    "decision_tree_14": 172,
+    "logistic_regression_15": 182,
+    "xgboost_16": 192
+  },
+  "original_feature_count": 48,
+  "encoded_feature_count": 2680,
+  "train_size": 100000,
+  "split_config": {
+    "validation_size": 10000,
+    "test_size": 10000,
+    "mia_nonmember_size": 10000,
+    "mia_member_size": 10000,
+    "seed": 42
+  },
+  "training": {
+    "input_dim": 2680,
+    "num_classes": 2,
+    "hidden_dims": [
+      512,
+      256,
+      128
+    ],
+    "dropout": 0.0,
+    "best_epoch": 3,
+    "seed": 42,
+    "epochs_requested": 100,
+    "epochs_run": 100,
+    "batch_size": 256,
+    "learning_rate": 0.001,
+    "weight_decay": 0.0,
+    "patience": 5,
+    "device": "cpu",
+    "early_stopping": false,
+    "restore_best": false,
+    "monitor_train": true,
+    "returned_epoch": 100
+  },
+  "target_training_seconds": 976.094,
+  "target_metrics": {
+    "train": {
+      "accuracy": 0.99975,
+      "roc_auc": 0.999999265182367,
+      "log_loss": 0.0008348005940206349
+    },
+    "validation": {
+      "accuracy": 0.7972,
+      "roc_auc": 0.8693081114400676,
+      "log_loss": 2.006770610809326
+    },
+    "test": {
+      "accuracy": 0.7957,
+      "roc_auc": 0.8672523668588262,
+      "log_loss": 2.057203531265259
+    }
+  },
+  "shadow_attack_metrics": {
+    "train": {
+      "records": 38427,
+      "members": 19244,
+      "accuracy": 0.602388945272855,
+      "balanced_accuracy": 0.6023153611888289,
+      "roc_auc": 0.6450075969168858,
+      "tpr_at_1pct_fpr_roc": 0.03330908335065475,
+      "threshold": 0.5056246766098698,
+      "tn": 10665,
+      "fp": 8518,
+      "fn": 6761,
+      "tp": 12483,
+      "shadow_selected_threshold": 0.6049451146772035,
+      "tpr_at_shadow_threshold": 0.020681770941592185,
+      "fpr_at_shadow_threshold": 0.005994891310014075
+    },
+    "validation": {
+      "records": 12775,
+      "members": 6415,
+      "accuracy": 0.5213307240704501,
+      "balanced_accuracy": 0.5211145874694235,
+      "roc_auc": 0.5244263273479512,
+      "tpr_at_1pct_fpr_roc": 0.012782540919719408,
+      "threshold": 0.5056246766098698,
+      "tn": 2995,
+      "fp": 3365,
+      "fn": 2750,
+      "tp": 3665,
+      "shadow_selected_threshold": 0.6049451146772035,
+      "tpr_at_shadow_threshold": 0.012782540919719408,
+      "fpr_at_shadow_threshold": 0.009748427672955974
+    },
+    "test": {
+      "records": 12798,
+      "members": 6341,
+      "accuracy": 0.509063916236912,
+      "balanced_accuracy": 0.5094676764173324,
+      "roc_auc": 0.5142000492039864,
+      "tpr_at_1pct_fpr_roc": 0.011512379750827945,
+      "threshold": 0.5056246766098698,
+      "tn": 3002,
+      "fp": 3455,
+      "fn": 2828,
+      "tp": 3513,
+      "shadow_selected_threshold": 0.6049451146772035,
+      "tpr_at_shadow_threshold": 0.01561267938810913,
+      "fpr_at_shadow_threshold": 0.013938361468174074
+    }
+  },
+  "target_mia_metrics": {
+    "records": 20000,
+    "members": 10000,
+    "accuracy": 0.559,
+    "balanced_accuracy": 0.559,
+    "roc_auc": 0.616531155,
+    "tpr_at_1pct_fpr_roc": 0.0092,
+    "threshold": 0.5056246766098698,
+    "tn": 6366,
+    "fp": 3634,
+    "fn": 5186,
+    "tp": 4814,
+    "shadow_selected_threshold": 0.6049451146772035,
+    "tpr_at_shadow_threshold": 0.0808,
+    "fpr_at_shadow_threshold": 0.049,
+    "tpr_at_accuracy_threshold": 0.4814,
+    "fpr_at_accuracy_threshold": 0.3634
+  },
+  "target_query_diagnostics": {
+    "record_queries": 539484,
+    "max_record_queries": 820000,
+    "walk_censored_fraction": 0.457075,
+    "blind_walk_enabled": true,
+    "config": {
+      "max_steps": 20,
+      "repeats": 2,
+      "categorical_change_probability": 0.05,
+      "batch_size": 512,
+      "seed": 42
+    }
+  },
+  "walk_numeric_protocol_scope": "Extra target numeric fields only; not a shared shadow/target protocol",
+  "perturbation_protocol_audit": {
+    "shadow_numeric_fields": {
+      "AGEP": [
+        1.0,
+        17,
+        99
+      ],
+      "WKHP": [
+        2.0,
+        1,
+        99
+      ]
+    },
+    "target_extra_numeric_fields": {
+      "JWMNP": [
+        2.0,
+        0,
+        200
+      ],
+      "JWRIP": [
+        1.0,
+        1,
+        10
+      ]
+    },
+    "shadow_commuting_fields": "Categorical replacements, unchanged from original run",
+    "target_commuting_fields": "Numeric perturbations, unchanged from original run",
+    "correction": "Prior assistant statements that the shadow commuting perturbation protocol changed were incorrect. Original and current perturbation call sources are identical."
+  }
+}

@@ -1,0 +1,3 @@
+method,candidate,records,members,accuracy,balanced_accuracy,roc_auc,tpr_at_1pct_fpr_roc,threshold,tn,fp,fn,tp,shadow_selected_threshold,tpr_at_shadow_threshold,fpr_at_shadow_threshold
+selected,random_forest/paper/logistic,20000,10000,0.5103,0.5103,0.512591555,0.0106,0.49091945729304776,2353,7647,2147,7853,0.5674908860550368,0.0736,0.0703
+original_reference,pooled/paper/rf_d12_leaf20,20000,10000,0.5009,0.5009,0.504699845,0.0076,0.5100662237877827,6289,3711,6271,3729,0.5907931082794238,0.0099,0.0126

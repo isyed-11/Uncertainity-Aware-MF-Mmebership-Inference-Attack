@@ -1,0 +1,226 @@
+{
+  "execution_status": "all_cells_completed",
+  "target_year": 2023,
+  "target_train_size": 145000,
+  "target_features": [
+    "AGEP",
+    "COW",
+    "SCHL",
+    "MAR",
+    "OCCP",
+    "POBP",
+    "RELSHIPP",
+    "WKHP",
+    "SEX",
+    "RAC1P"
+  ],
+  "acs2014_features": [
+    "AGEP",
+    "COW",
+    "SCHL",
+    "MAR",
+    "OCCP",
+    "POBP",
+    "RELP",
+    "WKHP",
+    "SEX",
+    "RAC1P"
+  ],
+  "relationship_schema": "Native RELSHIPP for 2023; native RELP for 2014; separate encodings",
+  "target_label": "nominal PINCP > 50000",
+  "target_training": {
+    "input_dim": 818,
+    "num_classes": 2,
+    "hidden_dims": [
+      512,
+      256,
+      128
+    ],
+    "dropout": 0.0,
+    "best_epoch": 1,
+    "seed": 42,
+    "epochs_requested": 100,
+    "epochs_run": 100,
+    "batch_size": 256,
+    "learning_rate": 0.001,
+    "weight_decay": 0.0,
+    "patience": 5,
+    "device": "cpu",
+    "early_stopping": false,
+    "restore_best": false,
+    "monitor_train": true,
+    "returned_epoch": 100
+  },
+  "target_metrics": {
+    "validation": {
+      "accuracy": 0.7836,
+      "roc_auc": 0.8509627538585994,
+      "log_loss": 1.9818109273910522
+    },
+    "test": {
+      "accuracy": 0.7846,
+      "roc_auc": 0.8520225047104483,
+      "log_loss": 2.0202343463897705
+    },
+    "train": {
+      "accuracy": 0.9916137931034483,
+      "roc_auc": 0.9997667736871189,
+      "log_loss": 0.01978633739054203
+    }
+  },
+  "n_shadows_per_auxiliary": 8,
+  "shadow_algorithms": [
+    "xgboost",
+    "random_forest",
+    "mlp",
+    "decision_tree",
+    "logistic_regression"
+  ],
+  "shadow_records_per_membership": 2000,
+  "walk_config": {
+    "max_steps": 20,
+    "repeats": 2,
+    "categorical_change_probability": 0.05,
+    "batch_size": 512,
+    "seed": 42
+  },
+  "split_config": {
+    "validation_size": 10000,
+    "test_size": 10000,
+    "mia_nonmember_size": 10000,
+    "mia_member_size": 10000,
+    "seed": 42
+  },
+  "adult_target_mia": {
+    "records": 20000,
+    "members": 10000,
+    "accuracy": 0.60165,
+    "balanced_accuracy": 0.60165,
+    "roc_auc": 0.625638555,
+    "tpr_at_1pct_fpr_roc": 0.0049,
+    "threshold": 0.44841998648065545,
+    "tn": 2154,
+    "fp": 7846,
+    "fn": 121,
+    "tp": 9879,
+    "shadow_selected_threshold": 0.6178565870486732,
+    "tpr_at_shadow_threshold": 0.0017,
+    "fpr_at_shadow_threshold": 0.0008
+  },
+  "acs2014_target_mia": {
+    "records": 20000,
+    "members": 10000,
+    "accuracy": 0.54315,
+    "balanced_accuracy": 0.54315,
+    "roc_auc": 0.57349343,
+    "tpr_at_1pct_fpr_roc": 0.007,
+    "threshold": 0.5245432439606094,
+    "tn": 5149,
+    "fp": 4851,
+    "fn": 4286,
+    "tp": 5714,
+    "shadow_selected_threshold": 0.5889217037867067,
+    "tpr_at_shadow_threshold": 0.002,
+    "fpr_at_shadow_threshold": 0.003
+  },
+  "adult_auxiliary_attack_metrics": {
+    "train": {
+      "records": 19279,
+      "members": 9614,
+      "accuracy": 0.5525182841433685,
+      "balanced_accuracy": 0.5534760751021505,
+      "roc_auc": 0.6500668160364084,
+      "tpr_at_1pct_fpr_roc": 0.03609319742042854,
+      "threshold": 0.44841998648065545,
+      "tn": 1850,
+      "fp": 7815,
+      "fn": 812,
+      "tp": 8802,
+      "shadow_selected_threshold": 0.6178565870486732,
+      "tpr_at_shadow_threshold": 0.015706261701685043,
+      "fpr_at_shadow_threshold": 0.0035178479048111745
+    },
+    "validation": {
+      "records": 6319,
+      "members": 3150,
+      "accuracy": 0.5124228517170438,
+      "balanced_accuracy": 0.5135181094632025,
+      "roc_auc": 0.5031062325003631,
+      "tpr_at_1pct_fpr_roc": 0.009523809523809525,
+      "threshold": 0.44841998648065545,
+      "tn": 473,
+      "fp": 2696,
+      "fn": 385,
+      "tp": 2765,
+      "shadow_selected_threshold": 0.6178565870486732,
+      "tpr_at_shadow_threshold": 0.009523809523809525,
+      "fpr_at_shadow_threshold": 0.009466708740927737
+    },
+    "test": {
+      "records": 6402,
+      "members": 3236,
+      "accuracy": 0.5165573258356764,
+      "balanced_accuracy": 0.5125759674601978,
+      "roc_auc": 0.5175512846241002,
+      "tpr_at_1pct_fpr_roc": 0.006180469715698393,
+      "threshold": 0.44841998648065545,
+      "tn": 470,
+      "fp": 2696,
+      "fn": 399,
+      "tp": 2837,
+      "shadow_selected_threshold": 0.6178565870486732,
+      "tpr_at_shadow_threshold": 0.00865265760197775,
+      "fpr_at_shadow_threshold": 0.012002526847757423
+    }
+  },
+  "acs2014_auxiliary_attack_metrics": {
+    "train": {
+      "records": 19245,
+      "members": 9645,
+      "accuracy": 0.5912184983112497,
+      "balanced_accuracy": 0.5918391977708657,
+      "roc_auc": 0.6626044528684982,
+      "tpr_at_1pct_fpr_roc": 0.040850181441161225,
+      "threshold": 0.5245432439606094,
+      "tn": 8230,
+      "fp": 1370,
+      "fn": 6497,
+      "tp": 3148,
+      "shadow_selected_threshold": 0.5889217037867067,
+      "tpr_at_shadow_threshold": 0.0208398133748056,
+      "fpr_at_shadow_threshold": 0.004270833333333333
+    },
+    "validation": {
+      "records": 6395,
+      "members": 3177,
+      "accuracy": 0.5086786551993745,
+      "balanced_accuracy": 0.5070182321545493,
+      "roc_auc": 0.49857760280981644,
+      "tpr_at_1pct_fpr_roc": 0.013220018885741265,
+      "threshold": 0.5245432439606094,
+      "tn": 2465,
+      "fp": 753,
+      "fn": 2389,
+      "tp": 788,
+      "shadow_selected_threshold": 0.5889217037867067,
+      "tpr_at_shadow_threshold": 0.013220018885741265,
+      "fpr_at_shadow_threshold": 0.009944064636420136
+    },
+    "test": {
+      "records": 6360,
+      "members": 3178,
+      "accuracy": 0.4970125786163522,
+      "balanced_accuracy": 0.4968459502574859,
+      "roc_auc": 0.5021377228502523,
+      "tpr_at_1pct_fpr_roc": 0.009439899307740718,
+      "threshold": 0.5245432439606094,
+      "tn": 2424,
+      "fp": 758,
+      "fn": 2441,
+      "tp": 737,
+      "shadow_selected_threshold": 0.5889217037867067,
+      "tpr_at_shadow_threshold": 0.009439899307740718,
+      "fpr_at_shadow_threshold": 0.010370835952231301
+    }
+  }
+}

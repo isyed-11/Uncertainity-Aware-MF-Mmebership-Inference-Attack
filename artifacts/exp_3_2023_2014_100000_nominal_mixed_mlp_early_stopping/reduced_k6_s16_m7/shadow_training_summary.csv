@@ -1,0 +1,17 @@
+shadow_model,algorithm,early_stopping,epochs_run,returned_epoch
+random_forest_01,random_forest,False,,
+gradient_boosting_02,gradient_boosting,False,,
+xgboost_03,xgboost,False,,
+mlp_04,mlp,True,8.0,3.0
+random_forest_05,random_forest,False,,
+gradient_boosting_06,gradient_boosting,False,,
+xgboost_07,xgboost,False,,
+mlp_08,mlp,True,10.0,5.0
+random_forest_09,random_forest,False,,
+gradient_boosting_10,gradient_boosting,False,,
+xgboost_11,xgboost,False,,
+mlp_12,mlp,True,8.0,3.0
+random_forest_13,random_forest,False,,
+gradient_boosting_14,gradient_boosting,False,,
+xgboost_15,xgboost,False,,
+mlp_16,mlp,True,8.0,3.0
